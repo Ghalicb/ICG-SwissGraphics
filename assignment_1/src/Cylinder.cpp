@@ -33,5 +33,21 @@ intersect(const Ray&  _ray,
      * - store normal at _intersection_point in `_intersection_normal`.
      * - return whether there is an intersection with t > 0
     */
+
+    vec3 delta_points = _ray.origin - center;
+    double dot_ray_dir_axis = dot(_ray.direction, axis);
+    vec3 dot_delta_axis_times_axis = dot(delta_points, axis)*axis;
+
+    vec3 a_sqrt = (_ray.direction - dot_ray_dir_axis* axis);
+    double a = dot(a_sqrt, a_sqrt);
+
+    double b = 2 * dot(_ray.direction - dot_ray_dir_axis * axis,
+                       dot_delta_axis_times_axis);
+
+    vec3 c_minus_r2_sqrt = delta_points - dot_delta_axis_times_axis;
+    double c = dot(c_minus_r2_sqrt, c_minus_r2_sqrt) - radius*radius;
+
+    //solveQuadratic(a, b, c, );
+
     return false;
 }
