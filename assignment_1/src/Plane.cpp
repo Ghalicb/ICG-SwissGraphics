@@ -48,9 +48,9 @@ intersect(const Ray& _ray,
         _intersection_point = _ray(_intersection_t);
 
         _intersection_normal = normal;
+
         // Take the normal oriented "against" the ray
-        vec3 origin_to_t = (_intersection_point - _ray.origin);
-        if (norm(origin_to_t) < norm(origin_to_t + normal)) {
+        if (denom > 0) {
             _intersection_normal *= -1;
         }
 
