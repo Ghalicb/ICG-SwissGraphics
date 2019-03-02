@@ -58,8 +58,8 @@ intersect(const Ray&  _ray,
         //check the solution is in font of the viewer,
         //closer than the others and does not exceed the height
         if (t[i] > 0 && t[i] < _intersection_t
-                     && abs(dot(axis * height, _ray(t[i]) - center)) < 1)
-            _intersection_t = std::min(_intersection_t, t[i]);
+                     && abs(dot(axis, _ray(t[i]) - center)) < height/2)
+            _intersection_t = t[i];
     }
 
     if (_intersection_t == NO_INTERSECTION)
