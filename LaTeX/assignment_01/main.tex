@@ -1,7 +1,7 @@
 \documentclass{article}
 \usepackage[utf8]{inputenc}
 \usepackage{graphicx}
-\usepackage{amsmath} 
+\usepackage{amsmath}
 
 \title{Computer graphics - cylindres}
 \author{samuel.chassot }
@@ -25,16 +25,16 @@ Here is a sketch of the situation:
 
 We can compute $r$ as following:
 First compute the orthogonal projection of the vector $c q$ on $v_a$:
-$$p_q = <v_a, q-c> v_a$$
+$$p_q = \langle v_a, q-c\rangle  v_a$$
 Now we can compute the vector $r$ :
 
 \begin{gather*}
     r = q-c-p_q \\
-    r = q-c - <v_a, q-c> v_a
+    r = q-c - \langle v_a, q-c\rangle  v_a
 \end{gather*}
 Now we just need to compute the norm of $r$ and we have the distance we wanted. We can take this distance squared to simplify computation and we have the implicit equation for the cylinder:
 \begin{gather*}
-    |q-c-<v_a, q-c> v_a|^2 -r^2 = 0
+    |q-c-\langle v_a, q-c\rangle  v_a|^2 -r^2 = 0
 \end{gather*}
 for a point $q$.
 
@@ -42,35 +42,35 @@ Now we inject the ray parametrization as point $q$ :
 
 \begin{gather*}
     q=p+v*t \\
-    |p-c+v*t-<v_a, p-c+v*t>v_a|^2-r^2=0
+    |p-c+v*t-\langle v_a, p-c+v*t\rangle v_a|^2-r^2=0
 \end{gather*}
 We will solve this equation for $t$:
 \begin{gather*}
-    |p-c+v*t-<v_a, p-c+v*t>v_a|^2-r^2=0\\
-    |p-c+v*t - <v_a, p-c>v_a - t*<v_a, v>v_a|^2 -r^2=0\\
-    |t*(v+<v_a, v>v_a) + (p-c- <v_a, p-c>v_a)|^2 -r^2 = 0
+    |p-c+v*t-\langle v_a, p-c+v*t\rangle v_a|^2-r^2=0\\
+    |p-c+v*t - \langle v_a, p-c\rangle v_a - t*\langle v_a, v\rangle v_a|^2 -r^2=0\\
+    |t*(v+\langle v_a, v\rangle v_a) + (p-c- \langle v_a, p-c\rangle v_a)|^2 -r^2 = 0
 \end{gather*}
 Let us define some variables :
 \begin{gather*}
-    A = (v-<v_a, v>v_a)\\
-    B = (p-c- <v_a, p-c>v_a)
+    A = (v-\langle v_a, v\rangle v_a)\\
+    B = (p-c- \langle v_a, p-c\rangle v_a)
 \end{gather*}
 Both are vectors.
 \begin{gather*}
     |t*A + B|^2 -r^2 = 0\\
-    <t*A+B, t*A+B> -r^2 = 0\\
-    t^2 * <A,A> + t*<A+B, A+B> + <B,B> -r^2 = 0
+    \langle t*A+B, t*A+B\rangle  -r^2 = 0\\
+    t^2 * \langle A,A\rangle  + t*\langle A+B, A+B\rangle  + \langle B,B\rangle  -r^2 = 0
 \end{gather*}
 We have an equation of the form:
 $$t^2*C + t*E + F = 0$$
 with:
 \begin{align*}
-    C &= <A,A> \\ 
-    &= |v-<v_a, v>v_a|^2\\
-    E &= 2*<A, B> \\
-    &= 2*<v-<v_a, v>v_a, p-c- <v_a, p-c>v_a>\\
-    F &= <B,B> -r^2 \\
-    &= |p-c- <v_a, p-c>v_a|^2
+    C &= \langle A,A\rangle  \\
+    &= |v-\langle v_a, v\rangle v_a|^2\\
+    E &= 2*\langle A, B\rangle  \\
+    &= 2*\langle v-\langle v_a, v\rangle v_a, p-c- \langle v_a, p-c\rangle v_a\rangle \\
+    F &= \langle B,B\rangle  -r^2 \\
+    &= |p-c- \langle v_a, p-c\rangle v_a|^2
 \end{align*}
 
 
@@ -79,11 +79,118 @@ Now that we have these three elements, we can resolve the equation for $t$ using
 \section{Finite length cylinder}
 Now that we have $t$ for which the ray intersect the infinitely long cylinder, we can keep only intersections that this cylinder at a distance less than $h/2$ from the center.
 
-To do so, we compute the orthogonal projection of the vector between $c$ and the intersection point $p_i$ and check if its norm is smaller that $h/2$.
+To do so, we compute the orthogonal projection of the vector between $c$ and the intersection point $p_i$ on $v_a$ and check if its norm is smaller than $h/2$.
 
-$$|<p_i-c, v_a>v_a|^2 \leq h/2$$
+$$|\langle p_i-c, v_a\rangle v_a|^2 \leq h/2$$
 $$p_i = p+v*t_i$$
 where $t_i$ is the solution of the last equation. We keep only intersections that satisfy this equation.
 
+\section{Normal to cylinder surface}
+The normal to the cylinder surface at point $p_i$ is computed as the vector from the orthogonal projection $proj_{p_i}$ of $p_i$ on $v_a$ to $p_i$.
+
+\begin{align*}
+    &proj_{p_i} = c + \langle p_i-c, v_a \rangle \\
+    &n = p_i - proj_{p_i}
+\end{align*}\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\usepackage{amsmath}
+
+\title{Computer graphics - cylindres}
+\author{samuel.chassot }
+\date{February 2019}
+
+\usepackage{natbib}
+\usepackage{graphicx}
+
+\begin{document}
+
+\maketitle
+
+\section{Infinite length cylinder}
+Let us take a cylinder with $c + v_a*k$ as axis and $r$ as radius. For a point of the space $q = (x,y,z)$, it is on the cylinder iif the distance between the axis and the point (red $r$ on the sketch) is equal to $r$.
+
+Here is a sketch of the situation:
+\begin{figure}[h]
+\centering
+\includegraphics[width=6cm]{res/Cylinder_sketch.jpeg}
+\end{figure}
+
+We can compute $r$ as following:
+First compute the orthogonal projection of the vector $c q$ on $v_a$:
+$$p_q = \langle v_a, q-c\rangle  v_a$$
+Now we can compute the vector $r$ :
+
+\begin{gather*}
+    r = q-c-p_q \\
+    r = q-c - \langle v_a, q-c\rangle  v_a
+\end{gather*}
+Now we just need to compute the norm of $r$ and we have the distance we wanted. We can take this distance squared to simplify computation and we have the implicit equation for the cylinder:
+\begin{gather*}
+    |q-c-\langle v_a, q-c\rangle  v_a|^2 -r^2 = 0
+\end{gather*}
+for a point $q$.
+
+Now we inject the ray parametrization as point $q$ :
+
+\begin{gather*}
+    q=p+v*t \\
+    |p-c+v*t-\langle v_a, p-c+v*t\rangle v_a|^2-r^2=0
+\end{gather*}
+We will solve this equation for $t$:
+\begin{gather*}
+    |p-c+v*t-\langle v_a, p-c+v*t\rangle v_a|^2-r^2=0\\
+    |p-c+v*t - \langle v_a, p-c\rangle v_a - t*\langle v_a, v\rangle v_a|^2 -r^2=0\\
+    |t*(v+\langle v_a, v\rangle v_a) + (p-c- \langle v_a, p-c\rangle v_a)|^2 -r^2 = 0
+\end{gather*}
+Let us define some variables :
+\begin{gather*}
+    A = (v-\langle v_a, v\rangle v_a)\\
+    B = (p-c- \langle v_a, p-c\rangle v_a)
+\end{gather*}
+Both are vectors.
+\begin{gather*}
+    |t*A + B|^2 -r^2 = 0\\
+    \langle t*A+B, t*A+B\rangle  -r^2 = 0\\
+    t^2 * \langle A,A\rangle  + t*\langle A+B, A+B\rangle  + \langle B,B\rangle  -r^2 = 0
+\end{gather*}
+We have an equation of the form:
+$$t^2*C + t*E + F = 0$$
+with:
+\begin{align*}
+    C &= \langle A,A\rangle  \\
+    &= |v-\langle v_a, v\rangle v_a|^2\\
+    E &= 2*\langle A, B\rangle  \\
+    &= 2*\langle v-\langle v_a, v\rangle v_a, p-c- \langle v_a, p-c\rangle v_a\rangle \\
+    F &= \langle B,B\rangle  -r^2 \\
+    &= |p-c- \langle v_a, p-c\rangle v_a|^2
+\end{align*}
+
+
+Now that we have these three elements, we can resolve the equation for $t$ using \textit{quadraticSolve} and keep only the smallest positive solution for $t$(to have the first intersection in front of the observer).
+
+\section{Finite length cylinder}
+Now that we have $t$ for which the ray intersect the infinitely long cylinder, we can keep only intersections that this cylinder at a distance less than $h/2$ from the center.
+
+To do so, we compute the orthogonal projection of the vector between $c$ and the intersection point $p_i$ on $v_a$ and check if its norm is smaller than $h/2$.
+
+$$|\langle p_i-c, v_a\rangle v_a|^2 \leq h/2$$
+$$p_i = p+v*t_i$$
+where $t_i$ is the solution of the last equation. We keep only intersections that satisfy this equation.
+
+\section{Normal to cylinder surface}
+The normal to the cylinder surface at point $p_i$ is computed as the vector from the orthogonal projection $proj_{p_i}$ of $p_i$ on $v_a$ to $p_i$.
+
+\begin{align*}
+    &proj_{p_i} = c + \langle p_i-c, v_a \rangle \\
+    &n = p_i - proj_{p_i}
+\end{align*}
+
+As there are two possible directions for the vector $v$, we choose the one \textit{pointing againt the ray direction}. In other words, if the dot product of $v$ and $n$ must be negative. Otherwise, we have to take the inverse $n$ by multiplying its components by $-1$.
+
+\end{document}
+
+
+As there are two possible directions for the vector $v$, we choose the one \textit{pointing againt the ray direction}. In other words, the dot product of $v$ and $n$ must be negative. Otherwise, we have to take the inverse $n$ by multiplying its components by $-1$.
 
 \end{document}

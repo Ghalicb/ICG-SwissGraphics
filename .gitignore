@@ -3,3 +3,5 @@
 **.vscode/*
 **/xcode/*
 **/build_debug/*
+*.bib
+*.yaml
