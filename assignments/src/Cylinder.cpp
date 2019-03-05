@@ -72,7 +72,7 @@ intersect(const Ray&  _ray,
     _intersection_normal = normalize(_intersection_point-
         (center + dot(_intersection_point - center, axis)*axis));
 
-    // Take the normal oriented "against" the ray
+    // Take the normal pointing towards the viewer
     if (dot(_ray.direction, _intersection_normal) > 0)
     {
         _intersection_normal *= -1;

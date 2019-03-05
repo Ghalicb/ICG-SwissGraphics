@@ -49,7 +49,7 @@ intersect(const Ray& _ray,
 
         _intersection_normal = normal;
 
-        // Take the normal oriented "against" the ray
+        // Take the normal pointing towards the viewer
         if (denom > 0) {
             _intersection_normal *= -1;
         }
