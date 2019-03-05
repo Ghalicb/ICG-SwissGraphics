@@ -3,8 +3,8 @@
 \usepackage{graphicx}
 \usepackage{amsmath}
 
-\title{Computer graphics - cylindres}
-\author{samuel.chassot }
+\title{Computer graphics - Cylinder and its Normal}
+\author{Chassot Samuel, Chraibi Ghali and Nunes Silva Daniel Filipe}
 \date{February 2019}
 
 \usepackage{natbib}
@@ -15,83 +15,88 @@
 \maketitle
 
 \section{Infinite length cylinder}
-Let us take a cylinder with $c + v_a*k$ as axis and $r$ as radius. For a point of the space $q = (x,y,z)$, it is on the cylinder iif the distance between the axis and the point (red $r$ on the sketch) is equal to $r$.
+Let us take a cylinder with axis vector $c + \textit{k} v_a$ and radius $\textit{r}$. A point $q = (x,y,z)$ is on the cylinder iif the its distance from the axis vector $c + \textit{k} v_a$ (length of the red line $l$ on the Figure 1) is equal to $\textit{r}$.
 
-Here is a sketch of the situation:
 \begin{figure}[h]
 \centering
 \includegraphics[width=6cm]{res/Cylinder_sketch.jpeg}
+\caption{Cylinder}
 \end{figure}
 
-We can compute $r$ as following:
-First compute the orthogonal projection of the vector $c q$ on $v_a$:
+First, we need to compute the orthogonal projection $p_q$ of the vector $\overrightarrow{cq}$ on $v_a$ :
 $$p_q = \langle v_a, q-c\rangle  v_a$$
-Now we can compute the vector $r$ :
 
-\begin{gather*}
-    r = q-c-p_q \\
-    r = q-c - \langle v_a, q-c\rangle  v_a
-\end{gather*}
-Now we just need to compute the norm of $r$ and we have the distance we wanted. We can take this distance squared to simplify computation and we have the implicit equation for the cylinder:
-\begin{gather*}
-    |q-c-\langle v_a, q-c\rangle  v_a|^2 -r^2 = 0
-\end{gather*}
-for a point $q$.
-
-Now we inject the ray parametrization as point $q$ :
-
-\begin{gather*}
-    q=p+v*t \\
-    |p-c+v*t-\langle v_a, p-c+v*t\rangle v_a|^2-r^2=0
-\end{gather*}
-We will solve this equation for $t$:
-\begin{gather*}
-    |p-c+v*t-\langle v_a, p-c+v*t\rangle v_a|^2-r^2=0\\
-    |p-c+v*t - \langle v_a, p-c\rangle v_a - t*\langle v_a, v\rangle v_a|^2 -r^2=0\\
-    |t*(v+\langle v_a, v\rangle v_a) + (p-c- \langle v_a, p-c\rangle v_a)|^2 -r^2 = 0
-\end{gather*}
-Let us define some variables :
-\begin{gather*}
-    A = (v-\langle v_a, v\rangle v_a)\\
-    B = (p-c- \langle v_a, p-c\rangle v_a)
-\end{gather*}
-Both are vectors.
-\begin{gather*}
-    |t*A + B|^2 -r^2 = 0\\
-    \langle t*A+B, t*A+B\rangle  -r^2 = 0\\
-    t^2 * \langle A,A\rangle  + t*\langle A+B, A+B\rangle  + \langle B,B\rangle  -r^2 = 0
-\end{gather*}
-We have an equation of the form:
-$$t^2*C + t*E + F = 0$$
-with:
+Then, we can compute the vector $l$ :
 \begin{align*}
-    C &= \langle A,A\rangle  \\
+    &l = q-c-p_q \\
+    &l = q-c - \langle v_a, q-c\rangle  v_a
+\end{align*}
+
+Finally, we compute the norm of $l$ to get the distance we wanted. We can take this distance squared to simplify computation and we get the following implicit equation for the cylinder:
+\begin{gather*}
+    |q-c-\langle v_a, q-c\rangle  v_a|^2 - r^2 = 0
+\end{gather*}
+
+Now, we inject the ray parametrization of point $q$ :
+\begin{gather*}
+    q=p+tv \\
+    |p-c+tv-\langle v_a, p-c+tv\rangle v_a|^2-r^2=0
+\end{gather*}
+
+And solve this equation for $t$ :
+\begin{gather*}
+    |p-c+tv-\langle v_a, p-c+tv\rangle v_a|^2-r^2=0\\
+    |p-c+tv - \langle v_a, p-c\rangle v_a - t\langle v_a, v\rangle v_a|^2 -r^2=0\\
+    |t(v+\langle v_a, v\rangle v_a) + (p-c- \langle v_a, p-c\rangle v_a)|^2 -r^2 = 0
+\end{gather*}
+
+Let us define the following vectors :
+\begin{gather*}
+    e = (v-\langle v_a, v\rangle v_a)\\
+    f = (p-c- \langle v_a, p-c\rangle v_a)
+\end{gather*}
+
+Then :
+\begin{gather*}
+    |te + f|^2 -r^2 = 0\\
+    \langle te+f, te+f\rangle  -r^2 = 0\\
+    t^2  \langle e,e\rangle  + t\langle e+f, e+f\rangle  + \langle f,f\rangle  -r^2 = 0
+\end{gather*}
+
+We end up with an equation of the form:
+$$t^2A + tB + C = 0$$
+
+Where :
+\begin{align*}
+    A &= \langle e,e\rangle  \\
     &= |v-\langle v_a, v\rangle v_a|^2\\
-    E &= 2*\langle A, B\rangle  \\
-    &= 2*\langle v-\langle v_a, v\rangle v_a, p-c- \langle v_a, p-c\rangle v_a\rangle \\
-    F &= \langle B,B\rangle  -r^2 \\
+    B &= 2\langle e, f\rangle  \\
+    &= 2\langle v-\langle v_a, v\rangle v_a, p-c- \langle v_a, p-c\rangle v_a\rangle \\
+    C &= \langle f,f\rangle  -r^2 \\
     &= |p-c- \langle v_a, p-c\rangle v_a|^2
 \end{align*}
 
 
-Now that we have these three elements, we can resolve the equation for $t$ using \textit{quadraticSolve} and keep only the smallest positive solution for $t$(to have the first intersection in front of the observer).
+Now, we can resolve the previous equation for $t$ using \textit{quadraticSolve} and store the solution(s) in $S$.
 
 \section{Finite length cylinder}
-Now that we have $t$ for which the ray intersect the infinitely long cylinder, we can keep only intersections that this cylinder at a distance less than $h/2$ from the center.
+The array $S$ may contain zero, one or two solutions. Valid solutions must be positive and if there are two valid solutions for $s$, we should keep the smalllest one, which is inside the defined cylinder (radius $r$ and height $h$).
 
-To do so, we compute the orthogonal projection of the vector between $c$ and the intersection point $p_i$ on $v_a$ and check if its norm is smaller than $h/2$.
+First, we remove negative values from $S$. Then, we keep the $t_i$'s such that $p_i = p+t_iv$ are on the finite length cylinder.
 
+To do so, we compute the orthogonal projection of the vector between $c$ and the intersection point $p_i$ on $v_a$ and check if its norm is smaller than $h/2$ :
 $$|\langle p_i-c, v_a\rangle v_a|^2 \leq h/2$$
-$$p_i = p+v*t_i$$
-where $t_i$ is the solution of the last equation. We keep only intersections that satisfy this equation.
+And keep the smallest $t_i$ satisfying this inequation.
 
 \section{Normal to cylinder surface}
 
 The normal to the cylinder surface at point $p_i$ is computed as the vector from the orthogonal projection $proj_{p_i}$ of $p_i$ on $v_a$ to $p_i$.
-\\
 
+\begin{figure}[h]
 \centering
-\includegraphics[width=6cm]{res/Normal_sketch.jpeg}
+\includegraphics[width=6cm]{res/Cylinder_sketch.jpeg}
+\caption{Normal}
+\end{figure}
 
 
 \begin{align*}
