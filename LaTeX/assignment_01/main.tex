@@ -39,30 +39,25 @@ Now, we inject the ray parametrization of point $q$ where $v$ is a unit vector :
     q=p+tv \\
     |p-c+tv-\langle v_a, p-c+tv\rangle v_a|^2-r^2=0
 \end{gather*}
-
 And solve this equation for $t$ :
 \begin{gather*}
     |p-c+tv-\langle v_a, p-c+tv\rangle v_a|^2-r^2=0\\
     |p-c+tv - \langle v_a, p-c\rangle v_a - t\langle v_a, v\rangle v_a|^2 -r^2=0\\
     |t(v-\langle v_a, v\rangle v_a) + (p-c- \langle v_a, p-c\rangle v_a)|^2 -r^2 = 0
 \end{gather*}
-
 Let us define the following vectors :
 \begin{gather*}
     e = (v-\langle v_a, v\rangle v_a)\\
     f = (p-c- \langle v_a, p-c\rangle v_a)
 \end{gather*}
-
 Then :
 \begin{gather*}
     |te + f|^2 -r^2 = 0\\
     \langle te+f, te+f\rangle  -r^2 = 0\\
     t^2  \langle e,e\rangle  + 2t\langle e, f\rangle  + \langle f,f\rangle  -r^2 = 0
 \end{gather*}
-
 We end up with an equation of the form:
 $$t^2A + tB + C = 0$$
-
 Where :
 \begin{align*}
     A &= \langle e,e\rangle  \\
@@ -72,8 +67,6 @@ Where :
     C &= \langle f,f\rangle  -r^2 \\
     &= |p-c- \langle v_a, p-c\rangle v_a|^2
 \end{align*}
-
-
 Now, we can resolve the previous equation for $t$ using \textit{quadraticSolve} and store the solution(s) in $S$.
 
 \section{Finite length cylinder}
@@ -100,7 +93,6 @@ The normal to the cylinder surface at point $p_i$ is computed as the vector from
     &proj_{p_i} = c + \langle p_i-c, v_a \rangle \\
     &n = p_i - proj_{p_i}
 \end{align*}
-
 As there are two possible directions for the vector $v$, we choose the one \textit{pointing towards the viewer}. In other words, the dot product of $v$ and $n$ must be negative. Otherwise, we have to take the inverse of $n$ by multiplying its components by $-1$. It depends on wether the ray hits the cylinder on the inside or on the outside.
 
 \end{document}
