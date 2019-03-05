@@ -15,7 +15,7 @@
 \maketitle
 
 \section{Infinite length cylinder}
-Let us take a cylinder with axis vector $c + \textit{k} v_a$ and radius $\textit{r}$. A point $q = (x,y,z)$ is on the cylinder iif the its distance from the axis vector $c + \textit{k} v_a$ (length of the red line $l$ on the Figure 1) is equal to $\textit{r}$.
+Let us take a cylinder with axis vector $c + \textit{k} v_a$ and radius $\textit{r}$. A point $q = (x,y,z)$ is on the cylinder iif the its distance from the axis vector $c + \textit{k} v_a$ (length of the red line $l$ on the Figure 1) is equal to $\textit{r}$. We assume that $v_a$ is a unit vector.
 
 \begin{figure}[h]
 \centering
@@ -23,7 +23,7 @@ Let us take a cylinder with axis vector $c + \textit{k} v_a$ and radius $\textit
 \caption{Cylinder}
 \end{figure}
 
-First, we need to compute the orthogonal projection $p_q$ of the vector $\overrightarrow{cq}$ on $v_a$ :
+First, we need to compute $p_q$, the orthogonal projection times $v_a$ of the vector $\overrightarrow{cq}$ on $v_a$ :
 $$p_q = \langle v_a, q-c\rangle  v_a$$
 
 Then, we can compute the vector $l$ :
@@ -37,7 +37,7 @@ Finally, we compute the norm of $l$ to get the distance we wanted. We can take t
     |q-c-\langle v_a, q-c\rangle  v_a|^2 - r^2 = 0
 \end{gather*}
 
-Now, we inject the ray parametrization of point $q$ :
+Now, we inject the ray parametrization of point $q$ where $v$ is a unit vector (ray direction) :
 \begin{gather*}
     q=p+tv \\
     |p-c+tv-\langle v_a, p-c+tv\rangle v_a|^2-r^2=0
