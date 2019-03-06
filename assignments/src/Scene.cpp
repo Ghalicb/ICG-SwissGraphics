@@ -93,7 +93,7 @@ vec3 Scene::trace(const Ray& _ray, int _depth)
     // compute local Phong lighting (ambient+diffuse+specular)
     vec3 color = lighting(point, normal, -_ray.direction, object->material);
 
-    
+
     /** \todo
      * Compute reflections by recursive ray tracing:
      * - check whether `object` is reflective by checking its `material.mirror`
@@ -144,9 +144,14 @@ vec3 Scene::lighting(const vec3& _point, const vec3& _normal, const vec3& _view,
      * You can look at the classes `Light` and `Material` to check their attributes. Feel free to use
      * the existing vector functions in vec3.h e.g. mirror, reflect, norm, dot, normalize
      */
-    
+
     // visualize the normal as a RGB color for now.
-    vec3 color = (_normal + vec3(1)) / 2.0;
+    //vec3 color = (_normal + vec3(1)) / 2.0;
+
+    vec3 ambient = _material.ambient; //*_normal;
+    vec3 diffuse = vec3(0.0);
+    vec3 specular = vec3(0.0);
+    vec3 color = ambient + diffuse + specular;
 
     return color;
 }
