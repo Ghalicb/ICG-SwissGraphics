@@ -76,7 +76,7 @@ First, we remove negative values from $S$. Then, we keep the $t_i$'s such that $
 
 To do so, we compute the orthogonal projection $\overrightarrow{cp_q}$ of the vector $\overrightarrow{cq}$ on $v_a$ and check if its norm is smaller or equal to $h/2$ :
 $$|\langle q-c, v_a\rangle v_a|^2 \leq h/2$$
-And keep the smallest $t_i$ satisfying this inequation.
+And keep the smallest $t_i$ satisfying this inequation. If there is no, we keep no solution which means the ray does not intersect the cylinder.
 
 \section{Normal to cylinder surface}
 
