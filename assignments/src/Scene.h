@@ -93,8 +93,6 @@ private:
 
     /// global ambient light
     vec3 ambience = vec3(0, 0, 0);
-
-    const double EPSILON = 0.00000000000007;
 };
 
 //=============================================================================
