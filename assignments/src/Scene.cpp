@@ -106,7 +106,7 @@ vec3 Scene::trace(const Ray& _ray, int _depth)
     if (alpha > 0) {
         vec3 reflected_ray_direction = reflect(_ray.direction, normal);
         Ray reflected_ray = Ray(point+ normal*(EPSILON), reflected_ray_direction);
-        color = (1 - alpha) * color + alpha * trace(reflected_ray, _depth - 1);
+        color = (1 - alpha) * color + alpha * trace(reflected_ray, _depth + 1);
     }
 
     return color;
