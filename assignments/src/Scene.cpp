@@ -154,16 +154,16 @@ vec3 Scene::lighting(const vec3& _point, const vec3& _normal, const vec3& _view,
 
     for (auto light : lights) {
 
-        vec3 toLightSource = light.position - _point;
-        vec3 toLightSourceNormalized = normalize(toLightSource);
+        vec3 to_light_source = normalize(light.position - _point);
 
-        double dot_prod_diffuse = dot(_normal, toLightSourceNormalized);
-        if (dot_prod_diffuse >= 0) diffuse += _material.diffuse * dot_prod_diffuse * light.color;
+        double dot_normal_light = dot(_normal, to_light_source);
+        if (dot_normal_light >= 0) diffuse += light.color * _material.diffuse * dot_normal_light;
 
+        vec3 reflection_light = 2 * _normal * dot_normal_light - to_light_source;
+        specular += light.color * _material.specular * pow(dot(reflection_light, _view), _material.shininess);
     }
 
-
-    //shadows part
+    // Shadows contribution
 
     // The Phong lighting
     vec3 color = ambient + diffuse + specular;
