@@ -164,6 +164,9 @@ vec3 Scene::lighting(const vec3& _point, const vec3& _normal, const vec3& _view,
       diffuse += forSource;
     }
 
+
+    //shadows part
+
     // The Phong lighting
     vec3 color = ambient + diffuse + specular;
 
