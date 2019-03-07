@@ -157,7 +157,6 @@ vec3 Scene::lighting(const vec3& _point, const vec3& _normal, const vec3& _view,
         vec3 to_light_source = normalize(light.position - _point);
 
         // Add EPSILON times the _normal in order to get out of the object
-        const double EPSILON = 0.00000000000007;
         Ray ray_to_light = Ray(_point+_normal*(EPSILON), to_light_source);
         Object_ptr object_intersect;
         vec3 point_intersect;

@@ -11,6 +11,8 @@
 #ifndef SCENE_H
 #define SCENE_H
 
+#define EPSILON 0.00000000000007
+
 //== INCLUDES =================================================================
 
 #include "StopWatch.h"
