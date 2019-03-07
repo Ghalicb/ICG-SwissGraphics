@@ -159,18 +159,19 @@ vec3 Scene::lighting(const vec3& _point, const vec3& _normal, const vec3& _view,
 
     for (auto light : lights) {
 
-        vec3 to_light_source = normalize(light.position - _point);
+        vec3 to_light_source_not_normalized = light.position - _point;
+        vec3 to_light_source = normalize(to_light_source_not_normalized);
 
         // Add EPSILON times the _normal in order to get out of the object
         Ray ray_to_light = Ray(_point+_normal*(EPSILON), to_light_source);
         Object_ptr object_intersect;
         vec3 point_intersect;
         vec3 normal_intersect;
-        double t_intersect;
+        double t_intersect = 0.0;
 
         bool does_intersect = intersect(ray_to_light, object_intersect, point_intersect, normal_intersect, t_intersect);
 
-        if (!does_intersect) {
+        if (!does_intersect || t_intersect > norm(to_light_source_not_normalized)) {
           double dot_normal_light = dot(_normal, to_light_source);
           if (dot_normal_light >= 0) diffuse += light.color * _material.diffuse * dot_normal_light;
 
