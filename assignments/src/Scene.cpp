@@ -171,6 +171,8 @@ vec3 Scene::lighting(const vec3& _point, const vec3& _normal, const vec3& _view,
 
         bool does_intersect = intersect(ray_to_light, object_intersect, point_intersect, normal_intersect, t_intersect);
 
+        // if the intersection is beyond the light source, it will not create
+        //any shadow so we do as there was no intersection
         if (!does_intersect || t_intersect > norm(to_light_source_not_normalized)) {
           double dot_normal_light = dot(_normal, to_light_source);
           if (dot_normal_light >= 0) diffuse += light.color * _material.diffuse * dot_normal_light;
