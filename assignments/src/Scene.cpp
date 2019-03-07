@@ -155,15 +155,27 @@ vec3 Scene::lighting(const vec3& _point, const vec3& _normal, const vec3& _view,
     for (auto light : lights) {
 
         vec3 to_light_source = normalize(light.position - _point);
+        bool does_intersect = false;
 
-        double dot_normal_light = dot(_normal, to_light_source);
-        if (dot_normal_light >= 0) diffuse += light.color * _material.diffuse * dot_normal_light;
+        //add EPSILON times the _normal in order to get out of the object
+        Ray ray_to_light = Ray(_point+_normal*(EPSILON), to_light_source);
+        Object_ptr object_intersect;
+        vec3 point_intersect;
+        vec3 normal_intersect;
+        double t_intersect;
 
-        vec3 reflection_light = 2 * _normal * dot_normal_light - to_light_source;
-        specular += light.color * _material.specular * pow(dot(reflection_light, _view), _material.shininess);
+        if (intersect(ray_to_light, object_intersect, point_intersect,
+                      normal_intersect, t_intersect)) does_intersect = true;
+
+        if (!does_intersect)
+        {
+          double dot_normal_light = dot(_normal, to_light_source);
+          if (dot_normal_light >= 0) diffuse += light.color * _material.diffuse * dot_normal_light;
+
+          vec3 reflection_light = 2 * _normal * dot_normal_light - to_light_source;
+          specular += light.color * _material.specular * pow(dot(reflection_light, _view), _material.shininess);
+        }
     }
-
-    // Shadows contribution
 
     // The Phong lighting
     vec3 color = ambient + diffuse + specular;

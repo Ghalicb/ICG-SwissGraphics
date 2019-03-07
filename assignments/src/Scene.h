@@ -44,7 +44,7 @@ public:
     *   @param[in] _ray passed Ray
     *   @param[in] _depth holds the information, how many times the `_ray` had been reflected. Goes from 0 to max_depth. Should be used for recursive function call.
     *   @return    color
-    **/ 
+    **/
     vec3  trace(const Ray& _ray, int _depth);
 
     /// Computes the closest intersection point between a ray and all objects in the scene.
@@ -56,7 +56,7 @@ public:
     *       @param _t returns distance between the `_ray`'s origin and `_point`
     *       @return returns `true`, if there is an intersection point between `_ray` and at least one object in the scene.
     **/
-    bool  intersect(const Ray& _ray, Object_ptr&, vec3& _point, vec3& _normal, double& _t);
+    bool  intersect(const Ray& _ray, Object_ptr& _Object_ptr, vec3& _point, vec3& _normal, double& _t);
 
     /// Computes the phong lighting for a given object intersection
     /**
@@ -93,6 +93,8 @@ private:
 
     /// global ambient light
     vec3 ambience = vec3(0, 0, 0);
+
+    const double EPSILON = 0.00000000000007;
 };
 
 //=============================================================================
