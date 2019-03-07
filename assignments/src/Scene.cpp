@@ -148,9 +148,9 @@ vec3 Scene::lighting(const vec3& _point, const vec3& _normal, const vec3& _view,
     // The ambiant contribution
     vec3 ambient = ambience * _material.ambient;
     vec3 diffuse = vec3(0.0);
-    for (auto light : _lights) {
-      vec3 toLightSource = light.source - _point;
-      diffuse += _material.diffuse * toLightSource.dot(_normal) * light.color;
+    for (auto light : lights) {
+      vec3 toLightSource = light.position - _point;
+      diffuse += _material.diffuse * dot(_normal, toLightSource) * light.color;
     }
     vec3 specular = vec3(0.0);
     vec3 color = ambient + diffuse + specular;
