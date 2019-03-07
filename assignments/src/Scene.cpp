@@ -102,7 +102,12 @@ vec3 Scene::trace(const Ray& _ray, int _depth)
      * the color computed by local Phong lighting (use `object->material.mirror` as weight)
      * - check whether your recursive algorithm reflects the ray `max_depth` times
      */
-
+    double alpha = object->material.mirror;
+    if (alpha > 0) {
+        vec3 reflected_ray_direction = reflect(_ray.direction, normal);
+        Ray reflected_ray = Ray(point+ normal*(EPSILON), reflected_ray_direction);
+        color = (1 - alpha) * color + alpha * trace(reflected_ray, _depth - 1);
+    }
 
     return color;
 }
