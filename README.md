@@ -26,6 +26,9 @@ Samuel CHASSOT : 1/3
 
 ### Description
 #### Todo
+- We implemented recursive ray tracing to compute reflections. We paid attention to ensure that the reflected rays are out of the intersected object, otherwise little black dot (shadows) may _randomly_ appear on the computed points.
+- We computed the Phong lighting. Ambient contribution is trivial while diffuse and specular need more work. Ensuring that we are dealing with normalized vector is always a challenge.
+- The trickiest problem we faced was forgetting to check that the dot product of the light or the reflection vector and the normal was positive before adding the diffuse and specular (respectivly) contributions.
 
 ### Workload
 Daniel Filipe NUNES SILVA : 1/3  

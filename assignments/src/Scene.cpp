@@ -152,7 +152,7 @@ vec3 Scene::lighting(const vec3& _point, const vec3& _normal, const vec3& _view,
      * the existing vector functions in vec3.h e.g. mirror, reflect, norm, dot, normalize
      */
 
-    // The ambiant contribution
+    // The ambient contribution
     vec3 ambient = ambience * _material.ambient;
 
     // The diffuse & specular contribution
@@ -161,7 +161,7 @@ vec3 Scene::lighting(const vec3& _point, const vec3& _normal, const vec3& _view,
 
     for (Light light : lights)
     {
-        vec3 to_light_source                = normalize(light.position - _point);
+        vec3 to_light_source = normalize(light.position - _point);
 
         // Add EPSILON times (*) the _normal to get the _point out of the object
         Ray        ray_to_light = Ray(_point + EPSILON * _normal, to_light_source);
