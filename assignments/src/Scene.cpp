@@ -74,8 +74,7 @@ Image Scene::render()
 
 //-----------------------------------------------------------------------------
 
-vec3 Scene::trace(const Ray& _ray, int _depth)
-{
+vec3 Scene::trace(const Ray& _ray, int _depth) {
     // stop if recursion depth (=number of reflections) is too large
     if (_depth > max_depth) return vec3(0,0,0);
 
@@ -85,8 +84,7 @@ vec3 Scene::trace(const Ray& _ray, int _depth)
     vec3        point;
     vec3        normal;
     double      t;
-    if (!intersect(_ray, object, point, normal, t))
-    {
+    if (!intersect(_ray, object, point, normal, t)) {
         return background;
     }
 
@@ -104,8 +102,7 @@ vec3 Scene::trace(const Ray& _ray, int _depth)
      */
     double alpha = object->material.mirror;
 
-    if (alpha > 0)
-    {
+    if (alpha > 0) {
         vec3 reflected_ray_direction = reflect(_ray.direction, normal);
         Ray reflected_ray = Ray(point + EPSILON * normal, reflected_ray_direction);
         color = (1 - alpha) * color + alpha * trace(reflected_ray, _depth + 1);
@@ -159,8 +156,7 @@ vec3 Scene::lighting(const vec3& _point, const vec3& _normal, const vec3& _view,
     vec3 diffuse = vec3(0.0);
     vec3 specular = vec3(0.0);
 
-    for (Light light : lights)
-    {
+    for (Light light : lights) {
         vec3 to_light_source = normalize(light.position - _point);
 
         // Add EPSILON times (*) the _normal to get the _point out of the object
@@ -176,22 +172,20 @@ vec3 Scene::lighting(const vec3& _point, const vec3& _normal, const vec3& _view,
 
         // if there is no intersection of if the intersection is beyond the
         // the light source, then there is no shadow
-        if (!does_intersect ||
-            t_intersect > distance(light.position, _point))
-        {
-          double dot_normal_light = dot(_normal, to_light_source);
+        if (!does_intersect || t_intersect > distance(light.position, _point)) {
+            double dot_normal_light = dot(_normal, to_light_source);
 
-          // the dot_normal_light and dot_reflection_light_view must be positive
-          // to produce any effect to the viewed immage
-          if (dot_normal_light > 0)
-          {
-            diffuse += light.color * _material.diffuse * dot_normal_light;
+            // the dot_normal_light and dot_reflection_light_view must be positive
+            // to produce any effect to the viewed image
+            if (dot_normal_light > 0) {
+                diffuse += light.color * _material.diffuse * dot_normal_light;
+            }
 
             vec3 reflection_light = 2 * _normal * dot_normal_light - to_light_source;
             double dot_reflection_light_view = dot(reflection_light, _view);
             if (dot_reflection_light_view > 0)
-              specular += light.color * _material.specular * pow(dot_reflection_light_view, _material.shininess);
-          }
+                specular += light.color * _material.specular * pow(dot_reflection_light_view, _material.shininess);
+            }
         }
     }
 
