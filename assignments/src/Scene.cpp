@@ -136,8 +136,7 @@ bool Scene::intersect(const Ray& _ray, Object_ptr& _object, vec3& _point, vec3& 
     return (tmin != Object::NO_INTERSECTION);
 }
 
-vec3 Scene::lighting(const vec3& _point, const vec3& _normal, const vec3& _view, const Material& _material)
-{
+vec3 Scene::lighting(const vec3& _point, const vec3& _normal, const vec3& _view, const Material& _material) {
 
     /** \todo
      * Compute the Phong lighting:
@@ -183,7 +182,7 @@ vec3 Scene::lighting(const vec3& _point, const vec3& _normal, const vec3& _view,
 
             vec3 reflection_light = 2 * _normal * dot_normal_light - to_light_source;
             double dot_reflection_light_view = dot(reflection_light, _view);
-            if (dot_reflection_light_view > 0)
+            if (dot_reflection_light_view > 0) {
                 specular += light.color * _material.specular * pow(dot_reflection_light_view, _material.shininess);
             }
         }
