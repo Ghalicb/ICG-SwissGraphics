@@ -223,7 +223,7 @@ bool Mesh::intersect_bounding_box(const Ray& _ray) const
     vec3 biggest_t = max(tmin, tmax);
 
     // TODO
-    return std::max(smallest_t[0], smallest_t[1], smallest_t[2]) <= std::min(biggest_t[0], std::min(biggest_t[1], biggest_t[2]));
+    return std::max(smallest_t[0], std::max(smallest_t[1], smallest_t[2])) <= std::min(biggest_t[0], std::min(biggest_t[1], biggest_t[2]));
 }
 
 
