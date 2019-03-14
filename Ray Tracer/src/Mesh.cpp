@@ -151,6 +151,24 @@ void Mesh::compute_normals()
      * - Store the vertex normals in the Vertex::normal member variable.
      * - Weigh the normals by their triangles' angles.
      */
+
+
+     for (Triangle& t: triangles_) {
+       Vertex& v0 = vertices_[t.i0];
+       Vertex& v1 = vertices_[t.i1];
+       Vertex& v2 = vertices_[t.i2];
+
+       double w0 = 0.0;
+       double w1 = 0.0;
+       double w2 = 0.0;
+
+       angleWeights(v0.position, v1.position, v2.position, w0, w1, w2);
+
+       v0.normal += w0 * t.normal;
+       v1.normal += w1 * t.normal;
+       v2.normal += w2 * t.normal;
+
+     }
 }
 
 
