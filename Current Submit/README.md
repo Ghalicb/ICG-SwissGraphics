@@ -1,4 +1,4 @@
-# Assignment
+# Assignment 3 : Raytracing Meshes
 
 ## Description
 
