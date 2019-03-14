@@ -160,21 +160,25 @@ void Mesh::compute_normals()
 
 
      for (Triangle& t: triangles_) {
-       Vertex& v0 = vertices_[t.i0];
-       Vertex& v1 = vertices_[t.i1];
-       Vertex& v2 = vertices_[t.i2];
+        Vertex& v0 = vertices_[t.i0];
+        Vertex& v1 = vertices_[t.i1];
+        Vertex& v2 = vertices_[t.i2];
 
-       double w0 = 0.0;
-       double w1 = 0.0;
-       double w2 = 0.0;
+        double w0 = 0.0;
+        double w1 = 0.0;
+        double w2 = 0.0;
 
-       angleWeights(v0.position, v1.position, v2.position, w0, w1, w2);
+        angleWeights(v0.position, v1.position, v2.position, w0, w1, w2);
 
-       v0.normal += w0 * t.normal;
-       v1.normal += w1 * t.normal;
-       v2.normal += w2 * t.normal;
-
+        v0.normal += w0 * t.normal;
+        v1.normal += w1 * t.normal;
+        v2.normal += w2 * t.normal;
      }
+
+    for (Vertex& v: vertices_)
+    {
+        v.normal = normalize(v.normal);
+    }
 }
 
 
@@ -210,11 +214,15 @@ bool Mesh::intersect_bounding_box(const Ray& _ray) const
     * in `Mesh::compute_bounding_box()`.
     */
 
+   // TODO 
     vec3 tmin = (bb_min_ - _ray.origin) / _ray.direction;
     vec3 tmax = (bb_max_ - _ray.origin) / _ray.direction;
+
+    // TODO
     vec3 smallest_t = min(tmin, tmax);
     vec3 biggest_t = max(tmin, tmax);
 
+    // TODO
     return std::max(smallest_t[0], smallest_t[1], smallest_t[2]) <= std::min(biggest_t[0], biggest_t[1], biggest_t[2]);
 }
 
