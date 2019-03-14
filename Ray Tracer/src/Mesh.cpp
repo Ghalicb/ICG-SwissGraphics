@@ -204,7 +204,12 @@ bool Mesh::intersect_bounding_box(const Ray& _ray) const
     * in `Mesh::compute_bounding_box()`.
     */
 
-    return true;
+    vec3 tmin = (bb_min_ - _ray.origin) / _ray.direction;
+    vec3 tmax = (bb_max_ - _ray.origin) / _ray.direction;
+    vec3 smallest_t = min(tmin, tmax);
+    vec3 biggest_t = max(tmin, tmax);
+
+    return std::max(smallest_t[0], smallest_t[1], smallest_t[2]) <= std::min(biggest_t[0], biggest_t[1], biggest_t[2]);
 }
 
 
