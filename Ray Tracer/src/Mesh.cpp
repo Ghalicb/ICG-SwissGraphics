@@ -123,6 +123,12 @@ void angleWeights(const vec3 &p0, const vec3 &p1, const vec3 &p2,
     w2 = acos( std::max(-1.0, std::min(1.0, dot(e20, -e12) )));
 }
 
+//-----------------------------------------------------------------------------
+
+double Mesh::compute_det(const vec3& x, const vec3& y, const vec3& z) const {
+    return dot(x, cross(y, z));
+}
+
 
 //-----------------------------------------------------------------------------
 
@@ -259,9 +265,9 @@ intersect_triangle(const Triangle&  _triangle,
                    vec3&            _intersection_normal,
                    double&          _intersection_t) const
 {
-    const vec3& p0 = vertices_[_triangle.i0].position;
-    const vec3& p1 = vertices_[_triangle.i1].position;
-    const vec3& p2 = vertices_[_triangle.i2].position;
+    const vec3& p0 = vertices_.at(_triangle.i0).position;
+    const vec3& p1 = vertices_.at(_triangle.i1).position;
+    const vec3& p2 = vertices_.at(_triangle.i2).position;
 
     /** \todo
     * - intersect _ray with _triangle
@@ -277,7 +283,48 @@ intersect_triangle(const Triangle&  _triangle,
     * Refer to [Cramer's Rule](https://en.wikipedia.org/wiki/Cramer%27s_rule) to easily solve it.
      */
 
-    return false;
+    /** Convert the equation `ray.origin + t*ray.dir = a*p0 + b*p1 + (1-a-b)*p2` into
+     * a matrix system [u v w] * (alpha beta t) = b */
+    vec3 u = p0 - p2; 
+    vec3 v = p1 - p2; 
+    vec3 w = - _ray.direction;
+    vec3 b = _ray.origin - p2; 
+
+    // Determinant of the complete matrix
+    double denom = compute_det(u,v,w);
+
+    double x = compute_det(b,v,w) / denom;
+    double y = compute_det(u,b,w) / denom;
+    double z = 1 - x - y;
+
+    // Check that the ray intersect the triangle, otherwise exit
+    if (!(x >= 0 && y >= 0 && z >= 0)) {
+        return false;
+    }
+
+    double t = compute_det(u,v,b) / denom;
+
+    // Check that the intersection is in front of the origin, otherwise exit
+    if (t <= 0) {
+        return false;
+    }
+
+    _intersection_point = vec3(x, y, z);
+    _intersection_t = t;
+
+    switch(draw_mode_) {
+        case FLAT :
+            _intersection_normal = normalize(_triangle.normal);
+            break;
+        case PHONG :
+             _intersection_normal = normalize(x*vertices_.at(_triangle.i0).normal + 
+                                    y*vertices_.at(_triangle.i1).normal + 
+                                    z*vertices_.at(_triangle.i2).normal);
+            break;
+        default:;
+    }
+
+    return true;
 }
 
 
