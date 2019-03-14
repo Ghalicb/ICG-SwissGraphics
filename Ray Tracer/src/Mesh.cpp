@@ -213,17 +213,35 @@ bool Mesh::intersect_bounding_box(const Ray& _ray) const
     * with all triangles of every mesh in the scene. The bounding boxes are computed
     * in `Mesh::compute_bounding_box()`.
     */
+    vec3 newDir = new vec3(0.0);
 
-   // TODO 
-    vec3 tmin = (bb_min_ - _ray.origin) / _ray.direction;
-    vec3 tmax = (bb_max_ - _ray.origin) / _ray.direction;
+    for (int i = 0 ; i < 3 ; ++i) {
+        if(_ray.direction[i] == 0) {
+            if(_ray.origin[i] <= bb_max_[i] && _ray.origin[i] >= bb_min_[i]) {
+                for (int j = 0 ; j < 3 ; ++j) {
+                    if(i == j){
+                        newDir[j] = _ray.origin[j] + 0.00000000001;
+                    } else {
+                        newDir[j] = _ray.origin[j]
+                    }
+                }
+            } else {
+                return false;
+            }
+        }
+    }
+
+    Ray newRay = new Ray(_ray.origin, newDir);
+   // TODO
+    vec3 tmin = (bb_min_ - newRay.origin) / newRay.direction;
+    vec3 tmax = (bb_max_ - newRay.origin) / newRay.direction;
 
     // TODO
     vec3 smallest_t = min(tmin, tmax);
     vec3 biggest_t = max(tmin, tmax);
 
     // TODO
-    return std::max(smallest_t[0], smallest_t[1], smallest_t[2]) <= std::min(biggest_t[0], biggest_t[1], biggest_t[2]);
+    return std::max(smallest_t[0], smallest_t[1], smallest_t[2]) <= std::min(biggest_t[0], std::min(biggest_t[1], biggest_t[2]));
 }
 
 
@@ -298,10 +316,10 @@ intersect_triangle(const Triangle&  _triangle,
 
     /** Convert the equation `ray.origin + t*ray.dir = a*p0 + b*p1 + (1-a-b)*p2` into
      * a matrix system [u v w] * (alpha beta t) = b */
-    vec3 u = p0 - p2; 
-    vec3 v = p1 - p2; 
+    vec3 u = p0 - p2;
+    vec3 v = p1 - p2;
     vec3 w = - _ray.direction;
-    vec3 b = _ray.origin - p2; 
+    vec3 b = _ray.origin - p2;
 
     // Determinant of the complete matrix
     double denom = compute_det(u,v,w);
@@ -330,8 +348,8 @@ intersect_triangle(const Triangle&  _triangle,
             _intersection_normal = normalize(_triangle.normal);
             break;
         case PHONG :
-             _intersection_normal = normalize(x*vertices_.at(_triangle.i0).normal + 
-                                    y*vertices_.at(_triangle.i1).normal + 
+             _intersection_normal = normalize(x*vertices_.at(_triangle.i0).normal +
+                                    y*vertices_.at(_triangle.i1).normal +
                                     z*vertices_.at(_triangle.i2).normal);
             break;
         default:;
