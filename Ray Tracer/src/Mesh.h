@@ -70,6 +70,9 @@ private:
         vec3 normal;
     };
 
+    /// Compute the determinant of a matrix givent its three column-vector
+    double compute_det(const vec3& x, const vec3& y, const vec3& z) const;
+
 public:
     /// Read mesh from an OFF file
     bool read(const std::string &_filename);
