@@ -149,7 +149,7 @@ inline const vec3 operator/(const vec3& v, const double s)
 inline const vec3 operator/(const vec3& v0, const vec3& v1)
 {
     if (v1[0] == 0.0 || v1[1] == 0.0 || v1[2] == 0.0) {
-        throw "Erreur : division par 0 !";
+        throw "Error : divide by 0";
     }
     return vec3(v0[0] / v1[0],
                 v0[1] / v1[1],
