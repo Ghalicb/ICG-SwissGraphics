@@ -213,10 +213,11 @@ bool Mesh::intersect_bounding_box(const Ray& _ray) const
     * with all triangles of every mesh in the scene. The bounding boxes are computed
     * in `Mesh::compute_bounding_box()`.
     */
-   
-    // TODO 
+
+    // TODO
    vec3 tmin(0,0,0), tmax(0,0,0);
    for (int i(0); i < 3; ++i) {
+       //We must do something to evict division by zero
         tmin[i] = (bb_min_[i] - _ray.origin[i]) / _ray.direction[i];
         tmax[i] = (bb_max_[i] - _ray.origin[i]) / _ray.direction[i];
    }
