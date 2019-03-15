@@ -325,7 +325,7 @@ intersect_triangle(const Triangle&  _triangle,
         return false;
     }
 
-    _intersection_point = vec3(x, y, z);
+    _intersection_point = x*p0 + y*p1 + z*p2;
     _intersection_t = t;
 
     switch(draw_mode_) {
