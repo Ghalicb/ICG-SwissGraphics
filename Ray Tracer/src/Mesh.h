@@ -32,7 +32,7 @@ public:
     enum Draw_mode {FLAT, PHONG};
 
     /// Construct a mesh by parsing its path and properties from an input
-    /// stream. The mesh path read from the file is relative to the 
+    /// stream. The mesh path read from the file is relative to the
     /// scene file's path "scenePath".
     Mesh(std::istream &is, const std::string &scenePath);
 
@@ -70,8 +70,8 @@ private:
         vec3 normal;
     };
 
-    /// Compute the determinant of a matrix givent its three column-vector
-    double compute_det(const vec3& x, const vec3& y, const vec3& z) const;
+    /// Compute the determinant of a matrix given its three column-vectors
+    double compute_determinant(const vec3& x, const vec3& y, const vec3& z) const;
 
 public:
     /// Read mesh from an OFF file

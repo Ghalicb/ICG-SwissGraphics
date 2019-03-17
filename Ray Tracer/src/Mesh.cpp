@@ -125,7 +125,7 @@ void angleWeights(const vec3 &p0, const vec3 &p1, const vec3 &p2,
 
 //-----------------------------------------------------------------------------
 
-double Mesh::compute_det(const vec3& x, const vec3& y, const vec3& z) const {
+double Mesh::compute_determinant(const vec3& x, const vec3& y, const vec3& z) const {
     return dot(x, cross(y, z));
 }
 
@@ -157,7 +157,6 @@ void Mesh::compute_normals()
      * - Store the vertex normals in the Vertex::normal member variable.
      * - Weigh the normals by their triangles' angles.
      */
-
 
      for (Triangle& t: triangles_) {
         Vertex& v0 = vertices_[t.i0];
@@ -214,19 +213,20 @@ bool Mesh::intersect_bounding_box(const Ray& _ray) const
     * in `Mesh::compute_bounding_box()`.
     */
 
-    // TODO
-   vec3 tmin(0,0,0), tmax(0,0,0);
-   for (int i(0); i < 3; ++i) {
-       //We must do something to evict division by zero
-        tmin[i] = (bb_min_[i] - _ray.origin[i]) / _ray.direction[i];
-        tmax[i] = (bb_max_[i] - _ray.origin[i]) / _ray.direction[i];
-   }
-    // TODO
-    vec3 smallest_t = min(tmin, tmax);
-    vec3 biggest_t = max(tmin, tmax);
+    // Compute vectors of t's to reach bb_min_ and bb_max_ component-wise
+    vec3 t_min = (bb_min_ - _ray.origin) / _ray.direction;
+    vec3 t_max = (bb_max_ - _ray.origin) / _ray.direction;
 
-    // TODO
-    return std::max(smallest_t[0], std::max(smallest_t[1], smallest_t[2])) <= std::min(biggest_t[0], std::min(biggest_t[1], biggest_t[2]));
+    // Ensure having the smallest/largest components of t's
+    // (needed for negative components)
+    vec3 smallest_t = min(t_min, t_max);
+    vec3 largest_t  = max(t_min, t_max);
+
+    // the bounding box is intersected
+    // when the interval [max(smallest); min(largest)] is nonempty
+    // "the ray intersects something between bb_min_ and bb_max_"
+    return std::max({smallest_t[0], smallest_t[1], smallest_t[2]}) <=
+           std::min({largest_t[0],  largest_t[1],  largest_t[2]});
 }
 
 
@@ -299,31 +299,27 @@ intersect_triangle(const Triangle&  _triangle,
     * Refer to [Cramer's Rule](https://en.wikipedia.org/wiki/Cramer%27s_rule) to easily solve it.
      */
 
-    /** Convert the equation `ray.origin + t*ray.dir = a*p0 + b*p1 + (1-a-b)*p2` into
-     * a matrix system [u v w] * (alpha beta t) = b */
+    // Convert the equation `ray.origin + t*ray.dir = a*p0 + b*p1 + (1-a-b)*p2`
+    // into a matrix system [u v w] * (alpha beta t) = b
     vec3 u = p0 - p2;
     vec3 v = p1 - p2;
     vec3 w = - _ray.direction;
     vec3 b = _ray.origin - p2;
 
-    // Determinant of the complete matrix
-    double denom = compute_det(u,v,w);
+    // Determinant of the complete matrix is the denominator in cramer's rule
+    double denom = compute_determinant(u,v,w);
 
-    double x = compute_det(b,v,w) / denom;
-    double y = compute_det(u,b,w) / denom;
+    double x = compute_determinant(b,v,w) / denom;
+    double y = compute_determinant(u,b,w) / denom;
     double z = 1 - x - y;
 
-    // Check that the ray intersect the triangle, otherwise exit
-    if (!(x >= 0 && y >= 0 && z >= 0)) {
-        return false;
-    }
+    // exits if the ray does not intersect the triangle
+    if (!(x >= 0 && y >= 0 && z >= 0)) return false;
 
-    double t = compute_det(u,v,b) / denom;
+    double t = compute_determinant(u,v,b) / denom;
 
-    // Check that the intersection is in front of the origin, otherwise exit
-    if (t <= 0) {
-        return false;
-    }
+    // exits if the intersection happens behind the origin
+    if (t <= 0) return false;
 
     _intersection_point = x*p0 + y*p1 + z*p2;
     _intersection_t = t;
@@ -334,8 +330,8 @@ intersect_triangle(const Triangle&  _triangle,
             break;
         case PHONG :
              _intersection_normal = normalize(x*vertices_.at(_triangle.i0).normal +
-                                    y*vertices_.at(_triangle.i1).normal +
-                                    z*vertices_.at(_triangle.i2).normal);
+                                              y*vertices_.at(_triangle.i1).normal +
+                                              z*vertices_.at(_triangle.i2).normal);
             break;
         default:;
     }

@@ -145,15 +145,11 @@ inline const vec3 operator/(const vec3& v, const double s)
 }
 
 /// component-wise division of vectors \c v0 by \c v1
-/// We assume v1 is a strictly positive vec3
 inline const vec3 operator/(const vec3& v0, const vec3& v1)
 {
-    if (v1[0] == 0.0 || v1[1] == 0.0 || v1[2] == 0.0) {
-        throw "Error : divide by 0";
-    }
-    return vec3(v0[0] / v1[0],
-                v0[1] / v1[1],
-                v0[2] / v1[2]);
+  return vec3(v0[0] / v1[0],
+              v0[1] / v1[1],
+              v0[2] / v1[2]);
 }
 
 /// add two vectors \c v0 and \c v1
