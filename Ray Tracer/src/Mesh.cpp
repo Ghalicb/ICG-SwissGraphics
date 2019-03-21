@@ -225,6 +225,7 @@ bool Mesh::intersect_bounding_box(const Ray& _ray) const
     // the bounding box is intersected
     // when the interval [max(smallest); min(largest)] is nonempty
     // "the ray intersects something between bb_min_ and bb_max_"
+    // there exists a t that makes the ray intersect the box for every component
     return std::max({smallest_t[0], smallest_t[1], smallest_t[2]}) <=
            std::min({largest_t[0],  largest_t[1],  largest_t[2]});
 }
