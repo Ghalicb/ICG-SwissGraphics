@@ -1,7 +1,6 @@
-# Assignment 4 : OpenGL "Hello World"
+# Assignment
 
 ## Description
-Needed dependencies installation
 
 ## Workload
 Daniel Filipe NUNES SILVA : 1/3  
