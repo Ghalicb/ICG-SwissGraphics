@@ -48,10 +48,17 @@ For this part, we added a method compute_determinant in the Mesh.h/Mesh.cpp file
 - Finally, to make our raytracer more efficient, we computed the bounding box test for triangle meshes, which avoid to test for many useless ray intersections. To help us with this function, we add an operator overload for the component-wise division of vectors in vec3.h.  
 Note that if one of the component of the vector at the denominator is exactly 0.0, it will return infinity in C++, which is in concordance with our implementation.
 
-
 ### Workload
 Daniel Filipe NUNES SILVA : 1/3  
 Ghali CHRAIBI : 1/3  
 Samuel CHASSOT : 1/3
 
+## Assignment 4 : OpenGL "Hello World"
 
+### Description
+Needed dependencies installation
+
+### Workload
+Daniel Filipe NUNES SILVA : 1/3  
+Ghali CHRAIBI : 1/3  
+Samuel CHASSOT : 1/3
