@@ -92,6 +92,19 @@ keyboard(int key, int scancode, int action, int mods)
              *    - key 9 should increase and key 8 should decrease the `dist_factor_`
              *    - 2.5 < `dist_factor_` < 20.0
              */
+            case GLFW_KEY_8:
+            {
+                if (dist_factor_ - DELTA_DIST_FACTOR >= 2.5) {
+                    dist_factor_ -= DELTA_DIST_FACTOR;
+                }
+            }
+
+            case GLFW_KEY_9:
+            {
+                if (dist_factor_ + DELTA_DIST_FACTOR <= 20.0) {
+                    dist_factor_ += DELTA_DIST_FACTOR;
+                }
+            }
 
             case GLFW_KEY_R:
             {
