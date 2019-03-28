@@ -223,6 +223,10 @@ void Solar_viewer::update_body_positions() {
      *       and earth's moon. Do not explicitly place the space ship, it's position
      *       is fixed for now.
      * */
+
+    // Update earth position
+    earth_.pos_ = mat4::rotate_y(earth_.angle_step_orbit_) * earth_.pos_;
+    earth_.angle_orbit_ += earth_.angle_step_orbit_;
 }
 
 //-----------------------------------------------------------------------------
@@ -342,7 +346,7 @@ void Solar_viewer::paint()
      *     the corresponding celestial body (this functionality is already provided,
      *     see `Solar_viewer::keyboard(...)`).
      *   - Pointer `planet_to_look_at_` stores the current body to view.
-     *   - When you are in spaceship mode (member in_ship_), the camera should
+     *   - *********** When you are in spaceship mode (member in_ship_), the camera should
      *     hover slightly behind and above the ship and rotate along with it (so that
      *     when the ship moves and turns it always remains stationary in view
      *     while the solar system moves and spins around it).
@@ -350,10 +354,18 @@ void Solar_viewer::paint()
      *  Hint: planet centers are stored in "Planet::pos_".
      */
     // For now, view the sun from a fixed position...
-    vec4     eye = vec4(0,0,7,1.0);
-    vec4  center = sun_.pos_;
+    vec4     eye = vec4(0,0,0,1);
+    vec4  center = planet_to_look_at_->pos_;
     vec4      up = vec4(0,1,0,0);
-    float radius = sun_.radius_;
+    float radius = planet_to_look_at_->radius_;
+
+    mat4 translate_system_matrix = mat4::translate(vec3(center));
+    mat4 translate_camera_matrix = mat4::translate(vec3(0,0,dist_factor_ * radius));
+    mat4 rotate_x_matrix = mat4::rotate_x(x_angle_);
+    mat4 rotate_y_matrix = mat4::rotate_y(y_angle_);
+
+    eye = translate_system_matrix * (rotate_y_matrix * (rotate_x_matrix * (translate_camera_matrix * eye)));
+
     mat4    view = mat4::look_at(vec3(eye), vec3(center), vec3(up));
 
     billboard_x_angle_ = billboard_y_angle_ = 0.0f;
@@ -432,6 +444,14 @@ void Solar_viewer::draw_scene(mat4& _projection, mat4& _view)
      *
      *  Hint: See how it is done for the Sun in the code above.
      */
+    // render earth
+    m_matrix = mat4::translate(vec3(earth_.pos_)) * mat4::rotate_y(earth_.angle_self_) * mat4::scale(earth_.radius_);
+    mv_matrix = _view * m_matrix;
+    mvp_matrix = _projection * mv_matrix;
+    color_shader_.use();
+    color_shader_.set_uniform("modelview_projection_matrix", mvp_matrix);
+    earth_.tex_.bind();
+    unit_sphere_.draw();
 
     // check for OpenGL errors
     glCheckError();
