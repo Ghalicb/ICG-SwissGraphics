@@ -227,6 +227,25 @@ void Solar_viewer::update_body_positions() {
     // Update earth position
     earth_.pos_ = mat4::rotate_y(earth_.angle_step_orbit_) * earth_.pos_;
     earth_.angle_orbit_ += earth_.angle_step_orbit_;
+
+    // Update mercury position
+    mercury_.pos_ = mat4::rotate_y(mercury_.angle_step_orbit_) * mercury_.pos_;
+    mercury_.angle_orbit_ += mercury_.angle_step_orbit_;
+
+    // Update mars position
+    mars_.pos_ = mat4::rotate_y(mars_.angle_step_orbit_) * mars_.pos_;
+    mars_.angle_orbit_ += mars_.angle_step_orbit_;
+
+    // Update venus position
+    venus_.pos_ = mat4::rotate_y(venus_.angle_step_orbit_) * venus_.pos_;
+    venus_.angle_orbit_ += venus_.angle_step_orbit_;
+
+    // Update moon position
+
+
+    // Update ship position
+
+
 }
 
 //-----------------------------------------------------------------------------
@@ -460,6 +479,7 @@ void Solar_viewer::draw_scene(mat4& _projection, mat4& _view)
      *
      *  Hint: See how it is done for the Sun in the code above.
      */
+
     // render earth
     m_matrix = mat4::translate(vec3(earth_.pos_)) * mat4::rotate_y(earth_.angle_self_) * mat4::scale(earth_.radius_);
     mv_matrix = _view * m_matrix;
@@ -469,6 +489,32 @@ void Solar_viewer::draw_scene(mat4& _projection, mat4& _view)
     earth_.tex_.bind();
     unit_sphere_.draw();
 
+    // render mercury
+    m_matrix = mat4::translate(vec3(mercury_.pos_)) * mat4::rotate_y(mercury_.angle_self_) * mat4::scale(mercury_.radius_);
+    mv_matrix = _view * m_matrix;
+    mvp_matrix = _projection * mv_matrix;
+    color_shader_.use();
+    color_shader_.set_uniform("modelview_projection_matrix", mvp_matrix);
+    mercury_.tex_.bind();
+    unit_sphere_.draw();
+
+    // render venus
+    m_matrix = mat4::translate(vec3(venus_.pos_)) * mat4::rotate_y(venus_.angle_self_) * mat4::scale(venus_.radius_);
+    mv_matrix = _view * m_matrix;
+    mvp_matrix = _projection * mv_matrix;
+    color_shader_.use();
+    color_shader_.set_uniform("modelview_projection_matrix", mvp_matrix);
+    venus_.tex_.bind();
+    unit_sphere_.draw();
+
+    // render mars
+    m_matrix = mat4::translate(vec3(mars_.pos_)) * mat4::rotate_y(mars_.angle_self_) * mat4::scale(mars_.radius_);
+    mv_matrix = _view * m_matrix;
+    mvp_matrix = _projection * mv_matrix;
+    color_shader_.use();
+    color_shader_.set_uniform("modelview_projection_matrix", mvp_matrix);
+    mars_.tex_.bind();
+    unit_sphere_.draw();
 
     //render stars background
     m_matrix = mat4::scale(stars_.radius_);
