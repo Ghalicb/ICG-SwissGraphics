@@ -225,28 +225,27 @@ void Solar_viewer::update_body_positions() {
      * */
 
     // Update earth position
-    vec4 previous_pos_earth = earth_.pos_;
-    earth_.pos_ = mat4::rotate_y(earth_.angle_step_orbit_) * earth_.pos_;
     earth_.angle_orbit_ += earth_.angle_step_orbit_;
+    earth_.pos_ = mat4::rotate_y(earth_.angle_orbit_) * vec4(earth_.distance_, 0, 0, 1);
 
     // Update mercury position
-    mercury_.pos_ = mat4::rotate_y(mercury_.angle_step_orbit_) * mercury_.pos_;
     mercury_.angle_orbit_ += mercury_.angle_step_orbit_;
+    mercury_.pos_ = mat4::rotate_y(mercury_.angle_orbit_) * vec4(mercury_.distance_, 0, 0, 1);
 
     // Update mars position
-    mars_.pos_ = mat4::rotate_y(mars_.angle_step_orbit_) * mars_.pos_;
     mars_.angle_orbit_ += mars_.angle_step_orbit_;
+    mars_.pos_ = mat4::rotate_y(mars_.angle_orbit_) * vec4(mars_.distance_, 0, 0, 1);
 
     // Update venus position
-    venus_.pos_ = mat4::rotate_y(venus_.angle_step_orbit_) * venus_.pos_;
     venus_.angle_orbit_ += venus_.angle_step_orbit_;
+    venus_.pos_ = mat4::rotate_y(venus_.angle_orbit_) * vec4(venus_.distance_, 0, 0, 1);
 
     // Update moon position
-      // First rotate the moon around the origin
+    // First rotate the moon around the origin
     moon_.angle_orbit_ += moon_.angle_step_orbit_;
-    moon_.pos_ = mat4::rotate_y(moon_.angle_orbit_) * vec4(moon_.distance_,0,0,1);
+    moon_.pos_ = mat4::rotate_y(moon_.angle_orbit_) * vec4(moon_.distance_, 0, 0, 1);
 
-      // Then put it in the earth orbit
+    // Then put it in the earth orbit
     mat4 translation_to_earth_orbit = mat4::translate(vec3(earth_.pos_));
     moon_.pos_ = translation_to_earth_orbit * moon_.pos_;
 
@@ -385,14 +384,14 @@ void Solar_viewer::paint()
     vec4  center;
 
     if (in_ship_) {
-        
+
         center = ship_.pos_;
 
         mat4 translate_system_matrix = mat4::translate(vec3(center));
         // We translate the camera slightly aboove the ship (one radius above)
         mat4 translate_camera_matrix = mat4::translate(vec3(0,ship_.radius_,dist_factor_ * ship_.radius_));
         mat4 rotate_y_matrix = mat4::rotate_y(y_angle_ + ship_.angle_);
-        
+
         eye = translate_system_matrix * (rotate_y_matrix * (translate_camera_matrix * eye));
 
     } else {
