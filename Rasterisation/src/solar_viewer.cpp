@@ -97,6 +97,7 @@ keyboard(int key, int scancode, int action, int mods)
                 if (dist_factor_ - DELTA_DIST_FACTOR >= 2.5) {
                     dist_factor_ -= DELTA_DIST_FACTOR;
                 }
+                break;
             }
 
             case GLFW_KEY_9:
@@ -104,6 +105,7 @@ keyboard(int key, int scancode, int action, int mods)
                 if (dist_factor_ + DELTA_DIST_FACTOR <= 20.0) {
                     dist_factor_ += DELTA_DIST_FACTOR;
                 }
+                break;
             }
 
             case GLFW_KEY_R:
