@@ -353,18 +353,34 @@ void Solar_viewer::paint()
      *
      *  Hint: planet centers are stored in "Planet::pos_".
      */
-    // For now, view the sun from a fixed position...
+
     vec4     eye = vec4(0,0,0,1);
-    vec4  center = planet_to_look_at_->pos_;
     vec4      up = vec4(0,1,0,0);
-    float radius = planet_to_look_at_->radius_;
+    vec4  center;
 
-    mat4 translate_system_matrix = mat4::translate(vec3(center));
-    mat4 translate_camera_matrix = mat4::translate(vec3(0,0,dist_factor_ * radius));
-    mat4 rotate_x_matrix = mat4::rotate_x(x_angle_);
-    mat4 rotate_y_matrix = mat4::rotate_y(y_angle_);
+    if (in_ship_) {
+        
+        center = ship_.pos_;
 
-    eye = translate_system_matrix * (rotate_y_matrix * (rotate_x_matrix * (translate_camera_matrix * eye)));
+        mat4 translate_system_matrix = mat4::translate(vec3(center));
+        // We translate the camera slightly aboove the ship (one radius above)
+        mat4 translate_camera_matrix = mat4::translate(vec3(0,ship_.radius_,dist_factor_ * ship_.radius_));
+        mat4 rotate_y_matrix = mat4::rotate_y(y_angle_ + ship_.angle_);
+        
+        eye = translate_system_matrix * (rotate_y_matrix * (translate_camera_matrix * eye));
+
+    } else {
+
+        center = planet_to_look_at_->pos_;
+        float radius = planet_to_look_at_->radius_;
+
+        mat4 translate_system_matrix = mat4::translate(vec3(center));
+        mat4 translate_camera_matrix = mat4::translate(vec3(0,0,dist_factor_ * radius));
+        mat4 rotate_x_matrix = mat4::rotate_x(x_angle_);
+        mat4 rotate_y_matrix = mat4::rotate_y(y_angle_);
+
+        eye = translate_system_matrix * (rotate_y_matrix * (rotate_x_matrix * (translate_camera_matrix * eye)));
+    }
 
     mat4    view = mat4::look_at(vec3(eye), vec3(center), vec3(up));
 
