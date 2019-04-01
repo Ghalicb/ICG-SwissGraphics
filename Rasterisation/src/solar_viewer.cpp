@@ -94,17 +94,15 @@ keyboard(int key, int scancode, int action, int mods)
              */
             case GLFW_KEY_8:
             {
-                if (dist_factor_ - DELTA_DIST_FACTOR >= 2.5) {
+                if (dist_factor_ - DELTA_DIST_FACTOR >= 2.5)
                     dist_factor_ -= DELTA_DIST_FACTOR;
-                }
                 break;
             }
 
             case GLFW_KEY_9:
             {
-                if (dist_factor_ + DELTA_DIST_FACTOR <= 20.0) {
+                if (dist_factor_ + DELTA_DIST_FACTOR <= 20.0)
                     dist_factor_ += DELTA_DIST_FACTOR;
-                }
                 break;
             }
 
@@ -214,6 +212,7 @@ keyboard(int key, int scancode, int action, int mods)
 // around their orbits. This position is needed to set up the camera in the scene
 // (see Solar_viewer::paint)
 void Solar_viewer::update_body_positions() {
+
     /** \todo Update the position of the planets based on their distance to their orbit's center
      * and their angular displacement around the orbit. Planets should follow a circular
      * orbit in the x-z plane, moving in a clockwise direction around the
@@ -223,6 +222,10 @@ void Solar_viewer::update_body_positions() {
      *       and earth's moon. Do not explicitly place the space ship, it's position
      *       is fixed for now.
      * */
+
+
+    // New planet angle orbit are incremented, then, planet are rotated around y
+    // as if they were rotated of angle_orbit_ from the initial position
 
     // Update earth position
     earth_.angle_orbit_ += earth_.angle_step_orbit_;
@@ -241,17 +244,12 @@ void Solar_viewer::update_body_positions() {
     venus_.pos_ = mat4::rotate_y(venus_.angle_orbit_) * vec4(venus_.distance_, 0, 0, 1);
 
     // Update moon position
-    // First rotate the moon around the origin
     moon_.angle_orbit_ += moon_.angle_step_orbit_;
     moon_.pos_ = mat4::rotate_y(moon_.angle_orbit_) * vec4(moon_.distance_, 0, 0, 1);
 
-    // Then put it in the earth orbit
+    // Moon is a special case : it is translated to rotate around the earth
     mat4 translation_to_earth_orbit = mat4::translate(vec3(earth_.pos_));
     moon_.pos_ = translation_to_earth_orbit * moon_.pos_;
-
-    // Update ship position
-
-
 }
 
 //-----------------------------------------------------------------------------
@@ -386,13 +384,15 @@ void Solar_viewer::paint()
     if (in_ship_) {
 
         center = ship_.pos_;
-
         mat4 translate_system_matrix = mat4::translate(vec3(center));
+
         // We translate the camera slightly aboove the ship (one radius above)
         mat4 translate_camera_matrix = mat4::translate(
-            vec3(0,SCALING_SHIP_RADIUS_FACTOR * ship_.radius_,-dist_factor_ * SCALING_SHIP_RADIUS_FACTOR * ship_.radius_));
-        mat4 rotate_y_matrix = mat4::rotate_y(y_angle_ + ship_.angle_);
+          vec3(0,SCALING_SHIP_RADIUS_FACTOR
+            * ship_.radius_,-dist_factor_
+            * SCALING_SHIP_RADIUS_FACTOR * ship_.radius_));
 
+        mat4 rotate_y_matrix = mat4::rotate_y(y_angle_ + ship_.angle_);
         eye = translate_system_matrix * (rotate_y_matrix * (translate_camera_matrix * eye));
 
     } else {
@@ -409,12 +409,9 @@ void Solar_viewer::paint()
     }
 
     mat4 view = mat4::look_at(vec3(eye), vec3(center), vec3(up));
-
     billboard_x_angle_ = billboard_y_angle_ = 0.0f;
-
     mat4 projection = mat4::perspective(fovy_, (float)width_/(float)height_, near_, far_);
     draw_scene(projection, view);
-
 }
 
 
