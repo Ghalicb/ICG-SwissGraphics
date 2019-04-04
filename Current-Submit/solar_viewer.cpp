@@ -404,7 +404,7 @@ void Solar_viewer::paint()
         mat4 translate_camera_matrix = mat4::translate(vec3(0,0,dist_factor_ * radius));
         mat4 rotate_x_matrix = mat4::rotate_x(x_angle_);
         mat4 rotate_y_matrix = mat4::rotate_y(y_angle_);
-
+        up = rotate_y_matrix * rotate_x_matrix * up;
         eye = translate_system_matrix * (rotate_y_matrix * (rotate_x_matrix * (translate_camera_matrix * eye)));
     }
 
@@ -539,7 +539,7 @@ void Solar_viewer::draw_scene(mat4& _projection, mat4& _view)
     unit_sphere_.draw();
 
     // render ship
-    m_matrix = mat4::translate(vec3(ship_.pos_)) * mat4::scale(ship_.radius_);
+    m_matrix = mat4::translate(vec3(ship_.pos_)) * mat4::rotate_y(ship_.angle_) * mat4::scale(ship_.radius_);
     mv_matrix = _view * m_matrix;
     mvp_matrix = _projection * mv_matrix;
     color_shader_.use();
