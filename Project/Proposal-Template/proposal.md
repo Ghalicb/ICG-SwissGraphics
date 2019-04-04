@@ -19,4 +19,4 @@ Specific plan on when and by whom tasks will be completed.
 
 # Resources
 
-List your dependencies...
+- https://www.youtube.com/watch?v=NHyXo11bG4U
