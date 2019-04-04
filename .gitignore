@@ -6,3 +6,5 @@
 *.bib
 *.yaml
 *.gz
+*.bin
+*.ipch
