@@ -98,6 +98,7 @@ bool Texture::createSunBillboardTexture()
     std::vector<unsigned char> img;
     int width = 900;
     int height = 900;
+    const int radius = 150;
     img.resize(width*height * 4);
 
     /** \todo Set up the texture for the sun billboard.
@@ -113,6 +114,21 @@ bool Texture::createSunBillboardTexture()
             img[(row * width + col) * 4 + 1] = 255; // G
             img[(row * width + col) * 4 + 2] = 255; // B
             img[(row * width + col) * 4 + 3] = 255; // A
+        }
+    }
+
+    int dist_to_center = 0;
+    int dist_to_circle_boarder = 0;
+
+    for (int col = 0; col < width; ++col) {
+        for (int row = 0; row < height; ++row) {
+
+            dist_to_center = (col - width/2,2)*(col - width/2,2) + (row - height/2,2)*(row - height/2,2);
+
+            if (dist_to_center > radius*radius) {
+                dist_to_circle_boarder = dist_to_center - radius;
+                img[(row * width + col) * 4 + 3] = 255/(dist_to_circle_boarder*dist_to_circle_boarder);
+            }
         }
     }
 
