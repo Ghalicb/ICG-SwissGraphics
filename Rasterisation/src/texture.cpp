@@ -112,7 +112,7 @@ bool Texture::createSunBillboardTexture()
         for (int row = 0; row < height; ++row) {
             img[(row * width + col) * 4 + 0] = 255; // R
             img[(row * width + col) * 4 + 1] = 255; // G
-            img[(row * width + col) * 4 + 2] = 255; // B
+            img[(row * width + col) * 4 + 2] = 0;   // B
             img[(row * width + col) * 4 + 3] = 255; // A
         }
     }
