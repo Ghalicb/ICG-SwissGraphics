@@ -18,5 +18,5 @@ Describe the goals of your project here, following the
 Specific plan on when and by whom tasks will be completed.
 
 # Resources
-
+- https://www.youtube.com/watch?v=NHyXo11bG4U
 List your dependencies...
