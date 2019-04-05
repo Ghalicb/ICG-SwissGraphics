@@ -99,6 +99,7 @@ bool Texture::createSunBillboardTexture()
     int width = 900;
     int height = 900;
     const int radius = 150;
+    const int squared_radius = radius*radius;
     img.resize(width*height * 4);
 
     /** \todo Set up the texture for the sun billboard.
