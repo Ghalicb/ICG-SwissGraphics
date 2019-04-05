@@ -383,19 +383,19 @@ void Solar_viewer::paint()
      *  the sun's center.
      */
 
-    billboard_x_angle_ = 0;
     vec3 center_to_eye = vec3(eye)-vec3(center);
     center_to_eye.x = 0;
-
+    center_to_eye = normalize(center_to_eye);
     billboard_x_angle_ = rad2deg(atan2(-center_to_eye.y, dot(center_to_eye, vec3(0, 0, -1))));
 
+    std::cout << billboard_x_angle_ << "\n" << std::flush;
     // billboard_y_angle_ = 0;
     center_to_eye = vec3(eye)-vec3(center);
     center_to_eye.y = 0;
     center_to_eye = normalize(center_to_eye);
 
     billboard_y_angle_ = rad2deg(atan2(-center_to_eye.x, dot(center_to_eye, vec3(0, 0, -1))));
-
+    //billboard_y_angle_ = 0;
     mat4 projection = mat4::perspective(fovy_, (float)width_/(float)height_, near_, far_);
     draw_scene(projection, view);
 }
