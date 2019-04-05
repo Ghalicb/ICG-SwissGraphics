@@ -543,10 +543,12 @@ void Solar_viewer::draw_scene(mat4& _projection, mat4& _view)
     m_matrix = mat4::rotate_y(billboard_y_angle_)*mat4::rotate_x(billboard_x_angle_)*mat4::scale(2*sun_.radius_);
     mv_matrix = _view * m_matrix;
     mvp_matrix = _projection * mv_matrix;
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_SRC_COLOR);
     color_shader_.use();
     color_shader_.set_uniform("modelview_projection_matrix", mvp_matrix);
-    glEnable(GL_BLEND);
     sunglow_.draw();
+    glDisable(GL_BLEND);
 
     // check for OpenGL errors
     glCheckError();
