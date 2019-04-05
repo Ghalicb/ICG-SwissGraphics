@@ -12,7 +12,7 @@
 #include <cassert>
 #include <algorithm>
 #include "lodepng.h"
-
+#include "math.h"
 //=============================================================================
 
 
@@ -123,9 +123,8 @@ bool Texture::createSunBillboardTexture()
     for (int col = 0; col < width; ++col) {
         for (int row = 0; row < height; ++row) {
 
-            dist_to_center = (col - width/2)*(col - width/2) + (row - height/2)*(row - height/2);
-
-            if (dist_to_center > radius*radius) {
+            dist_to_center = sqrt((col - width/2)*(col - width/2) + (row - height/2)*(row - height/2));
+            if (dist_to_center > radius) {
                 dist_to_circle_boarder = dist_to_center - radius;
                 img[(row * width + col) * 4 + 3] = 255/(dist_to_circle_boarder*dist_to_circle_boarder);
             }
