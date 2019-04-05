@@ -388,7 +388,7 @@ void Solar_viewer::paint()
     center_to_eye = normalize(center_to_eye);
     billboard_x_angle_ = rad2deg(atan2(-center_to_eye.y, dot(center_to_eye, vec3(0, 0, -1))));
 
-    std::cout << billboard_x_angle_ << "\n" << std::flush;
+    std::cout << billboard_x_angle_ << "    :    " << center_to_eye.y << "   " << center_to_eye.z << "\n" << std::flush;
     // billboard_y_angle_ = 0;
     center_to_eye = vec3(eye)-vec3(center);
     center_to_eye.y = 0;
