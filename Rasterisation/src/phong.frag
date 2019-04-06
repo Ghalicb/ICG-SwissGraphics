@@ -38,6 +38,9 @@ void main()
 
     vec3 r_vector = reflect(v2f_light, v2f_normal);
 
+    //add the ambient component to the final color vector
+    color += 0.2*sunlight;
+
     // convert RGB color to YUV color and use only the luminance
     if (greyscale) color = vec3(0.299*color.r+0.587*color.g+0.114*color.b);
 
