@@ -545,7 +545,7 @@ void Solar_viewer::draw_scene(mat4& _projection, mat4& _view)
     *   - Bind the texture for and draw sunglow_
     **/
 
-    m_matrix = mat4::rotate_y(billboard_y_angle_)*mat4::rotate_x(billboard_x_angle_)*mat4::scale(2*sun_.radius_);
+    m_matrix = mat4::rotate_y(billboard_y_angle_)*mat4::rotate_x(billboard_x_angle_)*mat4::scale(3*sun_.radius_);
     mv_matrix = _view * m_matrix;
     mvp_matrix = _projection * mv_matrix;
     glEnable(GL_BLEND);
