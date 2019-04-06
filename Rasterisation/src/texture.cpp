@@ -127,13 +127,16 @@ bool Texture::createSunBillboardTexture()
             dist_to_center = sqrt((col - width/2)*(col - width/2) + (row - height/2)*(row - height/2));
             if (dist_to_center > radius) {
                 dist_to_circle_boarder = dist_to_center - radius;
+
+                // Compute alpha using an arbitrary function & wrap it in its domain [0;255]
                 int alpha = 255*exp(-0.01*dist_to_circle_boarder);
-                if(alpha < 0){
+
+                if (alpha < 0) {
                   alpha = 0;
-                }
-                if(alpha > 255){
+                } else if (alpha > 255) {
                   alpha = 255;
                 }
+
                 img[(row * width + col) * 4 + 3] = alpha;
             }
         }
