@@ -36,4 +36,11 @@ void main()
       Hint: Write the final vertex position to gl_Position
     */
 
+    v2f_texcoord = v_texcoord;
+    v2f_normal = normal_matrix * v_normal;
+    v2f_view =
+    gl_Position = modelview_projection_matrix * v_position;
+    v2f_light = light_position - gl_Position;
+
+
 }
