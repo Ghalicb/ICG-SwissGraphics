@@ -40,7 +40,6 @@ void main()
     v2f_normal = normal_matrix * v_normal;
     vec3 v_position_for_lightning = modelview_matrix * v_position;
 
-
     v2f_light = light_position - v_position_for_lightning;
     v2f_view = vec3(0,0,0) - v_position_for_lightning;  //(0,0,0) corresponds to the eye position in eye coordinates
 

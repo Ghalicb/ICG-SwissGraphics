@@ -478,8 +478,8 @@ void Solar_viewer::draw_scene(mat4& _projection, mat4& _view)
     m_matrix = mat4::translate(vec3(mercury_.pos_)) * mat4::rotate_y(mercury_.angle_self_) * mat4::scale(mercury_.radius_);
     mv_matrix = _view * m_matrix;
     mvp_matrix = _projection * mv_matrix;
-    color_shader_.use();
-    color_shader_.set_uniform("modelview_projection_matrix", mvp_matrix);
+    phong_shader_.use();
+    phong_shader_.set_uniform("modelview_projection_matrix", mvp_matrix);
     mercury_.tex_.bind();
     unit_sphere_.draw();
 
@@ -487,8 +487,8 @@ void Solar_viewer::draw_scene(mat4& _projection, mat4& _view)
     m_matrix = mat4::translate(vec3(venus_.pos_)) * mat4::rotate_y(venus_.angle_self_) * mat4::scale(venus_.radius_);
     mv_matrix = _view * m_matrix;
     mvp_matrix = _projection * mv_matrix;
-    color_shader_.use();
-    color_shader_.set_uniform("modelview_projection_matrix", mvp_matrix);
+    phong_shader_.use();
+    phong_shader_.set_uniform("modelview_projection_matrix", mvp_matrix);
     venus_.tex_.bind();
     unit_sphere_.draw();
 
@@ -496,8 +496,8 @@ void Solar_viewer::draw_scene(mat4& _projection, mat4& _view)
     m_matrix = mat4::translate(vec3(mars_.pos_)) * mat4::rotate_y(mars_.angle_self_) * mat4::scale(mars_.radius_);
     mv_matrix = _view * m_matrix;
     mvp_matrix = _projection * mv_matrix;
-    color_shader_.use();
-    color_shader_.set_uniform("modelview_projection_matrix", mvp_matrix);
+    phong_shader_.use();
+    phong_shader_.set_uniform("modelview_projection_matrix", mvp_matrix);
     mars_.tex_.bind();
     unit_sphere_.draw();
 
@@ -514,8 +514,8 @@ void Solar_viewer::draw_scene(mat4& _projection, mat4& _view)
     m_matrix = mat4::translate(vec3(moon_.pos_)) * mat4::rotate_y(moon_.angle_self_) * mat4::scale(moon_.radius_);
     mv_matrix = _view * m_matrix;
     mvp_matrix = _projection * mv_matrix;
-    color_shader_.use();
-    color_shader_.set_uniform("modelview_projection_matrix", mvp_matrix);
+    phong_shader_.use();
+    phong_shader_.set_uniform("modelview_projection_matrix", mvp_matrix);
     moon_.tex_.bind();
     unit_sphere_.draw();
 
