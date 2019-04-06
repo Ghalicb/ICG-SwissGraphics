@@ -362,6 +362,9 @@ void Solar_viewer::paint()
         mat4 rotate_y_matrix = mat4::rotate_y(y_angle_ + ship_.angle_);
         eye = translate_system_matrix * (rotate_y_matrix * (translate_camera_matrix * eye));
 
+        billboard_x_angle_ = 0;
+        billboard_y_angle_ = y_angle_ + ship_.angle_;
+
     } else {
 
         center = planet_to_look_at_->pos_;
@@ -373,6 +376,9 @@ void Solar_viewer::paint()
         mat4 rotate_y_matrix = mat4::rotate_y(y_angle_);
         up = rotate_y_matrix * rotate_x_matrix * up;
         eye = translate_system_matrix * (rotate_y_matrix * (rotate_x_matrix * (translate_camera_matrix * eye)));
+
+        billboard_x_angle_ = x_angle_;
+        billboard_y_angle_ = y_angle_;
     }
 
     mat4 view = mat4::look_at(vec3(eye), vec3(center), vec3(up));
@@ -383,8 +389,7 @@ void Solar_viewer::paint()
      *  the sun's center.
      */
 
-    billboard_x_angle_ = x_angle_;
-    billboard_y_angle_ = y_angle_;
+
 
     mat4 projection = mat4::perspective(fovy_, (float)width_/(float)height_, near_, far_);
     draw_scene(projection, view);
