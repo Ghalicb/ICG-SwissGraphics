@@ -36,13 +36,21 @@ void main()
       Hint: Write the final vertex position to gl_Position
     */
 
+    vec4 v_position_in_eye_space = modelview_matrix * v_position;
+
+    // TODO comment ?
     v2f_texcoord = v_texcoord;
+
+    // Vertex normal in eye space
     v2f_normal = normalize(normal_matrix * v_normal);
 
-    vec3 v_position_for_lightning = modelview_matrix * v_position;
-    v2f_light = light_position - v_position_for_lightning;
-    v2f_view = vec3(0,0,0) - v_position_for_lightning;  //(0,0,0) corresponds to the eye position in eye coordinates
+    // Light position in eye space
+    v2f_light = normalize(vec3(light_position - v_position_in_eye_space));
 
+    // View vector between the vertex and the eye in eye space
+    v2f_view = normalize(vec3(vec4(0,0,0,1) - v_position_in_eye_space));  //(0,0,0,1) corresponds to the eye position in eye coordinates
+
+    // Vertex position in screen
     gl_Position = modelview_projection_matrix * v_position;
 
 }
