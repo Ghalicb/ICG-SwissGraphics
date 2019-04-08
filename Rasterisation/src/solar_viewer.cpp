@@ -445,6 +445,7 @@ void Solar_viewer::draw_scene(mat4& _projection, mat4& _view)
                                                              it may be optimized away by the GLSL    compiler if it's unused. */);
     sun_shader_.set_uniform("tex", 0);
     sun_shader_.set_uniform("greyscale", (int)greyscale_); 
+    sun_shader_.set_uniform("radius", sun_.radius_);
     sun_.tex_.bind();
     unit_sphere_.draw();
 
