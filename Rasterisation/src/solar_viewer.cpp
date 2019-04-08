@@ -432,11 +432,14 @@ void Solar_viewer::draw_scene(mat4& _projection, mat4& _view)
     static float sun_animation_time = 0;
     if (timer_active_) sun_animation_time += 0.01f;
 
+    // ---------- DRAW THE SUN SHADED OBJECTS ---------- //
+
+    sun_shader_.use();
+
     // render sun
     m_matrix = mat4::rotate_y(sun_.angle_self_) * mat4::scale(sun_.radius_);
     mv_matrix = _view * m_matrix;
     mvp_matrix = _projection * mv_matrix;
-    sun_shader_.use();
     sun_shader_.set_uniform("modelview_projection_matrix", mvp_matrix);
     sun_shader_.set_uniform("t", sun_animation_time, true /* Indicate that time parameter is optional;
                                                              it may be optimized away by the GLSL    compiler if it's unused. */);
@@ -444,6 +447,8 @@ void Solar_viewer::draw_scene(mat4& _projection, mat4& _view)
     sun_shader_.set_uniform("greyscale", (int)greyscale_); 
     sun_.tex_.bind();
     unit_sphere_.draw();
+
+    sun_shader_.disable();
 
     /** \todo Render the star background, the spaceship, and the rest of the celestial bodies.
      *  For now, everything should be rendered with the color_shader_,
@@ -465,26 +470,35 @@ void Solar_viewer::draw_scene(mat4& _projection, mat4& _view)
      *  Hint: See how it is done for the Sun in the code above.
      */
 
+    // ---------- DRAW THE EARTH SHADED OBJECTS ---------- //
+
+    color_shader_.use();
+
     // render earth
     m_matrix = mat4::translate(vec3(earth_.pos_)) * mat4::rotate_y(earth_.angle_self_) * mat4::scale(earth_.radius_);
     mv_matrix = _view * m_matrix;
     mvp_matrix = _projection * mv_matrix;
-    color_shader_.use();
     color_shader_.set_uniform("modelview_projection_matrix", mvp_matrix);
     earth_.tex_.bind();
     unit_sphere_.draw();
+
+    color_shader_.disable();
+
+    // ---------- DRAW THE PHONG SHADED OBJECTS ---------- //
+
+    phong_shader_.use();
+    // Set the uniform value of "tex", "grayscale" and "light_position" once for all the phong shaded objects
+    phong_shader_.set_uniform("light_position", light);
+    phong_shader_.set_uniform("tex", 0); 
+    phong_shader_.set_uniform("greyscale", (int)greyscale_);
 
     // render mercury
     m_matrix = mat4::translate(vec3(mercury_.pos_)) * mat4::rotate_y(mercury_.angle_self_) * mat4::scale(mercury_.radius_);
     mv_matrix = _view * m_matrix;
     mvp_matrix = _projection * mv_matrix;
-    phong_shader_.use();
     phong_shader_.set_uniform("modelview_projection_matrix", mvp_matrix);
     phong_shader_.set_uniform("modelview_matrix", mv_matrix);
     phong_shader_.set_uniform("normal_matrix", transpose(inverse(mv_matrix)));
-    phong_shader_.set_uniform("light_position", light);
-    phong_shader_.set_uniform("tex", 0); // Set the uniform value of tex and greyscale once for all the phong shaded objects
-    phong_shader_.set_uniform("greyscale", (int)greyscale_);
     mercury_.tex_.bind();
     unit_sphere_.draw();
 
@@ -492,11 +506,9 @@ void Solar_viewer::draw_scene(mat4& _projection, mat4& _view)
     m_matrix = mat4::translate(vec3(venus_.pos_)) * mat4::rotate_y(venus_.angle_self_) * mat4::scale(venus_.radius_);
     mv_matrix = _view * m_matrix;
     mvp_matrix = _projection * mv_matrix;
-    phong_shader_.use();
     phong_shader_.set_uniform("modelview_projection_matrix", mvp_matrix);
     phong_shader_.set_uniform("modelview_matrix", mv_matrix);
     phong_shader_.set_uniform("normal_matrix", transpose(inverse(mv_matrix)));
-    phong_shader_.set_uniform("light_position", light);
     venus_.tex_.bind();
     unit_sphere_.draw();
 
@@ -504,32 +516,19 @@ void Solar_viewer::draw_scene(mat4& _projection, mat4& _view)
     m_matrix = mat4::translate(vec3(mars_.pos_)) * mat4::rotate_y(mars_.angle_self_) * mat4::scale(mars_.radius_);
     mv_matrix = _view * m_matrix;
     mvp_matrix = _projection * mv_matrix;
-    phong_shader_.use();
     phong_shader_.set_uniform("modelview_projection_matrix", mvp_matrix);
     phong_shader_.set_uniform("modelview_matrix", mv_matrix);
     phong_shader_.set_uniform("normal_matrix", transpose(inverse(mv_matrix)));
-    phong_shader_.set_uniform("light_position", light);
     mars_.tex_.bind();
-    unit_sphere_.draw();
-
-    // render stars background
-    m_matrix = mat4::scale(stars_.radius_);
-    mv_matrix = _view * m_matrix;
-    mvp_matrix = _projection * mv_matrix;
-    color_shader_.use();
-    color_shader_.set_uniform("modelview_projection_matrix", mvp_matrix);
-    stars_.tex_.bind();
     unit_sphere_.draw();
 
     // render moon
     m_matrix = mat4::translate(vec3(moon_.pos_)) * mat4::rotate_y(moon_.angle_self_) * mat4::scale(moon_.radius_);
     mv_matrix = _view * m_matrix;
     mvp_matrix = _projection * mv_matrix;
-    phong_shader_.use();
     phong_shader_.set_uniform("modelview_projection_matrix", mvp_matrix);
     phong_shader_.set_uniform("modelview_matrix", mv_matrix);
     phong_shader_.set_uniform("normal_matrix", transpose(inverse(mv_matrix)));
-    phong_shader_.set_uniform("light_position", light);
     moon_.tex_.bind();
     unit_sphere_.draw();
 
@@ -537,13 +536,26 @@ void Solar_viewer::draw_scene(mat4& _projection, mat4& _view)
     m_matrix = mat4::translate(vec3(ship_.pos_)) * mat4::rotate_y(ship_.angle_) * mat4::scale(ship_.radius_);
     mv_matrix = _view * m_matrix;
     mvp_matrix = _projection * mv_matrix;
-    phong_shader_.use();
     phong_shader_.set_uniform("modelview_projection_matrix", mvp_matrix);
     phong_shader_.set_uniform("modelview_matrix", mv_matrix);
     phong_shader_.set_uniform("normal_matrix", transpose(inverse(mv_matrix)));
-    phong_shader_.set_uniform("light_position", light);
     ship_.tex_.bind();
     ship_.draw();
+
+    phong_shader_.disable();
+
+
+    // ---------- DRAW THE COLOR SHADED OBJECTS ---------- //
+
+    color_shader_.use();
+
+    // render stars background
+    m_matrix = mat4::scale(stars_.radius_);
+    mv_matrix = _view * m_matrix;
+    mvp_matrix = _projection * mv_matrix;
+    color_shader_.set_uniform("modelview_projection_matrix", mvp_matrix);
+    stars_.tex_.bind();
+    unit_sphere_.draw();
 
     /** \todo Switch from using color_shader_ to the fancier shaders you'll
      * implement in this assignment:
@@ -562,16 +574,19 @@ void Solar_viewer::draw_scene(mat4& _projection, mat4& _view)
     *   - Bind the texture for and draw sunglow_
     **/
 
+    // render the sun billboard
     m_matrix = mat4::rotate_y(billboard_y_angle_)*mat4::rotate_x(billboard_x_angle_)*mat4::scale(3*sun_.radius_);
     mv_matrix = _view * m_matrix;
     mvp_matrix = _projection * mv_matrix;
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    color_shader_.use();
     color_shader_.set_uniform("modelview_projection_matrix", mvp_matrix);
     sunglow_.tex_.bind();
     sunglow_.draw();
     glDisable(GL_BLEND);
+
+    color_shader_.disable();
+
 
     // check for OpenGL errors
     glCheckError();
