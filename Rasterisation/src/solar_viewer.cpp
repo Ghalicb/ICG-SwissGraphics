@@ -497,7 +497,6 @@ void Solar_viewer::draw_scene(mat4& _projection, mat4& _view)
     phong_shader_.set_uniform("modelview_matrix", mv_matrix);
     phong_shader_.set_uniform("normal_matrix", transpose(inverse(mv_matrix)));
     phong_shader_.set_uniform("light_position", light);
-    //phong_shader_.set_uniform("tex", 0);
     venus_.tex_.bind();
     unit_sphere_.draw();
 
@@ -510,7 +509,6 @@ void Solar_viewer::draw_scene(mat4& _projection, mat4& _view)
     phong_shader_.set_uniform("modelview_matrix", mv_matrix);
     phong_shader_.set_uniform("normal_matrix", transpose(inverse(mv_matrix)));
     phong_shader_.set_uniform("light_position", light);
-    //phong_shader_.set_uniform("tex", 0);
     mars_.tex_.bind();
     unit_sphere_.draw();
 
