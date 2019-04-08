@@ -441,7 +441,7 @@ void Solar_viewer::draw_scene(mat4& _projection, mat4& _view)
     sun_shader_.set_uniform("t", sun_animation_time, true /* Indicate that time parameter is optional;
                                                              it may be optimized away by the GLSL    compiler if it's unused. */);
     sun_shader_.set_uniform("tex", 0);
-    sun_shader_.set_uniform("greyscale", (int)greyscale_); // Note that we fix this uniform constant for all the planets once
+    sun_shader_.set_uniform("greyscale", (int)greyscale_); 
     sun_.tex_.bind();
     unit_sphere_.draw();
 
@@ -483,7 +483,8 @@ void Solar_viewer::draw_scene(mat4& _projection, mat4& _view)
     phong_shader_.set_uniform("modelview_matrix", mv_matrix);
     phong_shader_.set_uniform("normal_matrix", transpose(inverse(mv_matrix)));
     phong_shader_.set_uniform("light_position", light);
-    phong_shader_.set_uniform("tex", 0);
+    phong_shader_.set_uniform("tex", 0); // Set the uniform value of tex and greyscale once for all the phong shaded objects
+    phong_shader_.set_uniform("greyscale", (int)greyscale_);
     mercury_.tex_.bind();
     unit_sphere_.draw();
 
@@ -496,7 +497,7 @@ void Solar_viewer::draw_scene(mat4& _projection, mat4& _view)
     phong_shader_.set_uniform("modelview_matrix", mv_matrix);
     phong_shader_.set_uniform("normal_matrix", transpose(inverse(mv_matrix)));
     phong_shader_.set_uniform("light_position", light);
-    phong_shader_.set_uniform("tex", 0);
+    //phong_shader_.set_uniform("tex", 0);
     venus_.tex_.bind();
     unit_sphere_.draw();
 
@@ -509,7 +510,7 @@ void Solar_viewer::draw_scene(mat4& _projection, mat4& _view)
     phong_shader_.set_uniform("modelview_matrix", mv_matrix);
     phong_shader_.set_uniform("normal_matrix", transpose(inverse(mv_matrix)));
     phong_shader_.set_uniform("light_position", light);
-    phong_shader_.set_uniform("tex", 0);
+    //phong_shader_.set_uniform("tex", 0);
     mars_.tex_.bind();
     unit_sphere_.draw();
 
@@ -531,7 +532,6 @@ void Solar_viewer::draw_scene(mat4& _projection, mat4& _view)
     phong_shader_.set_uniform("modelview_matrix", mv_matrix);
     phong_shader_.set_uniform("normal_matrix", transpose(inverse(mv_matrix)));
     phong_shader_.set_uniform("light_position", light);
-    phong_shader_.set_uniform("tex", 0);
     moon_.tex_.bind();
     unit_sphere_.draw();
 
@@ -544,8 +544,6 @@ void Solar_viewer::draw_scene(mat4& _projection, mat4& _view)
     phong_shader_.set_uniform("modelview_matrix", mv_matrix);
     phong_shader_.set_uniform("normal_matrix", transpose(inverse(mv_matrix)));
     phong_shader_.set_uniform("light_position", light);
-    phong_shader_.set_uniform("tex", 0);
-    //phong_shader_.set_uniform("greyscale", (int)greyscale_);
     ship_.tex_.bind();
     ship_.draw();
 
