@@ -55,11 +55,12 @@ void main()
 
     vec3 r_vector = reflect(v2f_light, v2f_normal);
 
-     //combine gloss and cloudiness to get specular weight [0;1]
-     float specularity = 0.0;
-     if (gloss_texBin == 1.0){
-       specularity = 1-cloud_texRGB.r;
-     }
+    //combine gloss and cloudiness to get specular weight [0;1]
+    float specularity_factor = 0.0;
+    if (gloss_texBin == 1.0) {
+        specularity_factor = 1-cloud_texRGB.r;
+    }
+    vec3 m_s = specularity_factor * vec3(1,1,1);
 
     //add the ambient component to the color_day vector
     color_day += Ia * day_texRGB;
@@ -72,7 +73,7 @@ void main()
 
         if (dot(r_vector, v2f_view) > 0) {
             // add the specular component
-            //color += Il * day_texRGB * pow(dot(r_vector, v2f_view), shininess);
+            color_day += Il * m_s * pow(dot(r_vector, v2f_view), shininess);
         }
     }
 
