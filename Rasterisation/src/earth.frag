@@ -47,10 +47,16 @@ void main()
     vec3 Il = sunlight;
     vec3 day_texRGB = texture(day_texture, v2f_texcoord).rgb;
     vec3 night_texRGB = texture(night_texture, v2f_texcoord).rgb;
-    float cloud_texGray = texture(cloud_texture, v2f_texcoord).r;
+    vec3 cloud_texRGB = texture(cloud_texture, v2f_texcoord).rgb;
     float gloss_texBin = texture(gloss_texture, v2f_texcoord).r;
 
     vec3 r_vector = reflect(v2f_light, v2f_normal);
+
+     //combine gloss and cloudiness to get greyscale
+     float specularity = 0.0;
+     if (gloss_texBin){
+       specularity = 1-cloud_texRGB.r;
+     }
 
      //add the ambient component to the final color vector
      color += Ia * day_texRGB;
