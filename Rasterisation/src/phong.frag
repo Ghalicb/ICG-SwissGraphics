@@ -38,20 +38,20 @@ void main()
 
     vec3 Ia = 0.2*sunlight;
     vec3 Il = sunlight;
-    vec3 m_a, m_d, m_s = texture(tex, v2f_texcoord).rgb;
+    vec3 texRGB = texture(tex, v2f_texcoord).rgb;
     vec3 r_vector = reflect(v2f_light, v2f_normal);
 
     //add the ambient component to the final color vector
-    color += Ia * m_a;
+    color += Ia * texRGB;
 
     if (dot(v2f_normal, v2f_light) > 0) {
         // add the diffuse component
-        color += Il * m_d * dot(v2f_normal, v2f_light);
+        color += Il * texRGB * dot(v2f_normal, v2f_light);
 
         if (dot(r_vector, v2f_view) > 0) {
             // add the specular component
-            color += Il * m_s * pow(dot(r_vector, v2f_view), shininess);
-        } 
+            color += Il * texRGB * pow(dot(r_vector, v2f_view), shininess);
+        }
     }
 
     // convert RGB color to YUV color and use only the luminance
