@@ -34,7 +34,11 @@ void main()
     float theta = acos(v_position.z/radius);
     float phi = atan(v_position.y/v_position.x);
 
-    vec4 v_position_fluid = v_position * (1 /* + f(theta, phi, t) */);
+    vec4 v_position_fluid = vec4 (
+        v_position.x * (1 + 0.05*sin((theta+phi)*t)),
+        v_position.y * (1 + 0.05*cos((theta+phi)*t)),
+        v_position.z * (1 + 0.05*sin((theta+phi)*t)),
+        1);
 
     gl_Position = modelview_projection_matrix * v_position_fluid;
 
