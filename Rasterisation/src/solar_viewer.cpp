@@ -444,7 +444,7 @@ void Solar_viewer::draw_scene(mat4& _projection, mat4& _view)
     sun_shader_.set_uniform("t", sun_animation_time, true /* Indicate that time parameter is optional;
                                                              it may be optimized away by the GLSL    compiler if it's unused. */);
     sun_shader_.set_uniform("tex", 0);
-    sun_shader_.set_uniform("greyscale", (int)greyscale_); 
+    sun_shader_.set_uniform("greyscale", (int)greyscale_);
     sun_shader_.set_uniform("radius", sun_.radius_);
     sun_.tex_.bind();
     unit_sphere_.draw();
@@ -473,24 +473,39 @@ void Solar_viewer::draw_scene(mat4& _projection, mat4& _view)
 
     // ---------- DRAW THE EARTH SHADED OBJECTS ---------- //
 
-    color_shader_.use();
+    earth_shader_.use();
 
     // render earth
     m_matrix = mat4::translate(vec3(earth_.pos_)) * mat4::rotate_y(earth_.angle_self_) * mat4::scale(earth_.radius_);
     mv_matrix = _view * m_matrix;
     mvp_matrix = _projection * mv_matrix;
-    color_shader_.set_uniform("modelview_projection_matrix", mvp_matrix);
+    earth_shader_.set_uniform("modelview_projection_matrix", mvp_matrix);
+    earth_shader_.set_uniform("modelview_matrix", mv_matrix);
+    earth_shader_.set_uniform("normal_matrix", transpose(inverse(mv_matrix)));
+
+    //bind all earth textures
+    earth_shader_.set_uniform("day_texture", 0);
+    earth_shader_.set_uniform("night_texture", 1);
+    earth_shader_.set_uniform("cloud_texture", 2);
+    earth_shader_.set_uniform("gloss_texture", 3);
+
+    earth_shader_.set_uniform("greyscale", (int)greyscale_);
+
     earth_.tex_.bind();
+    earth_.night_.bind();
+    earth_.cloud_.bind();
+    earth_.gloss_.bind();
+    
     unit_sphere_.draw();
 
-    color_shader_.disable();
+    earth_shader_.disable();
 
     // ---------- DRAW THE PHONG SHADED OBJECTS ---------- //
 
     phong_shader_.use();
     // Set the uniform value of "tex", "grayscale" and "light_position" once for all the phong shaded objects
     phong_shader_.set_uniform("light_position", light);
-    phong_shader_.set_uniform("tex", 0); 
+    phong_shader_.set_uniform("tex", 0);
     phong_shader_.set_uniform("greyscale", (int)greyscale_);
 
     // render mercury

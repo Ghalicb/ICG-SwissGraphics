@@ -40,7 +40,7 @@ void main()
     vec3 Il = sunlight;
     vec3 texRGB = texture(tex, v2f_texcoord).rgb;
     vec3 r_vector = reflect(v2f_light, v2f_normal);
-
+    
     //add the ambient component to the final color vector
     color += Ia * texRGB;
 

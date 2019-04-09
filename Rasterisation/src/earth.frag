@@ -30,8 +30,8 @@ void main()
     /** \todo
     * - Copy your working code from the fragment shader of your Phong shader use it as
     * starting point
-    * - instead of using a single texture, use the four texures `day_texure`, `night_texure`,
-    * `cloud_texure` and `gloss_texture` and mix them for enhanced effects
+    * - instead of using a single texture, use the four texures `day_texture`, `night_texture`,
+    * `cloud_texture` and `gloss_texture` and mix them for enhanced effects
     * Hints:
     * - cloud and gloss textures are just greyscales. So you'll just need one color-
     * component.
@@ -45,8 +45,10 @@ void main()
 
      vec3 Ia = 0.2*sunlight;
      vec3 Il = sunlight;
-     vec3 texRGB = texture(tex, v2f_texcoord).rgb;
+     vec3 day_texRGB = texture(day_texture, v2f_texcoord).rgb;
+     vec3 night_texRGB = texture(night_texture, v2f_texcoord).rgb;
      vec3 r_vector = reflect(v2f_light, v2f_normal);
+
 
      //add the ambient component to the final color vector
      color += Ia * texRGB;
