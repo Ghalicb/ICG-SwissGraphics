@@ -41,4 +41,30 @@ void main()
     * - use mix(vec3 a,vec3 b, s) = a*(1-s) + b*s for linear interpolation of two colors
      */
 
+     vec3 color = vec3(0.0,0.0,0.0);
+
+     vec3 Ia = 0.2*sunlight;
+     vec3 Il = sunlight;
+     vec3 texRGB = texture(tex, v2f_texcoord).rgb;
+     vec3 r_vector = reflect(v2f_light, v2f_normal);
+
+     //add the ambient component to the final color vector
+     color += Ia * texRGB;
+
+     if (dot(v2f_normal, v2f_light) > 0) {
+         // add the diffuse component
+         color += Il * texRGB * dot(v2f_normal, v2f_light);
+
+         if (dot(r_vector, v2f_view) > 0) {
+             // add the specular component
+             color += Il * texRGB * pow(dot(r_vector, v2f_view), shininess);
+         }
+     }
+
+     // convert RGB color to YUV color and use only the luminance
+     if (greyscale) color = vec3(0.299*color.r+0.587*color.g+0.114*color.b);
+
+     // add required alpha value
+     f_color = vec4(color, 1.0);
+
 }
