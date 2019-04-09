@@ -41,15 +41,16 @@ void main()
     * - use mix(vec3 a,vec3 b, s) = a*(1-s) + b*s for linear interpolation of two colors
      */
 
-     vec3 color = vec3(0.0,0.0,0.0);
+    vec3 color = vec3(0.0,0.0,0.0);
 
-     vec3 Ia = 0.2*sunlight;
-     vec3 Il = sunlight;
-     vec3 day_texRGB = texture(day_texture, v2f_texcoord).rgb;
-     vec3 night_texRGB = texture(night_texture, v2f_texcoord).rgb;
-     vec3 cloud_texGray = texture(cloud_texture, v2f_texcoord).rgb;
-     vec3 gloss_texBin = texture(gloss_texture, v2f_texcoord).rgb;
+    vec3 Ia = 0.2*sunlight;
+    vec3 Il = sunlight;
+    vec3 day_texRGB = texture(day_texture, v2f_texcoord).rgb;
+    vec3 night_texRGB = texture(night_texture, v2f_texcoord).rgb;
+    vec3 cloud_texGray = texture(cloud_texture, v2f_texcoord).rgb;
+    vec3 gloss_texBin = texture(gloss_texture, v2f_texcoord).rgb;
 
+    vec3 r_vector = reflect(v2f_light, v2f_normal);
 
      //add the ambient component to the final color vector
      color += Ia * day_texRGB;
