@@ -53,11 +53,11 @@ void main()
     vec3 cloud_texRGB = texture(cloud_texture, v2f_texcoord).rgb;
     float gloss_texBin = texture(gloss_texture, v2f_texcoord).r;
 
-    vec3 r_vector = reflect(v2f_light, v2f_normal);
+    vec3 r_vector = -reflect(v2f_light, v2f_normal);
 
     // combine gloss and cloudiness to get specular weight [0;1]
     float specularity_factor = (1.-cloud_texRGB.r)*gloss_texBin;
-    
+
     vec3 m_s = specularity_factor * vec3(1.,1.,1.);
 
     // add the ambient component to the day & cloud color
