@@ -43,6 +43,11 @@ void main()
 
     vec3 color_day = vec3(0.0,0.0,0.0);
     vec3 color_night = vec3(0.0,0.0,0.0);
+    vec3 color_clouds = vec3(0.0,0.0,0.0);
+
+
+    vec3 color = vec3(0.0,0.0,0.0);
+
 
 
     vec3 Ia = 0.2*sunlight;
@@ -56,22 +61,30 @@ void main()
 
      //combine gloss and cloudiness to get specular weight [0;1]
      float specularity = 0.0;
-     if (gloss_texBin){
+     if (gloss_texBin == 1.0){
        specularity = 1-cloud_texRGB.r;
      }
 
-     //add the ambient component to the final color vector
-     color += Ia * day_texRGB;
+     //add the ambient component to the color_day vector
+     color_day += Ia * day_texRGB;
+     color_clouds += Ia * cloud_texRGB;
 
      if (dot(v2f_normal, v2f_light) > 0) {
-         // add the diffuse component
-         color += Il * day_texRGB * dot(v2f_normal, v2f_light);
+         // add the diffuse component to day color
+         color_day += Il * day_texRGB * dot(v2f_normal, v2f_light);
+         color_clouds += Il * cloud_texRGB * dot(v2f_normal, v2f_light);
 
          if (dot(r_vector, v2f_view) > 0) {
              // add the specular component
              //color += Il * day_texRGB * pow(dot(r_vector, v2f_view), shininess);
          }
      }
+
+
+     color_day = color_day + color_clouds;
+
+     color_night = mix(night_texRGB, vec3(0.0, 0.0, 0.0), cloud_texRGB.r);
+     color = mix(color_night, color_day, dot(v2f_normal, v2f_light));
 
      // convert RGB color to YUV color and use only the luminance
      if (greyscale) color = vec3(0.299*color.r+0.587*color.g+0.114*color.b);
