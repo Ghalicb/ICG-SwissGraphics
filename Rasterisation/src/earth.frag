@@ -41,7 +41,9 @@ void main()
     * - use mix(vec3 a,vec3 b, s) = a*(1-s) + b*s for linear interpolation of two colors
      */
 
-    vec3 color = vec3(0.0,0.0,0.0);
+    vec3 color_day = vec3(0.0,0.0,0.0);
+    vec3 color_night = vec3(0.0,0.0,0.0);
+
 
     vec3 Ia = 0.2*sunlight;
     vec3 Il = sunlight;
@@ -52,7 +54,7 @@ void main()
 
     vec3 r_vector = reflect(v2f_light, v2f_normal);
 
-     //combine gloss and cloudiness to get greyscale
+     //combine gloss and cloudiness to get specular weight [0;1]
      float specularity = 0.0;
      if (gloss_texBin){
        specularity = 1-cloud_texRGB.r;
