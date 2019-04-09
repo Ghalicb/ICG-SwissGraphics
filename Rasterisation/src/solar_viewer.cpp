@@ -479,6 +479,8 @@ void Solar_viewer::draw_scene(mat4& _projection, mat4& _view)
     m_matrix = mat4::translate(vec3(earth_.pos_)) * mat4::rotate_y(earth_.angle_self_) * mat4::scale(earth_.radius_);
     mv_matrix = _view * m_matrix;
     mvp_matrix = _projection * mv_matrix;
+    earth_shader_.set_uniform("light_position", light);
+
     earth_shader_.set_uniform("modelview_projection_matrix", mvp_matrix);
     earth_shader_.set_uniform("modelview_matrix", mv_matrix);
     earth_shader_.set_uniform("normal_matrix", transpose(inverse(mv_matrix)));
@@ -495,7 +497,7 @@ void Solar_viewer::draw_scene(mat4& _projection, mat4& _view)
     earth_.night_.bind();
     earth_.cloud_.bind();
     earth_.gloss_.bind();
-    
+
     unit_sphere_.draw();
 
     earth_shader_.disable();
