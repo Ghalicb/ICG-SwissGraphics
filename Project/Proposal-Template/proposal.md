@@ -1,19 +1,29 @@
 ---
-title:  Water Simulation (Group 21)
+title: Interactive ball thrower into water. (Group 21)
 ---
 
-![Interactive ball thrower on water.](images/thrown-ball-into-water-tank.png){width="300px"}
+![](images/thrown-ball-into-water-tank.png){width="300px"}
 
 # Title and Summary
 
 Interactive ball thrower into water. The purpose of this project is to render fluids effects when solid objects controlled by the user are thrown into water.
 
 # Goals and Deliverables
+## Minimum Implementation
+
+## Optional Extensions
 
 
 # Schedule
+## Week 1
 
-Specific plan on when and by whom tasks will be completed.
+## Week 2
+
+## Week 3
+
+## Week 4
+
+## Week 5
 
 # Resources
 - Animation and Rendering of Complex Water Surfaces. Douglas Enright. Stanford University. Industrial Light & Magic enright@stanford.edu. Stephen Marschner.
