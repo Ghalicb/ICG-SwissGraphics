@@ -35,7 +35,6 @@ void main()
 
      vec4 v_position_in_eye_space = modelview_matrix * v_position;
 
-     // TODO comment ?
      v2f_texcoord = v_texcoord;
 
      // Vertex normal in eye space
@@ -49,5 +48,5 @@ void main()
 
      // Vertex position in screen
      gl_Position = modelview_projection_matrix * v_position;
-     
+
 }

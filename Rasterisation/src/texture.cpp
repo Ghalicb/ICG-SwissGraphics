@@ -118,18 +118,15 @@ bool Texture::createSunBillboardTexture()
         }
     }
 
-    int dist_to_center = 0;
-    int dist_to_circle_boarder = 0;
+    int dist_to_circle_border = 0;
 
     for (int col = 0; col < width; ++col) {
         for (int row = 0; row < height; ++row) {
 
-            dist_to_center = sqrt((col - width/2)*(col - width/2) + (row - height/2)*(row - height/2));
-            if (dist_to_center > radius) {
-                dist_to_circle_boarder = dist_to_center - radius;
-
+            dist_to_circle_border = sqrt((col - width/2)*(col - width/2) + (row - height/2)*(row - height/2))-radius;
+            if (dist_to_circle_border > 0) {
                 // Compute alpha using an arbitrary function
-                img[(row * width + col) * 4 + 3] = 255*exp(-0.035*dist_to_circle_boarder);
+                img[(row * width + col) * 4 + 3] = 255*exp(-0.035*dist_to_circle_border);
             }
         }
     }
