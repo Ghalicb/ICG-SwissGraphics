@@ -13,7 +13,7 @@ Interactive ball thrower into water. The purpose of this project is to render fl
 # Goals and Deliverables
 ## Minimum Implementation
 
-- The minimal implementation consists of a static volume of water modelisation that reacts to dropped objects into it. The water volume will be connex. [Fig. 1]
+- The minimal implementation consists of a volume of water modelisation that reacts to dropped objects into it. The water volume will be connex. [Fig. 1]
 - It will be implemented in C++ and OpenGL.
 
 ## Optional Extensions
@@ -24,13 +24,18 @@ Interactive ball thrower into water. The purpose of this project is to render fl
 
 # Schedule
 ## Week 1
+- Model a static volume of transparent water
+- Model a simple sphere that falls under gravity
 
 ## Week 2
+- Implement basic water effects
 
 ## Week 3
+- Model more complex objects
+- Make it interactive : choose objects and move them
 
 ## Week 4
-- Debug and fix problems
+- Debug, fix problems, implement more complex water effects like droplets.
 
 ## Week 5
 - Add cherry on the cake, prepare report and video
