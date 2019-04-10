@@ -1,8 +1,10 @@
 ---
-title: Interactive ball thrower into water. (Group 21)
+title: Interactive ball thrower into water (Group 21)
 ---
 
-![](images/thrown-ball-into-water-tank.png){width="300px"}
+![Fif. 1](images/thrown-ball-into-water-tank.png){width="300px"}
+![Fif. 2](images/droplets.png){width="300px"}
+![Fif. 3](images/helice.png){width="300px"}
 
 # Title and Summary
 
@@ -10,10 +12,14 @@ Interactive ball thrower into water. The purpose of this project is to render fl
 
 # Goals and Deliverables
 ## Minimum Implementation
-The minimal implementation consists of a static water volume modelisation that reacts to user's perturbation. (with object or not ? I would say yes) The water volume will be connex (no particules ejection)
+
+- The minimal implementation consists of a static volume of water modelisation that reacts to dropped objects into it. The water volume will be connex. [Fig. 1]
+- It will be implemented in C++ and OpenGL.
 
 ## Optional Extensions
-Implements better effects, with water ejection.
+- Interactivity : the user can select one object among multiple shapes and move them into and out the water to perturb it.
+- Water particules ejections. [Fig. 2]
+- Moving parts in the water moving the water. [Fig. 3]
 
 
 # Schedule
@@ -24,8 +30,10 @@ Implements better effects, with water ejection.
 ## Week 3
 
 ## Week 4
+- Debug and fix problems
 
 ## Week 5
+- Add cherry on the cake, prepare report and video
 
 # Resources
 - Animation and Rendering of Complex Water Surfaces. Douglas Enright. Stanford University. Industrial Light & Magic enright@stanford.edu. Stephen Marschner.
