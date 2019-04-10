@@ -464,7 +464,7 @@ void Solar_viewer::draw_scene(mat4& _projection, mat4& _view)
     earth_shader_.set_uniform("normal_matrix", transpose(inverse(mv_matrix)));
 
     //bind all earth textures
-    earth_shader_.set_uniform("day_texture", 0);
+    earth_shader_.set_uniform("day_texture",   0);
     earth_shader_.set_uniform("night_texture", 1);
     earth_shader_.set_uniform("cloud_texture", 2);
     earth_shader_.set_uniform("gloss_texture", 3);
