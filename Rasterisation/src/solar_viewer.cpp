@@ -243,12 +243,12 @@ void Solar_viewer::update_body_positions() {
 void Solar_viewer::timer()
 {
     if (timer_active_) {
-        sun_.time_step(time_step_);
+            sun_.time_step(time_step_);
         mercury_.time_step(time_step_);
-        venus_.time_step(time_step_);
-        earth_.time_step(time_step_);
-        moon_.time_step(time_step_);
-        mars_.time_step(time_step_);
+          venus_.time_step(time_step_);
+          earth_.time_step(time_step_);
+           moon_.time_step(time_step_);
+           mars_.time_step(time_step_);
         update_body_positions();
 
         ship_.update_ship();
