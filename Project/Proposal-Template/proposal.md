@@ -10,8 +10,10 @@ Interactive ball thrower into water. The purpose of this project is to render fl
 
 # Goals and Deliverables
 ## Minimum Implementation
+The minimal implementation consists of a static water volume modelisation that reacts to user's perturbation. (with object or not ? I would say yes) The water volume will be connex (no particules ejection)
 
 ## Optional Extensions
+Implements better effects, with water ejection.
 
 
 # Schedule
