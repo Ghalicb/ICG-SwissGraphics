@@ -46,6 +46,24 @@ void main()
     ***/
     vec3 color = vec3(0.0f);
 
+    vec3 light_vector = normalize(light_position - v2f_ec_vertex);
+    vec3 view_vector = normalize(v2f_ec_vertex);
+
+    if (distance(light_position, v2f_ec_vertex) < 1.01 * texture(shadow_map, light_vector).r) {
+
+        vec3 r_vector = reflect(light_vector, N);
+
+        if (dot(N, light_vector) > 0) {
+            // add the diffuse component
+            color += light_color * diffuse_color * dot(N, light_vector);
+
+            if (dot(r_vector, view_vector) > 0) {
+                // add the specular component
+                color += light_color * specular_color * pow(dot(r_vector, view_vector), shininess);
+            }
+        }
+    }
+
     // append the required alpha value
     f_light_contribution = vec4(color, 1.0);
 }

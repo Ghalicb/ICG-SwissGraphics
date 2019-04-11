@@ -148,8 +148,8 @@ void ShadowViewer::draw(const mat4 &view_matrix, const mat4 &projection_matrix) 
     vec3 ambient_light(0.2, 0.2, 0.2),
         plane_diffuse (0.5, 0.5, 0.7), // used as ambient color too
         plane_specular(0.0, 0.0, 0.0),
-         mesh_diffuse (1.0, 0.0, 0.0), // used as ambient color too
-         mesh_specular(1.0, 1.0, 1.0);
+        mesh_diffuse (1.0, 0.0, 0.0), // used as ambient color too
+        mesh_specular(1.0, 1.0, 1.0);
 
     // Render the ambient light contribution
     m_solid_color_shader.use();
@@ -187,6 +187,23 @@ void ShadowViewer::draw(const mat4 &view_matrix, const mat4 &projection_matrix) 
          * You'll need to pass in the light position ***in eye coordinates** as
          * well as the proper material and transformation matrices.
          **/
+        m_phong_shader.set_uniform("light_position", view_matrix* m_light[li].position());
+        m_phong_shader.set_uniform("light_color", m_light[li].color);
+
+        m_phong_shader.set_uniform("modelview_matrix", mesh_mv_matrix);
+        m_phong_shader.set_uniform("modelview_projection_matrix", mesh_mvp_matrix);
+        m_phong_shader.set_uniform("normal_matrix", mesh_n_matrix);
+        m_phong_shader.set_uniform("diffuse_color", mesh_diffuse);
+        m_phong_shader.set_uniform("specular_color", mesh_specular);
+        m_mesh->draw();
+
+        m_phong_shader.set_uniform("modelview_matrix", plane_mv_matrix);
+        m_phong_shader.set_uniform("modelview_projection_matrix", plane_mvp_matrix);
+        m_phong_shader.set_uniform("normal_matrix", plane_n_matrix);
+        m_phong_shader.set_uniform("diffuse_color", plane_diffuse);
+        m_phong_shader.set_uniform("specular_color", plane_specular);
+        m_quad.draw();
+
         m_shadowMap->unbind();
 
         // All other shaders should overwrite the framebuffer color, not add to it...
