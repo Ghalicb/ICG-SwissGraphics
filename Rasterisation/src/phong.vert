@@ -28,5 +28,28 @@ uniform vec4 light_position; //in eye space coordinates already
 
 void main()
 {
+    /** \todo Setup all outgoing variables so that you can compute in the fragmend shader
+      the phong lighting. You will need to setup all the uniforms listed above, before you
+      can start coding this shader.
+
+      Hint: Compute the vertex position, normal and light_position in eye space.
+      Hint: Write the final vertex position to gl_Position
+    */
+
+    vec4 v_position_in_eye_space = modelview_matrix * v_position;
+
+    v2f_texcoord = v_texcoord;
+
+    // Vertex normal in eye space
+    v2f_normal = normalize(normal_matrix * v_normal);
+
+    // Light position in eye space
+    v2f_light = normalize(vec3(light_position - v_position_in_eye_space));
+
+    // View vector between the vertex and the eye in eye space
+    v2f_view = normalize(vec3(vec4(0,0,0,1) - v_position_in_eye_space));  //(0,0,0,1) corresponds to the eye position in eye coordinates
+
+    // Vertex position in screen
+    gl_Position = modelview_projection_matrix * v_position;
 
 }
