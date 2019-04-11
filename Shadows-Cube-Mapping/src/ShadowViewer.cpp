@@ -44,6 +44,11 @@ mat4 ShadowViewer::m_constructLightViewMatrix(size_t li, size_t cube_face) const
     * defined by scene_view_matrix.
     * Hint: use mat4::look_at
     **/
+
+    //use mat4::look_at(vec3 eye, vec3 center, vec3 up)
+    //eye is the light position
+    //center is the center of the face on which the shadow map is constructed
+    //up is up
     return mat4::identity() * scene_view_matrix;
 }
 
