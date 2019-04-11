@@ -1,6 +1,7 @@
-# Assignment
+# Final Project Proposal
 
 ## Description
+Please find our HTML file describing our future project and the papers, that inspired us.
 
 ## Workload
 Daniel Filipe NUNES SILVA : 1/3  
