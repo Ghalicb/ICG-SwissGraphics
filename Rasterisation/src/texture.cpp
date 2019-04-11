@@ -12,7 +12,7 @@
 #include <cassert>
 #include <algorithm>
 #include "lodepng.h"
-
+#include "math.h"
 //=============================================================================
 
 
@@ -98,14 +98,36 @@ bool Texture::createSunBillboardTexture()
     std::vector<unsigned char> img;
     int width = 900;
     int height = 900;
+    const int radius = 150;
+    const int squared_radius = radius*radius;
     img.resize(width*height * 4);
+
+    /** \todo Set up the texture for the sun billboard.
+    *   - Draw an opaque circle with a 150 pixel radius in its middle
+    *   - Outside that circle the texture should become more and more transparent to mimic a nice glow effect
+    *   - Make sure that your texture is fully transparent at its borders to avoid seeing visible edges
+    *   - Experiment with the color and with how fast you change the transparency until the effect satisfies you
+    **/
 
     for (int col = 0; col < width; ++col) {
         for (int row = 0; row < height; ++row) {
             img[(row * width + col) * 4 + 0] = 255; // R
-            img[(row * width + col) * 4 + 1] = 255; // G
-            img[(row * width + col) * 4 + 2] = 255; // B
+            img[(row * width + col) * 4 + 1] = 180; // G
+            img[(row * width + col) * 4 + 2] = 0;   // B
             img[(row * width + col) * 4 + 3] = 255; // A
+        }
+    }
+
+    int dist_to_circle_border = 0;
+
+    for (int col = 0; col < width; ++col) {
+        for (int row = 0; row < height; ++row) {
+
+            dist_to_circle_border = sqrt((col - width/2)*(col - width/2) + (row - height/2)*(row - height/2))-radius;
+            if (dist_to_circle_border > 0) {
+                // Compute alpha using an arbitrary function
+                img[(row * width + col) * 4 + 3] = 255*exp(-0.035*dist_to_circle_border);
+            }
         }
     }
 
