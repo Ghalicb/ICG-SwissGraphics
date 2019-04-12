@@ -71,8 +71,8 @@ mat4 ShadowViewer::m_constructLightViewMatrix(size_t li, size_t cube_face) const
                break;
     }
 
-    vec4 face_center = scene_view_matrix * face_direction + m_light[li].position();
-    vec4 face_up     = scene_view_matrix * up_direction;
+    vec4 face_center = affineInverse(scene_view_matrix) * face_direction + m_light[li].position();
+    vec4 face_up     = affineInverse(scene_view_matrix) * up_direction;
 
     return mat4::look_at(m_light[li].position(), face_center, face_up);
 }
@@ -187,7 +187,7 @@ void ShadowViewer::draw(const mat4 &view_matrix, const mat4 &projection_matrix) 
          * You'll need to pass in the light position ***in eye coordinates** as
          * well as the proper material and transformation matrices.
          **/
-        m_phong_shader.set_uniform("light_position", view_matrix* m_light[li].position());
+        m_phong_shader.set_uniform("light_position", vec3(view_matrix* m_light[li].position()));
         m_phong_shader.set_uniform("light_color", m_light[li].color);
 
         m_phong_shader.set_uniform("modelview_matrix", mesh_mv_matrix);
