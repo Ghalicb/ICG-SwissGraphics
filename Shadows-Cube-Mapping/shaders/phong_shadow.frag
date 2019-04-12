@@ -49,7 +49,7 @@ void main()
     vec3 light_vector = normalize(light_position - v2f_ec_vertex);
     vec3 view_vector = normalize(v2f_ec_vertex);
 
-    if (distance(light_position, v2f_ec_vertex) < 1.01 * texture(shadow_map, light_vector).r) {
+    if (distance(light_position, v2f_ec_vertex) < 1.01 * texture(shadow_map, -light_vector).r) {
 
         vec3 r_vector = reflect(light_vector, N);
 
