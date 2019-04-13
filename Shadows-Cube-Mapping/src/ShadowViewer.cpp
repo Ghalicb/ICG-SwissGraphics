@@ -146,10 +146,10 @@ void ShadowViewer::draw(const mat4 &view_matrix, const mat4 &projection_matrix) 
     mat3 mesh_n_matrix    = transpose(inverse(mesh_mv_matrix));
 
     vec3 ambient_light(0.2, 0.2, 0.2),
-        plane_diffuse (0.5, 0.5, 0.7), // used as ambient color too
-        plane_specular(0.0, 0.0, 0.0),
-        mesh_diffuse (1.0, 0.0, 0.0), // used as ambient color too
-        mesh_specular(1.0, 1.0, 1.0);
+         plane_diffuse (0.5, 0.5, 0.7), // used as ambient color too
+         plane_specular(0.0, 0.0, 0.0),
+         mesh_diffuse (1.0, 0.0, 0.0), // used as ambient color too
+         mesh_specular(1.0, 1.0, 1.0);
 
     // Render the ambient light contribution
     m_solid_color_shader.use();
@@ -172,8 +172,8 @@ void ShadowViewer::draw(const mat4 &view_matrix, const mat4 &projection_matrix) 
         * Hint: read the documentation for glBlendFunc
         **/
 
-       glEnable(GL_BLEND);
-       glBlendFunc(GL_SRC_ALPHA, GL_ONE);
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE);
 
         m_phong_shader.use();
         m_shadowMap->bind();
