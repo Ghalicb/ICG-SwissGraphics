@@ -20,7 +20,7 @@ Samuel CHASSOT : 1/3
 ### Workload
 Daniel Filipe NUNES SILVA : 1/3  
 Ghali CHRAIBI : 1/3  
-Samuel CHASSOT : 1/3
+Samuel CHASSOT : 1/3  
 
 ## Assignment 2 : Lighting
 
@@ -35,7 +35,7 @@ In this assignment, we implemented the Phong lighting model and add shadows as w
 ### Workload
 Daniel Filipe NUNES SILVA : 1/3  
 Ghali CHRAIBI : 1/3  
-Samuel CHASSOT : 1/3
+Samuel CHASSOT : 1/3  
 
 ## Assignment 3 : Raytracing meshes
 
@@ -43,15 +43,15 @@ Samuel CHASSOT : 1/3
 In this assignment, we implemented ray tracing for triangle meshes.
 
 - First, we implemented a method to compute vertex normals as an average of incident triangles' normal weighted by the opening angle of the triangle. To make it efficient, we traversed each triangle once and add the contribution of their normal to the three vertices composing them. At the end, we normalized the all the vertex normals.
-- Then, we implemented the method for triangle intersection using the explicit equation of the triangle (with the help of barycentric coordinates representation) and Cramer's rule to solve the equation. Depending on whether we  want a flat shaded or Phong shaded object, we computed the normal accordingly. For Phong lightning, the normal is an interpolation of the normals of each vertex weighted by the barycentric coordinates coefficients. For flat lightning, the normal is simply the triangle's normal.  
+- Then, we implemented the method for triangle intersection using the explicit equation of the triangle (with the help of barycentric coordinates representation) and Cramer's rule to solve the equation. Depending on whether we  want a flat shaded or Phong shaded object, we computed the normal accordingly. For Phong lightning, the normal is an interpolation of the normals of each vertex weighted by the barycentric coordinates coefficients. For flat lightning, the normal is simply the triangle's normal.
 For this part, we added a method compute_determinant in the Mesh.h/Mesh.cpp files to help us when using the Cramer's rule.
-- Finally, to make our raytracer more efficient, we computed the bounding box test for triangle meshes, which avoid to test for many useless ray intersections. To help us with this function, we add an operator overload for the component-wise division of vectors in vec3.h.  
+- Finally, to make our raytracer more efficient, we computed the bounding box test for triangle meshes, which avoid to test for many useless ray intersections. To help us with this function, we add an operator overload for the component-wise division of vectors in vec3.h.
 Note that if one of the component of the vector at the denominator is exactly 0.0, it will return infinity in C++, which is in concordance with our implementation.
 
 ### Workload
 Daniel Filipe NUNES SILVA : 1/3  
 Ghali CHRAIBI : 1/3  
-Samuel CHASSOT : 1/3
+Samuel CHASSOT : 1/3  
 
 ## Assignment 4 : OpenGL "Hello World"
 
@@ -61,7 +61,7 @@ Basic setup for OpenGL
 ### Workload
 Daniel Filipe NUNES SILVA : 1/3  
 Ghali CHRAIBI : 1/3  
-Samuel CHASSOT : 1/3
+Samuel CHASSOT : 1/3  
 
 ## Assignment 5 : Transformations and Viewing
 
@@ -74,13 +74,13 @@ In this assignment, we built a scene containing several objects (planets from th
 ### Workload
 Daniel Filipe NUNES SILVA : 1/3  
 Ghali CHRAIBI : 1/3  
-Samuel CHASSOT : 1/3
+Samuel CHASSOT : 1/3  
 
 ## Assignment 6 : Texturing and Lighting
 
 ### Description
 
-In this assignment, we used the billboarding technique to mimic the sun's glow. We had first difficulties to figure out how to make the billboard always facing the eye (we tried to find the angles of the billboard using trigonometric functions), but after some time we saw that these angles were already computed and corresponded to the given x\_angle_ and y\_angle_.  
+In this assignment, we used the billboarding technique to mimic the sun's glow. We had first difficulties to figure out how to make the billboard always facing the eye (we tried to find the angles of the billboard using trigonometric functions), but after some time we saw that these angles were already computed and corresponded to the given x\_angle_ and y\_angle_.
 For the rendering of this sun's glow, we tried many functions to make it realistic and we finally decided to use an exponential as its curvature correspond well to the wanted phenomena.
 
 Then we implemented the Phong lighting model to illuminate the planets. For that we needed to pass the modelview, modelview_projection and normal matrixes throw the phong vertex shader to compute the n,l,v vectors that we used in the fragment shader to apply the formula of the phong model derived in class.
@@ -92,4 +92,18 @@ Bonus : We added gradual disturbance of the geometry of the sphere representing 
 ### Workload
 Daniel Filipe NUNES SILVA : 1/3  
 Ghali CHRAIBI : 1/3  
-Samuel CHASSOT : 1/3
+Samuel CHASSOT : 1/3  
+
+## Assignment 7 : Shadows and Cube Mapping
+
+### Description
+In this assignment, we implemented a real-time shadowing technique for multiple omni-directional point lights.
+
+First we implemented the view and projection matrices for a cube face. For the view matrix, we struggled a bit figuring out which matrices to use in order to switch between the coordinates systems.
+
+Then we worked on the fragment shader and implemented Phong lighting in it. Shadows were handled using shadow map. Sign of vectors and coordinates system were also the challenging part, as it can become quickly confusing. 
+
+### Workload
+Daniel Filipe NUNES SILVA : 1/3  
+Ghali CHRAIBI : 1/3  
+Samuel CHASSOT : 1/3  
