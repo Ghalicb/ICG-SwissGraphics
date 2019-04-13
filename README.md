@@ -6,9 +6,9 @@
 We solve this exercice by changing the color of the background in the solid_color scene from black to red.
 
 ### Workload
-Daniel Filipe NUNES SILVA : 1/3
-Ghali CHRAIBI : 1/3
-Samuel CHASSOT : 1/3
+Daniel Filipe NUNES SILVA : 1/3  
+Ghali CHRAIBI : 1/3  
+Samuel CHASSOT : 1/3  
 
 ## Assignment 1 : Planes and Cylinders
 
@@ -18,9 +18,9 @@ Samuel CHASSOT : 1/3
 - Finally, having the implicit equation of the cylinder, we implemented ray intersections with cylinders without many difficulties.
 
 ### Workload
-Daniel Filipe NUNES SILVA : 1/3
-Ghali CHRAIBI : 1/3
-Samuel CHASSOT : 1/3
+Daniel Filipe NUNES SILVA : 1/3  
+Ghali CHRAIBI : 1/3  
+Samuel CHASSOT : 1/3  
 
 ## Assignment 2 : Lighting
 
@@ -33,9 +33,9 @@ In this assignment, we implemented the Phong lighting model and add shadows as w
 - The trickiest diffulty we overcame was forgetting to check that the dot product of the light or the reflection vector with the normal was positive before adding respectively the diffuse and specular contributions.
 
 ### Workload
-Daniel Filipe NUNES SILVA : 1/3
-Ghali CHRAIBI : 1/3
-Samuel CHASSOT : 1/3
+Daniel Filipe NUNES SILVA : 1/3  
+Ghali CHRAIBI : 1/3  
+Samuel CHASSOT : 1/3  
 
 ## Assignment 3 : Raytracing meshes
 
@@ -49,9 +49,9 @@ For this part, we added a method compute_determinant in the Mesh.h/Mesh.cpp file
 Note that if one of the component of the vector at the denominator is exactly 0.0, it will return infinity in C++, which is in concordance with our implementation.
 
 ### Workload
-Daniel Filipe NUNES SILVA : 1/3
-Ghali CHRAIBI : 1/3
-Samuel CHASSOT : 1/3
+Daniel Filipe NUNES SILVA : 1/3  
+Ghali CHRAIBI : 1/3  
+Samuel CHASSOT : 1/3  
 
 ## Assignment 4 : OpenGL "Hello World"
 
@@ -59,9 +59,9 @@ Samuel CHASSOT : 1/3
 Basic setup for OpenGL
 
 ### Workload
-Daniel Filipe NUNES SILVA : 1/3
-Ghali CHRAIBI : 1/3
-Samuel CHASSOT : 1/3
+Daniel Filipe NUNES SILVA : 1/3  
+Ghali CHRAIBI : 1/3  
+Samuel CHASSOT : 1/3  
 
 ## Assignment 5 : Transformations and Viewing
 
@@ -72,9 +72,9 @@ In this assignment, we built a scene containing several objects (planets from th
 - Our first approach was to update planets' positions step by step. But we finally decided to make use of the stored angle of orbit to compute the rotation from the initial position.
 
 ### Workload
-Daniel Filipe NUNES SILVA : 1/3
-Ghali CHRAIBI : 1/3
-Samuel CHASSOT : 1/3
+Daniel Filipe NUNES SILVA : 1/3  
+Ghali CHRAIBI : 1/3  
+Samuel CHASSOT : 1/3  
 
 ## Assignment 6 : Texturing and Lighting
 
@@ -90,17 +90,20 @@ Finaly, we focused our work on the earth and we combined multiple textures to vi
 Bonus : We added gradual disturbance of the geometry of the sphere representing the sun in the sun vertex shader. For that, we tried many different trigonometric formulas so that the fluid effect on the sun is visible, but still realistic.
 
 ### Workload
-Daniel Filipe NUNES SILVA : 1/3
-Ghali CHRAIBI : 1/3
-Samuel CHASSOT : 1/3
+Daniel Filipe NUNES SILVA : 1/3  
+Ghali CHRAIBI : 1/3  
+Samuel CHASSOT : 1/3  
 
 ## Assignment 7 : Shadows and Cube Mapping
 
 ### Description
-- In this assignment, we implemented a real-time shadowing technique for multiple omni-directional point lights.
-- The implementation was more or less straightforward. We struggled a bit figuring out which matrices to use in order to switch between the coordinates systems.
+In this assignment, we implemented a real-time shadowing technique for multiple omni-directional point lights.
+
+First we implemented the view and projection matrices for a cube face. For the view matrix, we struggled a bit figuring out which matrices to use in order to switch between the coordinates systems.
+
+Then we worked on the fragment shader and implemented Phong lighting in it. Shadows were handled using shadow map. Sign of vectors and coordinates system were also the challenging part, as it can become quickly confusing. 
 
 ### Workload
-Daniel Filipe NUNES SILVA : 1/3
-Ghali CHRAIBI : 1/3
-Samuel CHASSOT : 1/3
+Daniel Filipe NUNES SILVA : 1/3  
+Ghali CHRAIBI : 1/3  
+Samuel CHASSOT : 1/3  
