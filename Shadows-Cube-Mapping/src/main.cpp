@@ -7,7 +7,7 @@ int main(int argc, char *argv[]) {
         exit(-1);
     }
 
-    ShadowViewer window("Shadow Viewer", 640, 480);
+    ShadowViewer window("Shadow Viewer Group21", 640, 480);
     window.loadMesh(argv[1]);
     return window.run();
 }
