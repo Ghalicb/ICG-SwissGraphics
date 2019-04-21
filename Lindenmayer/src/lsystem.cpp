@@ -25,8 +25,13 @@ std::string LindenmayerSystemDeterministic::expandSymbol(unsigned char const& sy
 		For a given symbol in the sequence, what should it be replaced with after expansion?
 		The rules are in this->rules, see lsystem.h for details.
 	*/
-	// that is a dummy implementation to be replaced
-	return {char(sym)}; // this constructs string from char 
+
+	// If a symbol have a key entry in the rules map, return its value. Otherwise return the symbol with no changement.
+	if (rules.find(sym) != rules.end()) {
+		return rules.find(sym)->second;
+	} else {
+		return {char(sym)}; // this constructs string from char
+	}
 
 	/*
 	You may find useful:
