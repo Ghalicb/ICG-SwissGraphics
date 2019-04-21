@@ -47,7 +47,13 @@ std::string LindenmayerSystem::expandOnce(std::string const& symbol_sequence) {
 		Perform one iteration of grammar expansion on `symbol_sequence`.
 		Use the expandSymbol method
 	*/
-	return "";
+	std::string expanded_seq;
+
+	for (auto symbol : symbol_sequence) {
+		expanded_seq.append(expandSymbol(symbol));
+	}
+
+	return expanded_seq;
 
 	//============================================================
 }
