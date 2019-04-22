@@ -137,7 +137,21 @@ std::string LindenmayerSystemStochastic::expandSymbol(unsigned char const& sym) 
 		(stochastic case)
 		The rules are in this->rules, but now these are stochastic rules because this method belongs to the LindenmayerSystemStochastic class, see lsystem.h for details.
 	*/
-	return {char(sym)};
+	if (rules.find(sym) != rules.end()) {
+		std::vector<StochasticRule> sym_rules = rules.find(sym)->second;
+		Dice d;
+		double rand = d.roll();
+
+		for (StochasticRule sr : sym_rules) {
+			if (rand <= sr.probability) {
+				return sr.expansion;
+			}
+			rand -= sr.probability;
+		}
+
+	} else {
+		return {char(sym)}; // this constructs string from char
+	}
 
 	//============================================================
 }
