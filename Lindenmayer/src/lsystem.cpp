@@ -94,11 +94,11 @@ std::vector<Segment> LindenmayerSystem::draw(std::string const& symbols) {
 
 	// Rotation matrix for +
 	mat2 rotation_plus = mat2(cos(radii_angle), -sin(radii_angle),
-														sin(radii_angle),  cos(radii_angle));
+								sin(radii_angle),  cos(radii_angle));
 
 	// Rotation matrix for -
-	mat2 rotation_minus = mat2( cos(radii_angle), sin(radii_angle),
-														 -sin(radii_angle), cos(radii_angle));
+	mat2 rotation_minus = mat2(cos(radii_angle), sin(radii_angle),
+								-sin(radii_angle), cos(radii_angle));
 
 	for (const char symbol : symbols) {
 
@@ -112,14 +112,14 @@ std::vector<Segment> LindenmayerSystem::draw(std::string const& symbols) {
 				break;
 
 			case '[' :
-				positions_stack .push_back(position);
+				positions_stack.push_back(position);
 				directions_stack.push_back(direction);
 				break;
 
 			case ']' :
 				position  = positions_stack .back();
 				direction = directions_stack.back();
-				positions_stack .pop_back();
+				positions_stack.pop_back();
 				directions_stack.pop_back();
 				break;
 
