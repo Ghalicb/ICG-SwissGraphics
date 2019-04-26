@@ -80,24 +80,25 @@ std::vector<Segment> LindenmayerSystem::draw(std::string const& symbols) {
 		Build line segments according to the sequence of symbols
 		The initial position is (0, 0) and the initial direction is "up" (0, 1)
 		Segment is std::pair<vec2, vec2>
-		
+
 	*/
 	std::vector<Segment> lines;
-	vec2 position = vec2(0,0);
+	vec2 position  = vec2(0,0);
 	vec2 direction = vec2(0,1);
 
 	// Stack to keep in memory positions & directions when using []
 	std::vector<vec2> positions_stack;
 	std::vector<vec2> directions_stack;
 
-
 	double radii_angle = deg2rad(rotation_angle_deg);
+
 	// Rotation matrix for +
-	mat2 rotation_plus = mat2(cos(radii_angle), -sin(radii_angle), 
-								sin(radii_angle), cos(radii_angle));
+	mat2 rotation_plus = mat2(cos(radii_angle), -sin(radii_angle),
+														sin(radii_angle),  cos(radii_angle));
+
 	// Rotation matrix for -
-	mat2 rotation_minus = mat2(cos(radii_angle), sin(radii_angle), 
-								-sin(radii_angle), cos(radii_angle));
+	mat2 rotation_minus = mat2( cos(radii_angle), sin(radii_angle),
+														 -sin(radii_angle), cos(radii_angle));
 
 	for (const char symbol : symbols) {
 
@@ -105,19 +106,23 @@ std::vector<Segment> LindenmayerSystem::draw(std::string const& symbols) {
 			case '+' :
 				direction = rotation_plus * direction;
 				break;
+
 			case '-' :
 				direction = rotation_minus * direction;
 				break;
+
 			case '[' :
-				positions_stack.push_back(position);
+				positions_stack .push_back(position);
 				directions_stack.push_back(direction);
 				break;
+
 			case ']' :
-				position = positions_stack.back();
+				position  = positions_stack .back();
 				direction = directions_stack.back();
-				positions_stack.pop_back();
+				positions_stack .pop_back();
 				directions_stack.pop_back();
 				break;
+
 			default :
 				vec2 new_position = position + direction; // Knowing that direction is always a unit vector
 				lines.push_back(Segment(position, new_position));
@@ -126,7 +131,7 @@ std::vector<Segment> LindenmayerSystem::draw(std::string const& symbols) {
 		}
 	}
 	return lines;
-	
+
 	//============================================================
 }
 
