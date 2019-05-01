@@ -23,18 +23,20 @@ Improved ray tracer. The purpose of this project is to improve the ray tracer do
 
 # Schedule
 ## Week 1
-
+- Indirect lightning implementation.
 ## Week 2
-
+- Fluorescent objects implementation.
 
 ## Week 3
-
+- Caustics implementation.
 
 ## Week 4
-
+- Soft shadows and ray lightning implementation.
+- Bugs correction.
 
 ## Week 5
-
+- Correct last minute problems.
+- Render scene for submission.
 
 # Workload
 Dynamic and fair workload distribution
