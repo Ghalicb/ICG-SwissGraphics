@@ -16,9 +16,12 @@ The purpose of this project is to improve the ray tracer developped during the s
 - Global illuminations
 - It will be implemented in C++.
 
-## Optional Extensions
+## Optional Extensions Ideas
 - Transparent objects
 - Caustics
+- Glossy reflections
+- Motion blur
+- Depth of field
 
 # Schedule
 ## Week 10 : Initial Scene Composition
@@ -34,7 +37,7 @@ The purpose of this project is to improve the ray tracer developped during the s
 - TODO
 
 ## Week 13 : Extensions Implementation
-- TODO
+Choose extensions from enumerated ideas
 
 ## Week 14 : Final Work
 - Debugging
