@@ -49,3 +49,4 @@ Dynamic and fair workload distribution
 
 ## Photon Maps
 - Global Illumination using Photon Maps (Henrik Wann Jensen)
+- http://marctenbosch.com/photon/
