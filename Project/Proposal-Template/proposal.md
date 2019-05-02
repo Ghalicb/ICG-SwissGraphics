@@ -1,5 +1,5 @@
 ---
-title: Improved Ray Tracer (Group 21)
+title: Improved Ray Tracer with Path Tracing (Group 21)
 ---
 
 ![Fig. 1](images/1-global-lightning.jpg){width="300px"}
@@ -7,46 +7,41 @@ title: Improved Ray Tracer (Group 21)
 ![Fig. 3](images/3-caustics.jpg){width="300px"}
 
 # Summary
-
-The purpose of this project is to add soft shadows, global illumination and caustics to the ray tracer developped during the semester. This should require the use of photon maps. [Fig. 1]
+The purpose of this project is to improve the ray tracer developped during the semester with path tracing so that it can generate more realistic effects like global illuminations and soft shadows.
 
 # Goals and Deliverables
 ## Minimum Implementation
+- Diffuse objects
 - Soft shadows
-- Global illumination
-- Caustics
+- Global illuminations
 - It will be implemented in C++.
 
 ## Optional Extensions
-- New implicitly defined objects
-- Phosphorescent objects
+- Transparent objects
+- Caustics
 
 # Schedule
-## Week 1
-- Initial scene composition : Cornell Box
-- Global lightning implementation
+## Week 10 : Initial Scene Composition
+- Implement a rectangular source light
+- Implement walls
+- Implement boxes
+- Compose a Cornell Box
 
-## Week 2
-- Soft shadows implementation [Fig. 2]
+## Week 11 : Path Tracing I
+- TODO
 
-## Week 3
-- Caustics implementation [Fig. 3]
+## Week 12 : Path Tracing II
+- TODO
 
-## Week 4
-- Optional features implementation
+## Week 13 : Extensions Implementation
+- TODO
 
-## Week 5
+## Week 14 : Final Works
 - Debugging
-- Final scene rendering
+- Final scenes rendering
 
 # Workload
 Dynamic and fair workload distribution
 
 # Resources
-## Soft Shadows
-- https://www.imgtec.com/blog/ray-traced-soft-shadows-in-real-time-spellwrath/
-- Soft Shadows For Ray Tracing (ETH-CGL)
-
-## Photon Maps
-- Global Illumination using Photon Maps (Henrik Wann Jensen)
-- http://marctenbosch.com/photon/
+- TODO
