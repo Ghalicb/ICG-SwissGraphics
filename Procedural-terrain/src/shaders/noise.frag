@@ -59,10 +59,26 @@ float perlin_noise_1d(float x) {
 	 * in the handout. You will determine the two grid points
 	 * surrounding x, look up their gradients, evaluate the the
 	 * linear functions these gradients describe, and interpolate these
-	 * values using the smooth interolation polygnomial blending_weight_poly.
+	 * values using the smooth interpolation polynomial blending_weight_poly.
 	 * Note: gradients in the gradient lookup table are 2D, 
 	 */
-	return 0.0f;
+	// Find the surrounding cell corners
+	float c0 = floor(x);
+	float c1 = c0 + 1;
+
+	// Determine gradients at cell corners
+	float g0 = gradients[hash_func(vec2(c0,0)) % NUM_GRADIENTS].x;
+	float g1 = gradients[hash_func(vec2(c1,0)) % NUM_GRADIENTS].x;
+
+	// Compute contributions
+	float phi0 = g0 * (x - c0);
+	float phi1 = g1 * (x - c1);
+
+	// Interpolate contributions
+	float dist = x - c0;
+	float value = mix(phi0, phi1, blending_weight_poly(dist));
+
+	return value;
 }
 
 float perlin_fbm_1d(float x) {
