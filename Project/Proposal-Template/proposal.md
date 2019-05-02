@@ -1,38 +1,40 @@
-o---
+---
 title: Improved ray tracer (Group 21)
 ---
 
-![Fig. 1](images/thrown-ball-into-water-tank.png){width="300px"}
-![Fig. 2](images/droplets.png){width="300px"}
-![Fig. 3](images/helice.png){width="300px"}
+![Fig. 1](images/3-global-lightning.jpg){width="300px"}
+![Fig. 2](images/1-ray-tracing.jpg){width="300px"}
+![Fig. 3](images/2-caustics.jpg){width="300px"}
+![Fig. 4](images/4-soft-shadows.jpg){width="300px"}
 
-# Title and Summary
+# Summary
 
-Improved ray tracer. The purpose of this project is to improve the ray tracer done during assignments to add support for indirect lightning, soft shadows, caustics, fluorescense and ray light.
+The purpose of this project is to improve the ray tracer done during assignments to add support for indirect lightning, soft shadows, caustics, fluorescense and volumetric lightning/light shafts.
 
 # Goals and Deliverables
 ## Minimum Implementation
 
-- The minimal implementation consists of ray tracer that implements indirect lightning, fluorescent objects and caustics. [Fig. 1]
+- The minimal implementation consists of ray tracer that implements global lightning, soft shadows and caustics. [Fig. 1]
 - It will be implemented in C++.
 
 ## Optional Extensions
-- Soft shadows
-- light as rays
+- Fluorescent objects
+- Volumetric lightning/light shafts
 
 
 # Schedule
 ## Week 1
-- Indirect lightning implementation.
+- Global lightning implementation.
+
 ## Week 2
-- Fluorescent objects implementation.
+- Soft shadows. [Fig. 4]
 
 ## Week 3
-- Caustics implementation.
+- Caustics implementation (by implementing transparent objects and light refraction). [Fig. 3]
 
 ## Week 4
-- Soft shadows and ray lightning implementation.
 - Bugs correction.
+- Optional features implementation.
 
 ## Week 5
 - Correct last minute problems.
