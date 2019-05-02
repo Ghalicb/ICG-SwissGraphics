@@ -4,53 +4,65 @@
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <meta http-equiv="Content-Style-Type" content="text/css" />
   <meta name="generator" content="pandoc" />
-  <title>Improved ray tracer (Group 21)</title>
+  <title>Improved Ray Tracer (Group 21)</title>
   <style type="text/css">code{white-space: pre;}</style>
   <link rel="stylesheet" href="icg_report.css" type="text/css" />
 </head>
 <body>
 <div id="header">
-<h1 class="title">Improved ray tracer (Group 21)</h1>
+<h1 class="title">Improved Ray Tracer (Group 21)</h1>
 </div>
-<p><img src="images/3-global-lightning.jpg" alt="Fig. 1" width="300" /> <img src="images/1-ray-tracing.jpg" alt="Fig. 2" width="300" /> <img src="images/2-caustics.jpg" alt="Fig. 3" width="300" /> <img src="images/4-soft-shadows.jpg" alt="Fig. 4" width="300" /></p>
+<p><img src="images/1-global-lightning.jpg" alt="Fig. 1" width="300" /> <img src="images/2-soft-shadows.jpg" alt="Fig. 2" width="300" /> <img src="images/3-caustics.jpg" alt="Fig. 3" width="300" /></p>
 <h1 id="summary">Summary</h1>
-<p>The purpose of this project is to improve the ray tracer done during assignments to add support for indirect lightning, soft shadows, caustics, fluorescense and volumetric lightning/light shafts.</p>
+<p>The purpose of this project is to add soft shadows, global illumination and caustics to the ray tracer developped during the semester. This should require the use of photon maps. [Fig. 1]</p>
 <h1 id="goals-and-deliverables">Goals and Deliverables</h1>
 <h2 id="minimum-implementation">Minimum Implementation</h2>
 <ul>
-<li>The minimal implementation consists of ray tracer that implements global lightning, soft shadows and caustics. [Fig. 1]</li>
+<li>Soft shadows</li>
+<li>Global illumination</li>
+<li>Caustics</li>
 <li>It will be implemented in C++.</li>
 </ul>
 <h2 id="optional-extensions">Optional Extensions</h2>
 <ul>
+<li>New implicitly defined objects</li>
 <li>Fluorescent objects</li>
-<li>Volumetric lightning/light shafts</li>
+<li>Volumetric lightning</li>
 </ul>
 <h1 id="schedule">Schedule</h1>
 <h2 id="week-1">Week 1</h2>
 <ul>
-<li>Global lightning implementation.</li>
+<li>Initial scene composition : Cornell Box</li>
+<li>Global lightning implementation</li>
 </ul>
 <h2 id="week-2">Week 2</h2>
 <ul>
-<li>Soft shadows. [Fig. 4]</li>
+<li>Soft shadows implementation [Fig. 2]</li>
 </ul>
 <h2 id="week-3">Week 3</h2>
 <ul>
-<li>Caustics implementation (by implementing transparent objects and light refraction). [Fig. 3]</li>
+<li>Caustics implementation [Fig. 3]</li>
 </ul>
 <h2 id="week-4">Week 4</h2>
 <ul>
-<li>Bugs correction.</li>
-<li>Optional features implementation.</li>
+<li>Optional features implementation</li>
 </ul>
 <h2 id="week-5">Week 5</h2>
 <ul>
-<li>Correct last minute problems.</li>
-<li>Render scene for submission.</li>
+<li>Debugging</li>
+<li>Final scene rendering</li>
 </ul>
 <h1 id="workload">Workload</h1>
 <p>Dynamic and fair workload distribution</p>
 <h1 id="resources">Resources</h1>
+<h2 id="soft-shadows">Soft Shadows</h2>
+<ul>
+<li>https://www.imgtec.com/blog/ray-traced-soft-shadows-in-real-time-spellwrath/</li>
+<li>Soft Shadows For Ray Tracing (ETH-CGL)</li>
+</ul>
+<h2 id="photon-maps">Photon Maps</h2>
+<ul>
+<li>Global Illumination using Photon Maps (Henrik Wann Jensen)</li>
+</ul>
 </body>
 </html>
