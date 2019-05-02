@@ -44,3 +44,6 @@ The purpose of this project is to improve the ray tracer done during assignments
 Dynamic and fair workload distribution
 
 # Resources
+## Soft Shadows
+- https://www.imgtec.com/blog/ray-traced-soft-shadows-in-real-time-spellwrath/
+- Soft Shadows For Ray Tracing (ETH-CGL)
