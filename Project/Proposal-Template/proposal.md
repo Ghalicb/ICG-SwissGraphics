@@ -17,6 +17,7 @@ The purpose of this project is to improve the ray tracer developped during the s
 - It will be implemented in C++.
 
 ## Optional Extensions Ideas
+- Specular objects
 - Transparent objects
 - Caustics
 - Glossy reflections
@@ -31,10 +32,10 @@ The purpose of this project is to improve the ray tracer developped during the s
 - Compose a Cornell Box
 
 ## Week 11 : Path Tracing I
-- TODO
+Start path tracing implementation
 
 ## Week 12 : Path Tracing II
-- TODO
+Continue and finish path tracing implementation
 
 ## Week 13 : Extensions Implementation
 Choose extensions from enumerated ideas
