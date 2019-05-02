@@ -19,8 +19,7 @@ The purpose of this project is to add soft shadows, global illumination and caus
 
 ## Optional Extensions
 - New implicitly defined objects
-- Fluorescent objects
-- Volumetric lightning
+- Phosphorescent objects
 
 # Schedule
 ## Week 1
