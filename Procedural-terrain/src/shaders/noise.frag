@@ -144,7 +144,30 @@ float perlin_noise(vec2 point) {
 	* Implement 2D perlin noise as described in the handout.
 	* You may find a glsl `for` loop useful here, but it's not necessary.
 	**/
-	return 0.0f;
+	// Find the surrounding cell corners
+	vec2 c00 = vec2(floor(point.x), floor(point.y));
+	vec2 c01 = vec2(c00.x, c00.y + 1);
+	vec2 c10 = vec2(c00.x + 1, c00.y);
+	vec2 c11 = vec2(c00.x + 1, c00.y + 1);
+
+	// Determine gradients at cell corners
+	vec2 g00 = gradients[hash_func(c00) % NUM_GRADIENTS];
+	vec2 g01 = gradients[hash_func(c01) % NUM_GRADIENTS];
+	vec2 g10 = gradients[hash_func(c10) % NUM_GRADIENTS];
+	vec2 g11 = gradients[hash_func(c11) % NUM_GRADIENTS];
+
+	// Compute contributions
+	float s = dot(g00, (point - c00));
+	float u = dot(g01, (point - c01));
+	float t = dot(g10, (point - c10));
+	float v = dot(g11, (point - c11));
+
+	// Interpolate contributions
+	float st = mix(s, t, blending_weight_poly(point.x - c00.x));
+	float uv = mix(u, v, blending_weight_poly(point.x - c01.x));
+	float noise = mix(st, uv, blending_weight_poly(point.y - c00.y));
+
+	return noise;
 }
 
 // ==============================================================
@@ -156,7 +179,13 @@ float perlin_fbm(vec2 point) {
 	 * should use the constants num_octaves, freq_multiplier, and
 	 * ampl_multiplier. 
 	 */
-	return 0.0f;
+	float fbm = 0.0f;
+
+	for (int i = 0; i < num_octaves; ++i) {
+		fbm += pow(ampl_multiplier, i) * perlin_noise(point * pow(freq_multiplier, i));
+	}
+
+	return fbm;
 }
 
 // ==============================================================
@@ -168,7 +197,13 @@ float turbulence(vec2 point) {
 	 * Implement the 2D turbulence function as described in the handout.
 	 * Again, you should use num_octaves, freq_multiplier, and ampl_multiplier.
 	 */
-	return 0.0f;
+	float turb = 0.0f;
+
+	for (int i = 0; i < num_octaves; ++i) {
+		turb += pow(ampl_multiplier, i) * abs(perlin_noise(point * pow(freq_multiplier, i)));
+	}
+
+	return turb;
 }
 
 // ==============================================================
