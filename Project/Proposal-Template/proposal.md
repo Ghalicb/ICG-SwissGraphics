@@ -1,5 +1,5 @@
 ---
-title: Improved ray tracer (Group 21)
+title: Improved Ray Tracer (Group 21)
 ---
 
 ![Fig. 1](images/1-global-lightning.jpg){width="300px"}
@@ -18,12 +18,13 @@ The purpose of this project is to add soft shadows, global illumination and caus
 - It will be implemented in C++.
 
 ## Optional Extensions
+- New implicitly defined objects
 - Fluorescent objects
 - Volumetric lightning
-- New implicitly defined objects
 
 # Schedule
 ## Week 1
+- Initial scene composition : Cornell Box
 - Global lightning implementation
 
 ## Week 2
