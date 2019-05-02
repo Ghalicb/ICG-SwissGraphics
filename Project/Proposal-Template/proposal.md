@@ -36,12 +36,17 @@ The purpose of this project is to improve the ray tracer developped during the s
 ## Week 13 : Extensions Implementation
 - TODO
 
-## Week 14 : Final Works
+## Week 14 : Final Work
 - Debugging
+- Report Redaction
 - Final scenes rendering
 
 # Workload
 Dynamic and fair workload distribution
 
-# Resources
-- TODO
+# Ressources
+- ../Ressources/Monte-Carlo-Ray-Tracing-Cornell-Lecture.pdf
+- ../Ressources/Global-Illumination-Path-Tracing-Taku-Komura-Lecture.pdf
+- ../Ressources/Path-Tracing-Matthias-Teschner-Lecture.pdf
+- en.wikipedia.org/wiki/Path_tracing
+- scratchapixel.com/lessons/3d-basic-rendering/global-illumination-path-tracing
