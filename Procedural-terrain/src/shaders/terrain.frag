@@ -45,7 +45,7 @@ void main()
 
 	if (height < terrain_water_level) {
 		material = terrain_color_water;
-		shininess = 0.8;
+		shininess = 8.0;
 	} else {
 		float alpha = (height - terrain_water_level)*2;
 		material = mix(terrain_color_grass, terrain_color_mountain, alpha);
