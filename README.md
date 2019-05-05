@@ -122,3 +122,12 @@ Even if we could quickly find the rules for "basic" cases, we saw that it become
 Daniel Filipe NUNES SILVA : 1/3  
 Ghali CHRAIBI : 1/3  
 Samuel CHASSOT : 1/3  
+
+## Assignment 9 : Perlin Noise, Procedural Terrain
+
+### Description
+
+### Workload
+Daniel Filipe NUNES SILVA : 1/3  
+Ghali CHRAIBI : 1/3  
+Samuel CHASSOT : 1/3  
