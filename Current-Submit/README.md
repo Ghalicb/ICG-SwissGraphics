@@ -1,13 +1,12 @@
-# Assignment 8 : Lindenmayer Systems
+# Assignment 9 : Perlin Noise, Procedural Terrain
 
 ## Description
 
-The main part of this assignment was to implement a Lindenmayer system's generator.  
-First, we implemented functions for the expansion of such L-systems. Then we built a finite state machine to register all the lines that need to be drawn for a certain level of expansion of an L-systems. And as a more advanced topic, we implemented stochastic L-systems.
+In this assignment, we implemented perlin noise in 1D and 2D, as well as fractional Brownian motion and turbulance noises.  
 
-On the second part, we had to understand how L-systems worked, by reverse-engineered them.   
-Even if we could quickly find the rules for "basic" cases, we saw that it becomes much harder when we needed to use several variables.
+This allowed us to implement simple texture such as wood, marble and a basic map (water, grass and mountain) using known functions.
 
+Finally, we produced a 3D terrain, which was the most demanding part.  
 
 ## Workload
 Daniel Filipe NUNES SILVA : 1/3  
