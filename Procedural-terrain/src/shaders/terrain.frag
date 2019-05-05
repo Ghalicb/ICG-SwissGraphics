@@ -62,6 +62,7 @@ void main()
     vec3 Ia = 0.2*sunlight;
     vec3 Il = sunlight;
 	vec3 v2f_light = normalize(light_position - v2f_ec_vertex);
+	vec3 v2f_view = normalize(v2f_ec_vertex);
     vec3 r_vector = reflect(v2f_light, v2f_normal);
 
     //add the ambient component to the final color vector
@@ -71,9 +72,9 @@ void main()
         // add the diffuse component
         color += Il * material * dot(v2f_normal, v2f_light);
 
-        if (dot(r_vector, v2f_ec_vertex) > 0) {
+        if (dot(r_vector, v2f_view) > 0) {
             // add the specular component
-            color += Il * material * pow(dot(r_vector, v2f_ec_vertex), shininess);
+            color += Il * material * pow(dot(r_vector, v2f_view), shininess);
         }
     }
 
