@@ -30,12 +30,15 @@
 #include <tbb/parallel_for.h>
 #endif
 
+# define PATHS_PER_PIXEL 50
 //-----------------------------------------------------------------------------
 
 Image Scene::render()
 {
     // allocate new image.
     Image img(camera.width, camera.height);
+
+
 
     // Function rendering a full column of the image
     auto raytraceColumn = [&img, this](int x) {
@@ -44,10 +47,13 @@ Image Scene::render()
             Ray ray = camera.primary_ray(x,y);
 
             // compute color by tracing this ray
-            vec3 color = trace(ray, 0);
+            vec3 color = vec3(0.0, 0.0, 0.0);
+            for(int i=0; i<PATHS_PER_PIXEL; ++i){
+              color += trace(ray, 0);
+            }
 
             // avoid over-saturation
-            color = min(color, vec3(1, 1, 1));
+            color = min(color/PATHS_PER_PIXEL, vec3(1, 1, 1));
 
             // store pixel color
             img(x,y) = color;
@@ -189,17 +195,18 @@ vec3 Scene::lighting(const vec3& _point, const vec3& _normal, const vec3& _view,
             if (dot_reflection_light_view > 0) {
                 specular += light.color * _material.specular * pow(dot_reflection_light_view, _material.shininess);
             }
-        } else {
-          // Path tracing part
-          if (dot_normal_light > 0) {
-            //diffuse objects
-            vec3 random_reflected_ray = normalize(vec3(rand()%10, rand()%10, rand()%10));
-            random_reflected_ray = dot(random_reflected_ray, _normal) < 0 ? -random_reflected_ray : random_reflected_ray;
-            Ray reflected_ray = Ray(_point + EPSILON * _normal, random_reflected_ray);
-
-            diffuse += trace(reflected_ray, _depth+1);
-          }
         }
+
+        // Path tracing part
+        if (dot_normal_light > 0) {
+          //diffuse objects
+          vec3 random_reflected_ray = normalize(vec3(rand()%10, rand()%10, rand()%10));
+          random_reflected_ray = dot(random_reflected_ray, _normal) < 0 ? -random_reflected_ray : random_reflected_ray;
+          Ray reflected_ray = Ray(_point + EPSILON * _normal, random_reflected_ray);
+
+          diffuse += 0.1*trace(reflected_ray, _depth+1);
+        }
+
     }
 
     // The Phong lighting
