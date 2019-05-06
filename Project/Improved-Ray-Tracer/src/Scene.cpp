@@ -208,6 +208,7 @@ void Scene::read(const std::string &_filename)
         {"background", [&]() { ifs >> background; }},
         {"ambience",   [&]() { ifs >> ambience; }},
         {"light",      [&]() { lights .emplace_back(ifs); }},
+        {"planelight", [&]() { planelights.emplace_back(new PlaneLight(ifs)); }},
         {"plane",      [&]() { objects.emplace_back(new    Plane(ifs)); }},
         {"sphere",     [&]() { objects.emplace_back(new   Sphere(ifs)); }},
         {"cylinder",   [&]() { objects.emplace_back(new Cylinder(ifs)); }},
