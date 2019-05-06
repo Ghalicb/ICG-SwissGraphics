@@ -2,9 +2,9 @@
 title: Improved Ray Tracer with Path Tracing (Group 21)
 ---
 
-![Fig. 1](images/1-global-lightning.jpg){width="300px"}
-![Fig. 2](images/2-soft-shadows.jpg){width="300px"}
-![Fig. 3](images/3-caustics.jpg){width="300px"}
+![Fig. 1](../res/images/1-global-lightning.jpg){width="300px"}
+![Fig. 2](../res/images/2-soft-shadows.jpg){width="300px"}
+![Fig. 3](../res/images/3-caustics.jpg){width="300px"}
 
 # Summary
 The purpose of this project is to improve the ray tracer developped during the semester with path tracing so that it can generate more realistic effects like global illuminations and soft shadows.
@@ -48,9 +48,9 @@ Choose extensions from enumerated ideas
 # Workload
 Dynamic and fair workload distribution
 
-# Ressources
-- ../Ressources/Monte-Carlo-Ray-Tracing-Cornell-Lecture.pdf
-- ../Ressources/Global-Illumination-Path-Tracing-Taku-Komura-Lecture.pdf
-- ../Ressources/Path-Tracing-Matthias-Teschner-Lecture.pdf
+# References
+- ../res/references/Monte-Carlo-Ray-Tracing-Cornell-Lecture.pdf
+- ../res/references/Global-Illumination-Path-Tracing-Taku-Komura-Lecture.pdf
+- ../res/references/Path-Tracing-Matthias-Teschner-Lecture.pdf
 - en.wikipedia.org/wiki/Path_tracing
 - scratchapixel.com/lessons/3d-basic-rendering/global-illumination-path-tracing
