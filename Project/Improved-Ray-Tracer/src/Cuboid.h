@@ -17,12 +17,12 @@ public:
   {
     z_axis = normalize(cross(x_axis, y_axis));
 
-    faces.emplace_back{center + x_size/2,  x_axis};
-    faces.emplace_back{center - x_size/2, -x_axis};
-    faces.emplace_back{center + y_size/2,  y_axis};
-    faces.emplace_back{center - y_size/2, -y_axis};
-    faces.emplace_back{center + z_size/2,  z_axis};
-    faces.emplace_back{center - z_size/2, -z_axis};
+    faces[0] = new Plane(center + x_size/2,  x_axis);
+    faces[1] = new Plane(center - x_size/2, -x_axis);
+    faces[2] = new Plane(center + y_size/2,  y_axis);
+    faces[3] = new Plane(center - y_size/2, -y_axis);
+    faces[4] = new Plane(center + z_size/2,  z_axis);
+    faces[5] = new Plane(center - z_size/2, -z_axis);
   }
 
   Cuboid(std::istream &is) { parse(is); }
@@ -50,7 +50,7 @@ private:
   double y_size;
   double z_size;
 
-  std::vector<Plane> faces;
+  std::array<Plane, 6> faces;
 };
 
 #endif
