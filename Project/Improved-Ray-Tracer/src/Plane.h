@@ -51,6 +51,8 @@ public:
         normal = normalize(normal);
     }
 
+    const vec3 getCenter() const { return center; }
+
 private:
     /// one (arbitrary) point on the plane
     vec3 center;
