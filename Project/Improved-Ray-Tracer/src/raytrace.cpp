@@ -28,17 +28,18 @@ int main(int argc, char **argv) {
         jobs.emplace_back(RaytraceJob{argv[1], argv[2]});
     else if ((argc == 2) && argv[1][0] == '0') {
         jobs = { {
-            {"../scenes/spheres/spheres.sce",       "../results/provided_scenes/spheres.png"},
-            {"../scenes/cylinders/cylinders.sce",   "../results/provided_scenes/cylinders.png"},
-            {"../scenes/combo/combo.sce",           "../results/provided_scenes/combo.png"},
-            {"../scenes/molecule/molecule.sce",     "../results/provided_scenes/molecule.png"},
-            {"../scenes/molecule2/molecule2.sce",   "../results/provided_scenes/molecule2.png"},
-            {"../scenes/cube/cube.sce",             "../results/provided_scenes/cube.png"},
-            {"../scenes/mask/mask.sce",             "../results/provided_scenes/mask.png"},
-            {"../scenes/mirror/mirror.sce",         "../results/provided_scenes/mirror.png"},
-            {"../scenes/toon_faces/toon_faces.sce", "../results/provided_scenes/toon_faces.png"},
-            {"../scenes/office/office.sce",         "../results/provided_scenes/office.png"},
-            {"../scenes/rings/rings.sce",           "../results/provided_scenes/rings.png"}
+            {"../scenes/spheres/spheres.sce",         "../results/provided_scenes/spheres.png"},
+            {"../scenes/cylinders/cylinders.sce",     "../results/provided_scenes/cylinders.png"},
+            {"../scenes/combo/combo.sce",             "../results/provided_scenes/combo.png"},
+            {"../scenes/molecule/molecule.sce",       "../results/provided_scenes/molecule.png"},
+            {"../scenes/molecule2/molecule2.sce",     "../results/provided_scenes/molecule2.png"},
+            {"../scenes/cube/cube.sce",               "../results/provided_scenes/cube.png"},
+            {"../scenes/mask/mask.sce",               "../results/provided_scenes/mask.png"},
+            {"../scenes/mirror/mirror.sce",           "../results/provided_scenes/mirror.png"},
+            {"../scenes/toon_faces/toon_faces.sce",   "../results/provided_scenes/toon_faces.png"},
+            {"../scenes/office/office.sce",           "../results/provided_scenes/office.png"},
+            {"../scenes/rings/rings.sce",             "../results/provided_scenes/rings.png"},
+            {"../scenes/cornell_box/cornell_box.sce", "../results/cornell_box.png"}
         } };
     }
     else {
