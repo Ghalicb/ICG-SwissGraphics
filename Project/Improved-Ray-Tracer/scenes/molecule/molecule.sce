@@ -3,7 +3,7 @@ camera 0 0 3  0 0 0  0 1 0  55  500 500
 
 ambience 0.1 0.1 0.1
 background 1 1 1
-depth 3
+depth 5
 
 # lights: position and color
 light 0  0 10  0.3 0.3 0.3
