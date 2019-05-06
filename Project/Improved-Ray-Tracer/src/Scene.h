@@ -76,6 +76,7 @@ public:
 
     // Accessors for scene objects and camera for debugging.
     const std::vector<std::unique_ptr<Object>> &getObjects() const { return objects; }
+    const std::vector<std::unique_ptr<PlaneLight>> &getPlanelights() const { return planelights; }
     const Camera &getCamera() const { return camera; }
 
 private:
@@ -84,6 +85,9 @@ private:
 
     /// array for all lights in the scene
     std::vector<Light> lights;
+
+    /// array for all planelights in the scene
+    std::vector<std::unique_ptr<PlaneLight>> planelights;
 
     /// array for all the objects in the scene
     std::vector<std::unique_ptr<Object>> objects;

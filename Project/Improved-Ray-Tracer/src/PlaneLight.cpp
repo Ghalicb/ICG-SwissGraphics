@@ -9,8 +9,8 @@
 
 #include "PlaneLight.h"
 
-PlaneLight::PlaneLight(const vec3& _center, const vec3& _x_side_dir, const vec3& _y_side_dir,
-const double _size, const vec3& _color)
+
+PlaneLight::PlaneLight(const vec3& _center, const vec3& _x_side_dir, const vec3& _y_side_dir, const double _size, const vec3& _color)
 :center(_center), x_side_dir(_x_side_dir), y_side_dir(_y_side_dir), size(_size), color(_color)
 {
   normal = normalize(cross(x_side_dir, y_side_dir));
@@ -18,10 +18,13 @@ const double _size, const vec3& _color)
   y_side_dir = normalize(y_side_dir);
 }
 
-bool intersect(const Ray&        _ray,
-                     vec3&       _intersection_point,
-                     vec3&       _intersection_normal,
-                     double&     _intersection_t)
+bool
+PlaneLight::
+intersect(const Ray&        _ray,
+                vec3&       _intersection_point,
+                vec3&       _intersection_normal,
+                double&     _intersection_t) const
+
 {
   double denom = dot(normal, _ray.direction);
 
@@ -38,12 +41,15 @@ bool intersect(const Ray&        _ray,
       //check if the intersection is in the square centered at _center and and of size _size
       vec3 center_to_intersection = _intersection_point - center;
 
-      double delta_x = std::abs(dot(center_to_intersection, x_side_dir));
-      double delta_y = std::abs(dot(center_to_intersection, y_side_dir));
+      double delta_x = dot(center_to_intersection, x_side_dir);
+      double delta_y = dot(center_to_intersection, y_side_dir);
+
+      delta_x = delta_x < 0 ? - delta_x : delta_x;
+      delta_y = delta_y < 0 ? - delta_y : delta_y;
 
       if(delta_x > size/2 || delta_y > size/2) {
         // the intersection point lays outside the bounds of the light
-        return false
+        return false;
       }
 
       _intersection_normal = normal;

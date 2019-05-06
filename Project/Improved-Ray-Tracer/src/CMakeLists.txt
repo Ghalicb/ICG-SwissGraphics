@@ -1,4 +1,4 @@
-file(GLOB SRCS_COMMON Cylinder.cpp Mesh.cpp Plane.cpp Scene.cpp Sphere.cpp vec3.cpp Image.cpp Cuboid.cpp)
+file(GLOB SRCS_COMMON Cylinder.cpp Mesh.cpp Plane.cpp Scene.cpp Sphere.cpp vec3.cpp Image.cpp PlaneLight.cpp Cuboid.cpp)
 file(GLOB SRCS raytrace.cpp ${SRCS_COMMON})
 file(GLOB HDRS ./*.h)
 

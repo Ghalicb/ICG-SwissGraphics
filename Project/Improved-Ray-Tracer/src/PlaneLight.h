@@ -5,8 +5,12 @@
 //  Created by Samuel Chassot on 05.05.19.
 //
 
+#ifndef PLANELIGHT_H
+#define PLANELIGHT_H
+
 //== INCLUDES =================================================================
 
+#include "Object.h"
 #include "vec3.h"
 
 
@@ -34,7 +38,7 @@ public:
                            vec3&       _intersection_normal,
                            double&     _intersection_t) const override;
 
-    /// parse plane from an input stream
+    /// parse plane light from an input stream
     virtual void parse(std::istream &is) override {
         is >> center >> x_side_dir >> y_side_dir >> size >> color;
         normal = normalize(cross(x_side_dir, y_side_dir));
@@ -56,3 +60,5 @@ private:
     /// color of the light
     vec3 color;
 };
+
+#endif
