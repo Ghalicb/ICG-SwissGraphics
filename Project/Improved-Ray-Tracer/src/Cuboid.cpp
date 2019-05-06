@@ -53,6 +53,7 @@ intersect(const Ray&  _ray,
             in_cuboid = true;
           break;
       }
+      
       if (in_cuboid && _intersection_t < _intersection_t)
       {
         _intersection_point  = intersection_point;
