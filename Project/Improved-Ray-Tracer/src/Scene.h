@@ -18,6 +18,7 @@
 #include "StopWatch.h"
 #include "Object.h"
 #include "Light.h"
+#include "PlaneLight.h"
 #include "Ray.h"
 #include "Material.h"
 #include "Image.h"
