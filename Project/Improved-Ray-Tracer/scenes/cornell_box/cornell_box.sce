@@ -24,8 +24,8 @@ plane      0    0 -400    0  0 -1   0.9 0.8 0.6   0.9 0.8 0.6   0.0 0.0 0.0   0.
 plane   -400    0    0   -1  0  0   1.0 0.0 0.0   1.0 0.0 0.0   0.0 0.0 0.0   0.0   0.0
 plane    400    0    0    1  0  0   0.0 1.0 0.0   0.0 1.0 0.0   0.0 0.0 0.0   0.0   0.0
 
-# cuboids: center, x_axis, y_axis, x_size, y_size, z_size, material
-cuboid   -100 -150 -200   1 0 0   0 1 0   300   500   200   0.0 0.0 1.0    0.0 0.0 1.0   0.0 0.0 0.0   0.0   0.0
+# cuboids: center, x_size, y_size, z_size, rotation_anglem material
+cuboid   -100 -150 -150   300   500   200  -20    0.0 0.0 1.0   0.0 0.0 1.0   0.0 0.0 0.0   0.0   0.0
 
 # spheres: center, radius, material
 sphere    200 -300   50   100   1.0 1.0 0.0       1.0 1.0 0.0   0.0 0.0 0.0   0.0   0.0
