@@ -1,7 +1,5 @@
 #include "Cuboid.h"
 
-#include "Plane.h"
-
 bool
 Cuboid::
 intersect(const Ray&  _ray,
@@ -9,12 +7,12 @@ intersect(const Ray&  _ray,
                vec3&  _intersection_normal,
              double&  _intersection_t) const
 {
-  int i = 0;
+  int solutions = 0;
 
   for (size_t i = 0; i < faces.size(); ++i)
   {
     if (solutions >= 2) break;
-    f = faces[i];
+    Plane f = faces[i];
 
     vec3   intersection_point;
     vec3   intersection_normal;
@@ -24,12 +22,16 @@ intersect(const Ray&  _ray,
 
     if (f.intersect(_ray, intersection_point, intersection_normal, intersection_t))
     {
-      vec3 center_to_point = intersection_point - f.center;
+      vec3 center_to_point = intersection_point - f.getCenter();
       bool in_cuboid = false;
 
+      double dot_ctp_x_axis;
+      double dot_ctp_y_axis;
+      double dot_ctp_z_axis;
+
       switch (i) {
+        case 0:
         case 1:
-        case 2:
           dot_ctp_y_axis = dot(center_to_point, y_axis);
           dot_ctp_z_axis = dot(center_to_point, z_axis);
           if (dot_ctp_y_axis < y_size/2 &&
@@ -53,20 +55,25 @@ intersect(const Ray&  _ray,
             in_cuboid = true;
           break;
       }
-      
+
       if (in_cuboid && _intersection_t < _intersection_t)
       {
         _intersection_point  = intersection_point;
         _intersection_normal = intersection_normal;
-        _intersection_t      = intersection_t
+        _intersection_t      = intersection_t;
 
-        ++i;
+        ++solutions;
       }
     }
   }
 
-  if (i > 0)
+  std::cout << solutions;
+  if (solutions > 0)
+  {
     return true;
+  }
   else
+  {
     return false;
+  }
 }

@@ -2,7 +2,10 @@
 #define CUBOID_H
 
 #include "Object.h"
+#include "Plane.h"
 #include "vec3.h"
+
+#include <array>
 
 class Cuboid : public Object
 {
@@ -17,12 +20,12 @@ public:
   {
     z_axis = normalize(cross(x_axis, y_axis));
 
-    faces[0] = new Plane(center + x_size/2,  x_axis);
-    faces[1] = new Plane(center - x_size/2, -x_axis);
-    faces[2] = new Plane(center + y_size/2,  y_axis);
-    faces[3] = new Plane(center - y_size/2, -y_axis);
-    faces[4] = new Plane(center + z_size/2,  z_axis);
-    faces[5] = new Plane(center - z_size/2, -z_axis);
+    faces[0] = Plane(center + vec3(x_size/2, 0, 0),  x_axis);
+    faces[1] = Plane(center - vec3(x_size/2, 0, 0), -x_axis);
+    faces[2] = Plane(center + vec3(0, y_size/2, 0),  y_axis);
+    faces[3] = Plane(center - vec3(0, y_size/2, 0), -y_axis);
+    faces[4] = Plane(center + vec3(0, 0, z_size/2),  z_axis);
+    faces[5] = Plane(center - vec3(0, 0, z_size/2), -z_axis);
   }
 
   Cuboid(std::istream &is) { parse(is); }
