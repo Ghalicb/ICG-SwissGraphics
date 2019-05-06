@@ -2,10 +2,11 @@
 
 ## Build Project
 - Go to `Improved-Ray-Tracer/`
+- `mkdir build`
+- `cd build`
 - `cmake ..`
 - `make -j`
-- Go back to `Improved-Ray-Tracer/`
-- Ray trace all the scenes with : `./build/raytrace 0`
+- Ray trace all the scenes with : `./raytrace 0`
 
 ## Cuboid
 We implemented the class Cuboid, which is described by its center, {x, y, z}_size, rotation_angle and material. The faces of this object are planes. We intersect the ray with the Plane associated with the corresponding face to compute intersections and we restrict them to be on the faces computing the the dot product of the face_center_to_intersection_vector with the {x, y, z}_axis. In order to speed up the computations, we came up with the following tricks :
