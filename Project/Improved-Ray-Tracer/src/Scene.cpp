@@ -23,6 +23,8 @@
 #include <functional>
 #include <stdexcept>
 
+#include <stdlib.h>     // for rand()
+
 #if HAS_TBB
 #include <tbb/tbb.h>
 #include <tbb/parallel_for.h>
@@ -91,7 +93,7 @@ vec3 Scene::trace(const Ray& _ray, int _depth) {
     }
 
     // compute local Phong lighting (ambient+diffuse+specular)
-    vec3 color = lighting(point, normal, -_ray.direction, object->material);
+    vec3 color = lighting(point, normal, -_ray.direction, object->material, _depth);
 
 
     /** \todo
@@ -138,7 +140,7 @@ bool Scene::intersect(const Ray& _ray, Object_ptr& _object, vec3& _point, vec3& 
     return (tmin != Object::NO_INTERSECTION);
 }
 
-vec3 Scene::lighting(const vec3& _point, const vec3& _normal, const vec3& _view, const Material& _material) {
+vec3 Scene::lighting(const vec3& _point, const vec3& _normal, const vec3& _view, const Material& _material, const int _depth) {
 
     /** \todo
      * Compute the Phong lighting:
@@ -171,13 +173,13 @@ vec3 Scene::lighting(const vec3& _point, const vec3& _normal, const vec3& _view,
                                         point_intersect, normal_intersect,
                                         t_intersect);
 
+        double dot_normal_light = dot(_normal, to_light_source);
         // if there is no intersection of if the intersection is beyond the
         // the light source, then there is no shadow
         if (!does_intersect || t_intersect > distance(light.position, _point)) {
-            double dot_normal_light = dot(_normal, to_light_source);
-
             // the dot_normal_light and dot_reflection_light_view must be positive
             // to produce any effect to the viewed image
+            // PATH TRACING - if diffuse, trace a random ray from this surface
             if (dot_normal_light > 0) {
                 diffuse += light.color * _material.diffuse * dot_normal_light;
             }
@@ -187,6 +189,16 @@ vec3 Scene::lighting(const vec3& _point, const vec3& _normal, const vec3& _view,
             if (dot_reflection_light_view > 0) {
                 specular += light.color * _material.specular * pow(dot_reflection_light_view, _material.shininess);
             }
+        } else {
+          // Path tracing part
+          if (dot_normal_light > 0) {
+            //diffuse objects
+            vec3 random_reflected_ray = normalize(vec3(rand()%10, rand()%10, rand()%10));
+            random_reflected_ray = dot(random_reflected_ray, _normal) < 0 ? -random_reflected_ray : random_reflected_ray;
+            Ray reflected_ray = Ray(_point + EPSILON * _normal, random_reflected_ray);
+
+            diffuse += trace(reflected_ray, _depth+1);
+          }
         }
     }
 
