@@ -31,7 +31,7 @@
 #include <tbb/parallel_for.h>
 #endif
 
-# define PATHS_PER_PIXEL 20
+# define PATHS_PER_PIXEL 80
 //-----------------------------------------------------------------------------
 
 Image Scene::render()
@@ -111,13 +111,13 @@ vec3 Scene::trace(const Ray& _ray, int _depth) {
      * the color computed by local Phong lighting (use `object->material.mirror` as weight)
      * - check whether your recursive algorithm reflects the ray `max_depth` times
      */
-    double alpha = object->material.mirror;
-
-    if (alpha > 0) {
-        vec3 reflected_ray_direction = reflect(_ray.direction, normal);
-        Ray reflected_ray = Ray(point + EPSILON * normal, reflected_ray_direction);
-        color = (1 - alpha) * color + alpha * trace(reflected_ray, _depth + 1);
-    }
+    // double alpha = object->material.mirror;
+    //
+    // if (alpha > 0) {
+    //     vec3 reflected_ray_direction = reflect(_ray.direction, normal);
+    //     Ray reflected_ray = Ray(point + EPSILON * normal, reflected_ray_direction);
+    //     color = (1 - alpha) * color + alpha * trace(reflected_ray, _depth + 1);
+    // }
 
     return color;
 }
@@ -197,25 +197,27 @@ vec3 Scene::lighting(const vec3& _point, const vec3& _normal, const vec3& _view,
                 specular += light.color * _material.specular * pow(dot_reflection_light_view, _material.shininess);
             }
         }
-
-        // PATH TRACING
-
-        //diffuse objects
-        vec3 random_reflected_ray = normalize(vec3(rand()%10, rand()%10, rand()%10));
-        random_reflected_ray = dot(random_reflected_ray, _normal) < 0 ? -random_reflected_ray : random_reflected_ray;
-        Ray reflected_ray = Ray(_point + EPSILON * _normal, random_reflected_ray);
-
-        vec3 color_traced = trace(reflected_ray, _depth + 1);
-        diffuse = 0.6*diffuse + 0.4*color_traced;
-
-
-
-
     }
 
     // The Phong lighting
     vec3 color = ambient + diffuse + specular;
 
+    // PATH TRACING
+    double alpha = _material.mirror;
+
+    if (alpha > 0) {
+        vec3 reflected_ray_direction = reflect(-_view, _normal);
+        Ray reflected_ray = Ray(_point + EPSILON * _normal, reflected_ray_direction);
+        color = (1 - alpha) * color + alpha * trace(reflected_ray, _depth + 1);
+    }else {
+      //diffuse objects
+      vec3 random_reflected_ray = normalize(vec3(rand()%10, rand()%10, rand()%10));
+      random_reflected_ray = dot(random_reflected_ray, _normal) < 0 ? -random_reflected_ray : random_reflected_ray;
+      Ray reflected_ray = Ray(_point + EPSILON * _normal, random_reflected_ray);
+
+      vec3 color_traced = trace(reflected_ray, _depth + 1);
+      color = 0.6*color + 0.4*color_traced;
+    }
     return color;
 }
 
