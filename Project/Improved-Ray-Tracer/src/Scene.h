@@ -18,7 +18,6 @@
 #include "StopWatch.h"
 #include "Object.h"
 #include "Light.h"
-#include "PlaneLight.h"
 #include "Ray.h"
 #include "Material.h"
 #include "Image.h"
@@ -68,7 +67,7 @@ public:
     *   @param _view normalized direction from the point to the viewer's position.
     *   @param _material holds material parameters of the `_point`, that should be lit.
     */
-    vec3  lighting(const vec3& _point, const vec3& _normal, const vec3& _view, const Material& _material, const int _depth);
+    vec3  lighting(const vec3& _point, const vec3& _normal, const vec3& _view, const Material& _material);
 
     void read(const std::string &filename);
 
@@ -76,7 +75,6 @@ public:
 
     // Accessors for scene objects and camera for debugging.
     const std::vector<std::unique_ptr<Object>> &getObjects() const { return objects; }
-    const std::vector<std::unique_ptr<PlaneLight>> &getPlanelights() const { return planelights; }
     const Camera &getCamera() const { return camera; }
 
 private:
@@ -85,9 +83,6 @@ private:
 
     /// array for all lights in the scene
     std::vector<Light> lights;
-
-    /// array for all planelights in the scene
-    std::vector<std::unique_ptr<PlaneLight>> planelights;
 
     /// array for all the objects in the scene
     std::vector<std::unique_ptr<Object>> objects;
