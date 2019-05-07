@@ -31,7 +31,7 @@
 #include <tbb/parallel_for.h>
 #endif
 
-# define PATHS_PER_PIXEL 10
+# define PATHS_PER_PIXEL 20
 //-----------------------------------------------------------------------------
 
 Image Scene::render()
@@ -197,7 +197,8 @@ vec3 Scene::lighting(const vec3& _point, const vec3& _normal, const vec3& _view,
                 specular += light.color * _material.specular * pow(dot_reflection_light_view, _material.shininess);
             }
         }
-        // Path tracing part
+
+        // PATH TRACING
 
         //diffuse objects
         vec3 random_reflected_ray = normalize(vec3(rand()%10, rand()%10, rand()%10));
