@@ -31,7 +31,7 @@
 #include <tbb/parallel_for.h>
 #endif
 
-# define PATHS_PER_PIXEL 300
+# define PATHS_PER_PIXEL 10
 //-----------------------------------------------------------------------------
 
 Image Scene::render()
@@ -205,7 +205,7 @@ vec3 Scene::lighting(const vec3& _point, const vec3& _normal, const vec3& _view,
         Ray reflected_ray = Ray(_point + EPSILON * _normal, random_reflected_ray);
 
         vec3 color_traced = trace(reflected_ray, _depth + 1);
-        diffuse += 0.3*color_traced;
+        diffuse = 0.6*diffuse + 0.4*color_traced;
 
 
 
