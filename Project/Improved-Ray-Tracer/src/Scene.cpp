@@ -17,6 +17,7 @@
 #include "Mesh.h"
 
 #include "Cuboid.h"
+#include "CutPlane.h"
 
 #include <limits>
 #include <map>
@@ -30,7 +31,7 @@
 #include <tbb/parallel_for.h>
 #endif
 
-# define PATHS_PER_PIXEL 100
+# define PATHS_PER_PIXEL 300
 //-----------------------------------------------------------------------------
 
 Image Scene::render()
@@ -195,19 +196,19 @@ vec3 Scene::lighting(const vec3& _point, const vec3& _normal, const vec3& _view,
             if (dot_reflection_light_view > 0) {
                 specular += light.color * _material.specular * pow(dot_reflection_light_view, _material.shininess);
             }
-        } else {
-          // Path tracing part
-          if (dot_normal_light > 0) {
-            //diffuse objects
-            vec3 random_reflected_ray = normalize(vec3(rand()%10, rand()%10, rand()%10));
-            random_reflected_ray = dot(random_reflected_ray, _normal) < 0 ? -random_reflected_ray : random_reflected_ray;
-            Ray reflected_ray = Ray(_point + EPSILON * _normal, random_reflected_ray);
+        }
+        // Path tracing part
 
-            vec3 color_traced = trace(reflected_ray, _depth + 1);
-            diffuse += diffuse*0.7 + 0.3*color_traced;
+        //diffuse objects
+        vec3 random_reflected_ray = normalize(vec3(rand()%10, rand()%10, rand()%10));
+        random_reflected_ray = dot(random_reflected_ray, _normal) < 0 ? -random_reflected_ray : random_reflected_ray;
+        Ray reflected_ray = Ray(_point + EPSILON * _normal, random_reflected_ray);
 
-          }
-      }
+        vec3 color_traced = trace(reflected_ray, _depth + 1);
+        diffuse += 0.3*color_traced;
+
+
+
 
     }
 
@@ -233,6 +234,7 @@ void Scene::read(const std::string &_filename)
         {"light",      [&]() { lights .emplace_back(ifs); }},
         {"planelight", [&]() { planelights.emplace_back(new PlaneLight(ifs)); }},
         {"plane",      [&]() { objects.emplace_back(new    Plane(ifs)); }},
+        {"cutplane",   [&]() { objects.emplace_back(new    CutPlane(ifs)); }},
         {"sphere",     [&]() { objects.emplace_back(new   Sphere(ifs)); }},
         {"cylinder",   [&]() { objects.emplace_back(new Cylinder(ifs)); }},
         {"mesh",       [&]() { objects.emplace_back(new Mesh(ifs, _filename)); }},
