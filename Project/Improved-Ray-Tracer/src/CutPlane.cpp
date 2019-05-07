@@ -35,6 +35,7 @@ intersect(const Ray& _ray,
     if(plane->intersect(_ray, _intersection_point, _intersection_normal, _intersection_t)){
       // the ray intersects the plane, now need to check if point lays in the hole, if yes return false
 
+      //distance computed using this formula http://mathworld.wolfram.com/Point-LineDistance3-Dimensional.html
       double distance_squared;
       vec3 v1 = center - _intersection_point;
       double t1 = norm(v1);
