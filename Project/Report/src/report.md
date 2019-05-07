@@ -14,6 +14,6 @@ We implemented the class Cuboid, which is described by its center, {x, y, z}_siz
 - We evaluate the norm of face_center_to_intersection_vector and compare it with the norm of (x_size/2,y_size/2,z_size/2), which is the biggest value face_center_to_intersection_vector could have when intersection_point is on a face, before starting any heavy computations.
 
 ## Cornell Box
-We described a Cornell Box scene (/Improved-Ray-Tracer/scenes/cornell_box/). It is composed of five walls, one light, one cuboid and one sphere. For now, we do not consider specular, shininess nor mirror, which are all set to 0. It has 800x800x800 dimensions, the origin (0,0,0) is at the center of the box and the camera located at (0, 0, 600) is looking at the origin.
+We described a Cornell Box scene (/Improved-Ray-Tracer/scenes/cornell_box/). It is composed of five walls, one light, one cuboid and one sphere. For now, we do not consider specular, shininess nor mirror, which are all set to 0. It has 800x800x800 dimensions, the origin (0,0,0) is at the center of the box and the camera located at (0, 0, 600) is looking at the origin with a field of view of 90 degrees.
 
 Go to `Improved-Ray-Tracer/` and ray trace it with : `./build/raytrace ./scenes/cornell_box/cornell_box.sce ./results/cornell_box.png`
