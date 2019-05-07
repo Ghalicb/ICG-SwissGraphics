@@ -16,6 +16,8 @@
 #include "Cylinder.h"
 #include "Mesh.h"
 
+#include "Cuboid.h"
+
 #include <limits>
 #include <map>
 #include <functional>
@@ -211,7 +213,8 @@ void Scene::read(const std::string &_filename)
         {"plane",      [&]() { objects.emplace_back(new    Plane(ifs)); }},
         {"sphere",     [&]() { objects.emplace_back(new   Sphere(ifs)); }},
         {"cylinder",   [&]() { objects.emplace_back(new Cylinder(ifs)); }},
-        {"mesh",       [&]() { objects.emplace_back(new     Mesh(ifs, _filename)); }}
+        {"mesh",       [&]() { objects.emplace_back(new Mesh(ifs, _filename)); }},
+        {"cuboid",     [&]() { objects.emplace_back(new Cuboid(ifs)); }}
     };
 
     // parse file
