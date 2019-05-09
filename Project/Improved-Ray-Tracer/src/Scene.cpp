@@ -27,7 +27,7 @@
 #include <tbb/parallel_for.h>
 #endif
 
-#define PATHS_PER_PIXEL 50
+#define PATHS_PER_PIXEL 10
 #define MAX_BOUNCE 10
 //-----------------------------------------------------------------------------
 
@@ -35,8 +35,6 @@ Image Scene::render()
 {
     // allocate new image.
     Image img(camera.width, camera.height);
-
-
 
     // Function rendering a full column of the image
     auto raytraceColumn = [&img, this](int x) {
@@ -98,16 +96,6 @@ vec3 Scene::trace(const Ray& _ray, int _depth) {
 
     // compute local Phong lighting (ambient+diffuse+specular)
     vec3 color = lighting(point, normal, -_ray.direction, object->material, _depth);
-
-
-    /** \todo
-     * Compute reflections by recursive ray tracing:
-     * - check whether `object` is reflective by checking its `material.mirror`
-     * - check recursion depth
-     * - generate reflected ray, compute its color contribution, and mix it with
-     * the color computed by local Phong lighting (use `object->material.mirror` as weight)
-     * - check whether your recursive algorithm reflects the ray `max_depth` times
-     */
 
     return color;
 }
@@ -184,10 +172,8 @@ vec3 Scene::lighting(const vec3& _point, const vec3& _normal, const vec3& _view,
     //take a vector only in the semi-space in normal direction, otherwise a ray can be traced inside objects
     random_reflected_ray_dir = dot(random_reflected_ray_dir, _normal) < 0 ? -random_reflected_ray_dir : random_reflected_ray_dir;
     Ray random_reflected_ray = Ray(_point + EPSILON * _normal, random_reflected_ray_dir);
-
     vec3 color_traced = trace(random_reflected_ray, _depth + 1);
 
-    double diffuse_factor = norm(_material.diffuse);
     color += color_traced;
 
     return color/2.0;
