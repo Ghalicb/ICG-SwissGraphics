@@ -27,15 +27,12 @@
 #include <tbb/parallel_for.h>
 #endif
 
-# define PATHS_PER_PIXEL 10
-//-----------------------------------------------------------------------------
+#define PATHS_PER_PIXEL 10
 
 Image Scene::render()
 {
     // allocate new image.
     Image img(camera.width, camera.height);
-
-
 
     // Function rendering a full column of the image
     auto raytraceColumn = [&img, this](int x) {
@@ -44,13 +41,10 @@ Image Scene::render()
             Ray ray = camera.primary_ray(x,y);
 
             // compute color by tracing this ray
-            vec3 color = vec3(0.0, 0.0, 0.0);
-            for(int i=0; i<PATHS_PER_PIXEL; ++i){
-              color += trace(ray, 0);
-            }
+            vec3 color = trace(ray, 0);
 
             // avoid over-saturation
-            color = min(color/PATHS_PER_PIXEL, vec3(1, 1, 1));
+            color = min(color, vec3(1, 1, 1));
 
             // store pixel color
             img(x,y) = color;
@@ -96,7 +90,7 @@ vec3 Scene::trace(const Ray& _ray, int _depth) {
     }
 
     // compute local Phong lighting (ambient+diffuse+specular)
-    vec3 color = lighting(point, normal, -_ray.direction, object->material, _depth);
+    vec3 color = lighting(point, normal, -_ray.direction, object->material);
 
 
     /** \todo
@@ -143,7 +137,7 @@ bool Scene::intersect(const Ray& _ray, Object_ptr& _object, vec3& _point, vec3& 
     return (tmin != Object::NO_INTERSECTION);
 }
 
-vec3 Scene::lighting(const vec3& _point, const vec3& _normal, const vec3& _view, const Material& _material, const int _depth) {
+vec3 Scene::lighting(const vec3& _point, const vec3& _normal, const vec3& _view, const Material& _material) {
 
     /** \todo
      * Compute the Phong lighting:
@@ -176,13 +170,13 @@ vec3 Scene::lighting(const vec3& _point, const vec3& _normal, const vec3& _view,
                                         point_intersect, normal_intersect,
                                         t_intersect);
 
-        double dot_normal_light = dot(_normal, to_light_source);
         // if there is no intersection of if the intersection is beyond the
         // the light source, then there is no shadow
         if (!does_intersect || t_intersect > distance(light.position, _point)) {
+            double dot_normal_light = dot(_normal, to_light_source);
+
             // the dot_normal_light and dot_reflection_light_view must be positive
             // to produce any effect to the viewed image
-            // PATH TRACING - if diffuse, trace a random ray from this surface
             if (dot_normal_light > 0) {
                 diffuse += light.color * _material.diffuse * dot_normal_light;
             }
@@ -236,7 +230,6 @@ void Scene::read(const std::string &_filename)
         {"background", [&]() { ifs >> background; }},
         {"ambience",   [&]() { ifs >> ambience; }},
         {"light",      [&]() { lights .emplace_back(ifs); }},
-        {"planelight", [&]() { planelights.emplace_back(new PlaneLight(ifs)); }},
         {"plane",      [&]() { objects.emplace_back(new    Plane(ifs)); }},
         {"sphere",     [&]() { objects.emplace_back(new   Sphere(ifs)); }},
         {"cylinder",   [&]() { objects.emplace_back(new Cylinder(ifs)); }},
