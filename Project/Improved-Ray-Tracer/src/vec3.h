@@ -18,6 +18,10 @@
 #include <math.h>
 #include <algorithm>
 
+#include <stdlib.h>     // for rand()
+
+#define PI 3.14159265
+
 
 //== CLASS DEFINITION =========================================================
 
@@ -99,6 +103,20 @@ public:
     {
         for (int i=0; i<3; ++i) data_[i] += v[i];
         return *this;
+    }
+
+    /// create a random vector in space, normalized
+    static vec3 random_vector()
+    {
+        double a = 2*PI*(rand()%100000)/100000.0;
+        double b = 2*PI*(rand()%100000)/100000.0;
+        
+        double sina = sin(a);
+        double sinb = sin(b);
+        double cosa = cos(a);
+        double cosb = cos(b);
+
+        return vec3(sina*sinb, -sina*cosb, cosa);
     }
 };
 
