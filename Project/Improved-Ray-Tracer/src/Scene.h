@@ -67,7 +67,7 @@ public:
     *   @param _view normalized direction from the point to the viewer's position.
     *   @param _material holds material parameters of the `_point`, that should be lit.
     */
-    vec3  lighting(const vec3& _point, const vec3& _normal, const vec3& _view, const Material& _material);
+    vec3  lighting(const vec3& _point, const vec3& _normal, const vec3& _view, const Material& _material, int _depth);
 
     void read(const std::string &filename);
 

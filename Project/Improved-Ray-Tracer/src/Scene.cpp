@@ -91,7 +91,7 @@ vec3 Scene::trace(const Ray& _ray, int _depth) {
     }
 
     // compute local Phong lighting (ambient+diffuse+specular)
-    vec3 color = lighting(point, normal, -_ray.direction, object->material);
+    vec3 color = lighting(point, normal, -_ray.direction, object->material, _depth);
 
     return color;
 }
@@ -121,7 +121,7 @@ bool Scene::intersect(const Ray& _ray, Object_ptr& _object, vec3& _point, vec3& 
     return (tmin != Object::NO_INTERSECTION);
 }
 
-vec3 Scene::lighting(const vec3& _point, const vec3& _normal, const vec3& _view, const Material& _material) {
+vec3 Scene::lighting(const vec3& _point, const vec3& _normal, const vec3& _view, const Material& _material, const int _depth) {
 
     vec3 color = vec3(0.0);
 
