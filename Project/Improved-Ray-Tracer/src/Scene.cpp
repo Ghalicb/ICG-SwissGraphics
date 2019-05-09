@@ -28,7 +28,7 @@
 #endif
 
 #define PATHS_PER_PIXEL 10
-#define MAX_BOUNCE 10
+#define MAX_BOUNCE 15
 
 Image Scene::render()
 {
@@ -41,11 +41,13 @@ Image Scene::render()
         {
             Ray ray = camera.primary_ray(x,y);
 
+            vec3 color = vec3(0.0);
             // compute color by tracing this ray
-            vec3 color = trace(ray, 0);
-
+            for(int i=0; i<PATHS_PER_PIXEL; ++i){
+              color += trace(ray, 0);
+            }
             // avoid over-saturation
-            color = min(color, vec3(1, 1, 1));
+            color = min(color/PATHS_PER_PIXEL, vec3(1, 1, 1));
 
             // store pixel color
             img(x,y) = color;
@@ -125,7 +127,28 @@ vec3 Scene::lighting(const vec3& _point, const vec3& _normal, const vec3& _view,
 
     vec3 color = vec3(0.0);
 
-    for (Light light : lights) {
+    double mirror_coeff = _material.mirror;
+
+    // now we will do diffuse or specular with a probability mirror_coeff (it is between 0 and 1)
+    // for that, generate a random number between 0 and 1 and check if it is smaller than mirror_coeff
+    // if yes, do as specular, if not do as diffuse
+    double random_number = (rand()%100)/100;
+
+    if(random_number < mirror_coeff){
+      //for specular, trace a new ray but reflected with respect to normal
+      vec3 reflected_ray_dir = reflect(-_view, _normal);
+
+      //take a vector only in the semi-space in normal direction, otherwise a ray can be traced inside objects
+      // reflected_ray_dir = dot(reflected_ray_dir, _normal) < 0 ? -reflected_ray_dir : reflected_ray_dir;
+      Ray reflected_ray = Ray(_point + EPSILON * _normal, reflected_ray_dir);
+      vec3 color_traced = trace(reflected_ray, _depth + 1);
+
+      color += color_traced;
+
+    } else{
+      //diffuse objects
+
+      for (Light light : lights) {
         vec3 to_light_source = normalize(light.position - _point);
 
         // Add EPSILON times (*) the _normal to get the _point out of the object
@@ -147,32 +170,24 @@ vec3 Scene::lighting(const vec3& _point, const vec3& _normal, const vec3& _view,
             // the dot_normal_light and dot_reflection_light_view must be positive
             // to produce any effect to the viewed image
             if (dot_normal_light > 0) {
-                color += light.color * _material.diffuse;
+                color += 0.5*light.color * _material.diffuse;
             }
         }
     }
 
-    // PATH TRACING
-    // double alpha = _material.mirror;
-    //
-    // if (alpha > 0) {
-    //     vec3 reflected_ray_direction = reflect(-_view, _normal);
-    //     Ray reflected_ray = Ray(_point + EPSILON * _normal, reflected_ray_direction);
-    //     color = (1 - alpha) * color + alpha * trace(reflected_ray, _depth + 1);
 
+      //generate a random vector in 3D space
+      vec3 random_reflected_ray_dir = vec3::random_vector();
 
-    //diffuse objects
-    //generate a random vector in 3D space
-    vec3 random_reflected_ray_dir = vec3::random_vector();
+      //take a vector only in the semi-space in normal direction, otherwise a ray can be traced inside objects
+      random_reflected_ray_dir = dot(random_reflected_ray_dir, _normal) < 0 ? -random_reflected_ray_dir : random_reflected_ray_dir;
+      Ray random_reflected_ray = Ray(_point + EPSILON * _normal, random_reflected_ray_dir);
+      vec3 color_traced = trace(random_reflected_ray, _depth + 1);
 
-    //take a vector only in the semi-space in normal direction, otherwise a ray can be traced inside objects
-    random_reflected_ray_dir = dot(random_reflected_ray_dir, _normal) < 0 ? -random_reflected_ray_dir : random_reflected_ray_dir;
-    Ray random_reflected_ray = Ray(_point + EPSILON * _normal, random_reflected_ray_dir);
-    vec3 color_traced = trace(random_reflected_ray, _depth + 1);
+      color += 0.5*color_traced;
+    }
 
-    color += color_traced;
-
-    return color/2.0;
+    return color;
 }
 
 //-----------------------------------------------------------------------------
