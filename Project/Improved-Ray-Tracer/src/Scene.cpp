@@ -29,7 +29,7 @@
 #include <tbb/parallel_for.h>
 #endif
 
-# define PATHS_PER_PIXEL 150
+# define PATHS_PER_PIXEL 50
 //-----------------------------------------------------------------------------
 
 Image Scene::render()
@@ -217,6 +217,8 @@ vec3 Scene::lighting(const vec3& _point, const vec3& _normal, const vec3& _view,
       Ray random_reflected_ray = Ray(_point + EPSILON * _normal, random_reflected_ray_dir);
 
       vec3 color_traced = trace(random_reflected_ray, _depth + 1);
+
+      double diffuse_factor = norm(_material.diffuse);
       color = 0.6*color + 0.4*color_traced;
     }
     return color;
