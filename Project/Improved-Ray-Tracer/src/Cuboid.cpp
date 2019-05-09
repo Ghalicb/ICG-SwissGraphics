@@ -65,12 +65,5 @@ intersect(const Ray&  _ray,
     }
   }
 
-  if (solutions <= 0 || _intersection_t >= NO_INTERSECTION)
-  {
-    return false;
-  }
-  else
-  {
-    return true;
-  }
+  return !(solutions <= 0 || _intersection_t >= NO_INTERSECTION);
 }
