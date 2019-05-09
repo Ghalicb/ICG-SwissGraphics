@@ -20,7 +20,8 @@ intersect(const Ray& _ray,
         vec3 center_to_point = _intersection_point - center;
         double intersection_point_radius_squared = dot(center_to_point, center_to_point);
 
-        if (intersection_point_radius_squared > hole_radius*hole_radius)
+        if (intersection_point_radius_squared < hole_radius*hole_radius ||
+            intersection_point_radius_squared > outer_radius*outer_radius)
         {
           return false;
         }
