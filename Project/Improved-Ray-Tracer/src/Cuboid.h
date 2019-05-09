@@ -15,8 +15,8 @@ class Cuboid : public Object
 public:
   Cuboid(const vec3 &_center=vec3(0,0,0),
               double _x_size=1,
-              double _y_size = 1,
-              double _z_size = 1,
+              double _y_size=1,
+              double _z_size=1,
               double _rotation_angle=0):center(_center),
                                         x_size(_x_size),
                                         y_size(_y_size),
