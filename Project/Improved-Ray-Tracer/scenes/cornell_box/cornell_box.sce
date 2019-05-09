@@ -15,14 +15,14 @@ ambience   0.3 0.3 0.3
 # lights: position and color
 light   0 399.99999 0   1.0 1.0 1.0
 
-# planes: center, normal, material
+# planes: center, normal, hole_radius, material
 # ground, roof and back wall
-plane      0 -400    0    0  1  0       0.9 0.8 0.6   0.9 0.8 0.6   0.0 0.0 0.0   0.0   0.0
-cutplane   0  400    0    0 -1  0  50   0.9 0.8 0.6   0.9 0.8 0.6   0.0 0.0 0.0   0.0   0.0
-plane      0    0 -400    0  0 -1       0.9 0.8 0.6   0.9 0.8 0.6   0.0 0.0 0.0   0.0   0.0
+plane      0 -400    0    0  1  0   0   0.9 0.8 0.6   0.9 0.8 0.6   0.0 0.0 0.0   0.0   0.0
+plane      0  400    0    0 -1  0   0   0.9 0.8 0.6   0.9 0.8 0.6   0.0 0.0 0.0   0.0   0.0
+plane      0    0 -400    0  0 -1   0   0.9 0.8 0.6   0.9 0.8 0.6   0.0 0.0 0.0   0.0   0.0
 # left and right walls
-plane   -400    0    0   -1  0  0   1.0 0.0 0.0   1.0 0.0 0.0   0.0 0.0 0.0   0.0   0.0
-plane    400    0    0    1  0  0   0.0 1.0 0.0   0.0 1.0 0.0   0.0 0.0 0.0   0.0   0.0
+plane   -400    0    0   -1  0  0   0   1.0 0.0 0.0   1.0 0.0 0.0   0.0 0.0 0.0   0.0   0.0
+plane    400    0    0    1  0  0   0   0.0 1.0 0.0   0.0 1.0 0.0   0.0 0.0 0.0   0.0   0.0
 
 # cuboids: center, x_size, y_size, z_size, rotation_anglem material
 cuboid   -100 -150 -150   300   500   200  -30    0.0 0.0 1.0   0.0 0.0 1.0   0.0 0.0 0.0   0.0   0.0
