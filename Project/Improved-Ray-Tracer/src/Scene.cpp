@@ -27,7 +27,7 @@
 #include <tbb/parallel_for.h>
 #endif
 
-# define PATHS_PER_PIXEL 50
+# define PATHS_PER_PIXEL 10
 //-----------------------------------------------------------------------------
 
 Image Scene::render()
