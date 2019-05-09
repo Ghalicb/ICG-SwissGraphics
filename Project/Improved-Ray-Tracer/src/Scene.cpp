@@ -24,8 +24,6 @@
 #include <functional>
 #include <stdexcept>
 
-#include <stdlib.h>     // for rand()
-
 #if HAS_TBB
 #include <tbb/tbb.h>
 #include <tbb/parallel_for.h>
@@ -211,11 +209,14 @@ vec3 Scene::lighting(const vec3& _point, const vec3& _normal, const vec3& _view,
         color = (1 - alpha) * color + alpha * trace(reflected_ray, _depth + 1);
     }else {
       //diffuse objects
-      vec3 random_reflected_ray = normalize(vec3(rand()%10, rand()%10, rand()%10));
-      random_reflected_ray = dot(random_reflected_ray, _normal) < 0 ? -random_reflected_ray : random_reflected_ray;
-      Ray reflected_ray = Ray(_point + EPSILON * _normal, random_reflected_ray);
+      //generate a random vector in 3D space
+      vec3 random_reflected_ray_dir = vec3::random_vector();
 
-      vec3 color_traced = trace(reflected_ray, _depth + 1);
+      //take a vector only in the semi-space in normal direction, otherwise a ray can be traced inside objects
+      random_reflected_ray_dir = dot(random_reflected_ray_dir, _normal) < 0 ? -random_reflected_ray_dir : random_reflected_ray_dir;
+      Ray random_reflected_ray = Ray(_point + EPSILON * _normal, random_reflected_ray_dir);
+
+      vec3 color_traced = trace(random_reflected_ray, _depth + 1);
       color = 0.6*color + 0.4*color_traced;
     }
     return color;
