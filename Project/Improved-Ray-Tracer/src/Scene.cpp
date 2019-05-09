@@ -184,7 +184,6 @@ void Scene::read(const std::string &_filename)
         throw std::runtime_error("Cannot open file " + _filename);
 
     const std::map<std::string, std::function<void(void)>> entityParser = {
-        {"depth",      [&]() { ifs >> max_depth; }},
         {"camera",     [&]() { ifs >> camera; }},
         {"background", [&]() { ifs >> background; }},
         {"ambience",   [&]() { ifs >> ambience; }},
