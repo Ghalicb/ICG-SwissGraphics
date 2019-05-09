@@ -132,7 +132,7 @@ vec3 Scene::lighting(const vec3& _point, const vec3& _normal, const vec3& _view,
     // now we will do diffuse or specular with a probability mirror_coeff (it is between 0 and 1)
     // for that, generate a random number between 0 and 1 and check if it is smaller than mirror_coeff
     // if yes, do as specular, if not do as diffuse
-    double random_number = (rand()%100)/100;
+    double random_number = (rand()%100)/100.0;
 
     if(random_number < mirror_coeff){
       //for specular, trace a new ray but reflected with respect to normal
@@ -145,35 +145,36 @@ vec3 Scene::lighting(const vec3& _point, const vec3& _normal, const vec3& _view,
 
       color += color_traced;
 
-    } else{
+    } else {
       //diffuse objects
 
       for (Light light : lights) {
-        vec3 to_light_source = normalize(light.position - _point);
+          vec3 to_light_source = normalize(light.position - _point);
 
-        // Add EPSILON times (*) the _normal to get the _point out of the object
-        Ray        ray_to_light = Ray(_point + EPSILON * _normal, to_light_source);
-        Object_ptr object_intersect;
-        vec3       point_intersect;
-        vec3       normal_intersect;
-        double     t_intersect = 0.0;
+          // Add EPSILON times (*) the _normal to get the _point out of the object
+          Ray        ray_to_light = Ray(_point + EPSILON * _normal, to_light_source);
+          Object_ptr object_intersect;
+          vec3       point_intersect;
+          vec3       normal_intersect;
+          double     t_intersect = 0.0;
 
-        bool does_intersect = intersect(ray_to_light, object_intersect,
-                                        point_intersect, normal_intersect,
-                                        t_intersect);
+          bool does_intersect = intersect(ray_to_light, object_intersect,
+                                          point_intersect, normal_intersect,
+                                          t_intersect);
 
-        // if there is no intersection of if the intersection is beyond the
-        // the light source, then there is no shadow
-        if (!does_intersect || t_intersect > distance(light.position, _point)) {
-            double dot_normal_light = dot(_normal, to_light_source);
+          // if there is no intersection of if the intersection is beyond the
+          // the light source, then there is no shadow
+          if (!does_intersect || t_intersect > distance(light.position, _point)) {
+              double dot_normal_light = dot(_normal, to_light_source);
 
-            // the dot_normal_light and dot_reflection_light_view must be positive
-            // to produce any effect to the viewed image
-            if (dot_normal_light > 0) {
-                color += 0.5*light.color * _material.diffuse;
-            }
-        }
-    }
+              // the dot_normal_light and dot_reflection_light_view must be positive
+              // to produce any effect to the viewed image
+              double emittance_coeff = 0.2;
+              if (dot_normal_light > 0) {
+                  color += light.color * _material.diffuse * dot_normal_light + emittance_coeff * _material.diffuse;
+              }
+          }
+      }
 
 
       //generate a random vector in 3D space
@@ -184,7 +185,10 @@ vec3 Scene::lighting(const vec3& _point, const vec3& _normal, const vec3& _view,
       Ray random_reflected_ray = Ray(_point + EPSILON * _normal, random_reflected_ray_dir);
       vec3 color_traced = trace(random_reflected_ray, _depth + 1);
 
-      color += 0.5*color_traced;
+      color += color_traced;
+
+      color *= 1.0/2.0;
+
     }
 
     return color;
