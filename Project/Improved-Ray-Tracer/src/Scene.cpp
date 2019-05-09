@@ -27,7 +27,7 @@
 #include <tbb/parallel_for.h>
 #endif
 
-#define PATHS_PER_PIXEL 10
+#define PATHS_PER_PIXEL 1000
 #define MAX_BOUNCE 15
 
 Image Scene::render()
@@ -148,6 +148,8 @@ vec3 Scene::lighting(const vec3& _point, const vec3& _normal, const vec3& _view,
     } else {
       //diffuse objects
 
+      vec3 direct_illumination = vec3(0.0);
+
       for (Light light : lights) {
           vec3 to_light_source = normalize(light.position - _point);
 
@@ -171,13 +173,17 @@ vec3 Scene::lighting(const vec3& _point, const vec3& _normal, const vec3& _view,
               // to produce any effect to the viewed image
               double emittance_coeff = 0.2;
               if (dot_normal_light > 0) {
-                  color += light.color * _material.diffuse * dot_normal_light + emittance_coeff * _material.diffuse;
+                  direct_illumination += light.color * _material.diffuse * dot_normal_light;
               }
           }
+
       }
+      color += direct_illumination;
 
 
-      //generate a random vector in 3D space
+      vec3 indirect_illumination = vec3(0.0);
+
+      // generate a random vector in 3D space
       vec3 random_reflected_ray_dir = vec3::random_vector();
 
       //take a vector only in the semi-space in normal direction, otherwise a ray can be traced inside objects
@@ -185,9 +191,10 @@ vec3 Scene::lighting(const vec3& _point, const vec3& _normal, const vec3& _view,
       Ray random_reflected_ray = Ray(_point + EPSILON * _normal, random_reflected_ray_dir);
       vec3 color_traced = trace(random_reflected_ray, _depth + 1);
 
-      color += color_traced;
+      indirect_illumination += color_traced * dot(random_reflected_ray_dir, _normal);
 
-      color *= 1.0/2.0;
+      color += indirect_illumination;
+
 
     }
 
