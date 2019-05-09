@@ -15,9 +15,7 @@
 #include "Sphere.h"
 #include "Cylinder.h"
 #include "Mesh.h"
-
 #include "Cuboid.h"
-#include "CutPlane.h"
 
 #include <limits>
 #include <map>
@@ -240,7 +238,6 @@ void Scene::read(const std::string &_filename)
         {"light",      [&]() { lights .emplace_back(ifs); }},
         {"planelight", [&]() { planelights.emplace_back(new PlaneLight(ifs)); }},
         {"plane",      [&]() { objects.emplace_back(new    Plane(ifs)); }},
-        {"cutplane",   [&]() { objects.emplace_back(new    CutPlane(ifs)); }},
         {"sphere",     [&]() { objects.emplace_back(new   Sphere(ifs)); }},
         {"cylinder",   [&]() { objects.emplace_back(new Cylinder(ifs)); }},
         {"mesh",       [&]() { objects.emplace_back(new Mesh(ifs, _filename)); }},
