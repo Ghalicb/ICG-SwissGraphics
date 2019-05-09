@@ -28,6 +28,7 @@
 #endif
 
 #define PATHS_PER_PIXEL 10
+#define MAX_BOUNCE 10
 
 Image Scene::render()
 {
@@ -77,7 +78,7 @@ Image Scene::render()
 
 vec3 Scene::trace(const Ray& _ray, int _depth) {
     // stop if recursion depth (=number of reflections) is too large
-    if (_depth > max_depth) return vec3(0,0,0);
+    if (_depth > MAX_BOUNCE) return vec3(0,0,0);
 
     // Find first intersection with an object. If an intersection is found,
     // it is stored in object, point, normal, and t.
@@ -91,23 +92,6 @@ vec3 Scene::trace(const Ray& _ray, int _depth) {
 
     // compute local Phong lighting (ambient+diffuse+specular)
     vec3 color = lighting(point, normal, -_ray.direction, object->material);
-
-
-    /** \todo
-     * Compute reflections by recursive ray tracing:
-     * - check whether `object` is reflective by checking its `material.mirror`
-     * - check recursion depth
-     * - generate reflected ray, compute its color contribution, and mix it with
-     * the color computed by local Phong lighting (use `object->material.mirror` as weight)
-     * - check whether your recursive algorithm reflects the ray `max_depth` times
-     */
-    // double alpha = object->material.mirror;
-    //
-    // if (alpha > 0) {
-    //     vec3 reflected_ray_direction = reflect(_ray.direction, normal);
-    //     Ray reflected_ray = Ray(point + EPSILON * normal, reflected_ray_direction);
-    //     color = (1 - alpha) * color + alpha * trace(reflected_ray, _depth + 1);
-    // }
 
     return color;
 }
@@ -139,22 +123,7 @@ bool Scene::intersect(const Ray& _ray, Object_ptr& _object, vec3& _point, vec3& 
 
 vec3 Scene::lighting(const vec3& _point, const vec3& _normal, const vec3& _view, const Material& _material) {
 
-    /** \todo
-     * Compute the Phong lighting:
-     * - start with global ambient contribution
-     * - for each light source (stored in vector `lights`) add diffuse and specular contribution
-     * - only add diffuse and specular light if object is not in shadow
-     *
-     * You can look at the classes `Light` and `Material` to check their attributes. Feel free to use
-     * the existing vector functions in vec3.h e.g. mirror, reflect, norm, dot, normalize
-     */
-
-    // The ambient contribution
-    vec3 ambient = ambience * _material.ambient;
-
-    // The diffuse & specular contribution
-    vec3 diffuse = vec3(0.0);
-    vec3 specular = vec3(0.0);
+    vec3 color = vec3(0.0);
 
     for (Light light : lights) {
         vec3 to_light_source = normalize(light.position - _point);
@@ -178,42 +147,32 @@ vec3 Scene::lighting(const vec3& _point, const vec3& _normal, const vec3& _view,
             // the dot_normal_light and dot_reflection_light_view must be positive
             // to produce any effect to the viewed image
             if (dot_normal_light > 0) {
-                diffuse += light.color * _material.diffuse * dot_normal_light;
-            }
-
-            vec3 reflection_light = 2 * _normal * dot_normal_light - to_light_source;
-            double dot_reflection_light_view = dot(reflection_light, _view);
-            if (dot_reflection_light_view > 0) {
-                specular += light.color * _material.specular * pow(dot_reflection_light_view, _material.shininess);
+                color += light.color * _material.diffuse;
             }
         }
     }
 
-    // The Phong lighting
-    vec3 color = ambient + diffuse + specular;
-
     // PATH TRACING
-    double alpha = _material.mirror;
+    // double alpha = _material.mirror;
+    //
+    // if (alpha > 0) {
+    //     vec3 reflected_ray_direction = reflect(-_view, _normal);
+    //     Ray reflected_ray = Ray(_point + EPSILON * _normal, reflected_ray_direction);
+    //     color = (1 - alpha) * color + alpha * trace(reflected_ray, _depth + 1);
 
-    if (alpha > 0) {
-        vec3 reflected_ray_direction = reflect(-_view, _normal);
-        Ray reflected_ray = Ray(_point + EPSILON * _normal, reflected_ray_direction);
-        color = (1 - alpha) * color + alpha * trace(reflected_ray, _depth + 1);
-    } else {
-      //diffuse objects
-      //generate a random vector in 3D space
-      vec3 random_reflected_ray_dir = vec3::random_vector();
 
-      //take a vector only in the semi-space in normal direction, otherwise a ray can be traced inside objects
-      random_reflected_ray_dir = dot(random_reflected_ray_dir, _normal) < 0 ? -random_reflected_ray_dir : random_reflected_ray_dir;
-      Ray random_reflected_ray = Ray(_point + EPSILON * _normal, random_reflected_ray_dir);
+    //diffuse objects
+    //generate a random vector in 3D space
+    vec3 random_reflected_ray_dir = vec3::random_vector();
 
-      vec3 color_traced = trace(random_reflected_ray, _depth + 1);
+    //take a vector only in the semi-space in normal direction, otherwise a ray can be traced inside objects
+    random_reflected_ray_dir = dot(random_reflected_ray_dir, _normal) < 0 ? -random_reflected_ray_dir : random_reflected_ray_dir;
+    Ray random_reflected_ray = Ray(_point + EPSILON * _normal, random_reflected_ray_dir);
+    vec3 color_traced = trace(random_reflected_ray, _depth + 1);
 
-      double diffuse_factor = norm(_material.diffuse);
-      color = 0.6*color + 0.4*color_traced;
-    }
-    return color;
+    color += color_traced;
+
+    return color/2.0;
 }
 
 //-----------------------------------------------------------------------------
