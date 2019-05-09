@@ -54,3 +54,4 @@ Dynamic and fair workload distribution
 - ../res/references/Path-Tracing-Matthias-Teschner-Lecture.pdf
 - en.wikipedia.org/wiki/Path_tracing
 - scratchapixel.com/lessons/3d-basic-rendering/global-illumination-path-tracing
+- web.cs.wpi.edu/~emmanuel/courses/cs563/write_ups/zackw/realistic_raytracing.html

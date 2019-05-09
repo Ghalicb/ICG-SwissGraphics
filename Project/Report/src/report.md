@@ -13,6 +13,12 @@ We implemented the class Cuboid, which is described by its center, {x, y, z}_siz
 - We keep track of the number of possible intersections so that we do not necessarly need to iterate over all the faces if the already have computed two intersections.
 - We evaluate the norm of face_center_to_intersection_vector and compare it with the norm of (x_size/2,y_size/2,z_size/2), which is the biggest value face_center_to_intersection_vector could have when intersection_point is on a face, before starting any heavy computations.
 
+## Plane
+We modified the provided Plane class in order to support two new functionalities :
+- A plane cat be cut, it can have a hole around center of a given hole_radius
+- A plane is not necessarly infinite, it can be bounded by a circle of a given outer_radius
+This implied the function intersect to be updated.
+
 ## Cornell Box
 We described a Cornell Box scene (/Improved-Ray-Tracer/scenes/cornell_box/). It is composed of five walls, one light, one cuboid and one sphere. For now, we do not consider specular, shininess nor mirror, which are all set to 0. It has 800x800x800 dimensions, the origin (0,0,0) is at the center of the box and the camera located at (0, 0, 600) is looking at the origin with a field of view of 90 degrees.
 
