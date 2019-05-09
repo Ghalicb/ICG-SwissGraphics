@@ -29,7 +29,7 @@
 #include <tbb/parallel_for.h>
 #endif
 
-# define PATHS_PER_PIXEL 80
+# define PATHS_PER_PIXEL 150
 //-----------------------------------------------------------------------------
 
 Image Scene::render()
@@ -207,7 +207,7 @@ vec3 Scene::lighting(const vec3& _point, const vec3& _normal, const vec3& _view,
         vec3 reflected_ray_direction = reflect(-_view, _normal);
         Ray reflected_ray = Ray(_point + EPSILON * _normal, reflected_ray_direction);
         color = (1 - alpha) * color + alpha * trace(reflected_ray, _depth + 1);
-    }else {
+    } else {
       //diffuse objects
       //generate a random vector in 3D space
       vec3 random_reflected_ray_dir = vec3::random_vector();
