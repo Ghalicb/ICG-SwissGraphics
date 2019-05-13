@@ -30,6 +30,11 @@ public:
 
         normal = normalize(normal);
 
+        if (outer_radius <= 0.0)
+        {
+          outer_radius = 0.0;
+        }
+
         if (hole_radius <= 0.0)
         {
           hole_radius = 0.0;
