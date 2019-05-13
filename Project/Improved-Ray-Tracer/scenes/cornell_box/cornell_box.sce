@@ -6,9 +6,6 @@ camera   0 0 600   0 0 0   0 1 0  90  1500 1500
 # background color
 background   0 0 0
 
-# global ambient light
-ambience   0.3 0.3 0.3
-
 # lights: position and color
 light       0   0.999    0   1.0 1.0 1.0
 
@@ -25,7 +22,7 @@ plane   -400    0    0    1  0  0   1.0 0.0 0.0   0.0
 plane    400    0    0   -1  0  0   0.0 1.0 0.0   0.0
 
 # cuboids: center, x_size, y_size, z_size, rotation_anglem material
-cuboid   -100 -150 -150   300   500   200  -30    0.0 0.0 1.0   0.0
+cuboid   -100 -150 -150   300   500   200  -30    0.0 0.0 1.0   0.3
 
 # spheres: center, radius, material
 sphere    200 -300   50   100   1.0 1.0 0.0    0.0
