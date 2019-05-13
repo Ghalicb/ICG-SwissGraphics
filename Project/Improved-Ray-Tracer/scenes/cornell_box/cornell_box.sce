@@ -12,6 +12,9 @@ ambience   0.3 0.3 0.3
 # lights: position and color
 light   0 399.99999 0   1.0 1.0 1.0
 
+# AreaLights : center, color, x_size, y_size
+areaLight   0 390    0   0.5 1 1   30   30
+
 # planes: center, normal, outer_radius, hole_radius, material
 # ground, roof and back wall
 plane      0 -400    0    0  1  0   570      0   0.9 0.8 0.6   0.0
