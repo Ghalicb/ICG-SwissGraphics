@@ -28,8 +28,8 @@
 #include <tbb/parallel_for.h>
 #endif
 
-#define PATHS_PER_PIXEL 20
-#define MAX_BOUNCE 15
+#define PATHS_PER_PIXEL 2
+#define MAX_BOUNCE      2
 
 Image Scene::render()
 {
