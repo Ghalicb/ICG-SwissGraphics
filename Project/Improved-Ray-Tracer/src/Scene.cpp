@@ -90,7 +90,6 @@ vec3 Scene::trace(const Ray& _ray, int _depth) {
         return background;
     }
 
-    // compute local Phong lighting (ambient+diffuse+specular)
     vec3 color = lighting(point, normal, -_ray.direction, object->material, _depth);
 
     return color;
