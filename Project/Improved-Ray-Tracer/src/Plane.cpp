@@ -17,15 +17,6 @@ intersect(const Ray& _ray,
     if (_intersection_t > 0) {
         _intersection_point = _ray(_intersection_t);
 
-        vec3 center_to_point = _intersection_point - center;
-        double intersection_point_radius_squared = dot(center_to_point, center_to_point);
-
-        if (intersection_point_radius_squared < hole_radius*hole_radius ||
-            intersection_point_radius_squared > outer_radius*outer_radius)
-        {
-          return false;
-        }
-
         _intersection_normal = normal;
 
         if (denom > 0)
