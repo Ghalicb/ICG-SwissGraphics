@@ -171,7 +171,6 @@ vec3 Scene::lighting(const vec3& _point, const vec3& _normal, const vec3& _view,
       // here -EPSILON*normal because we go inside the object
       Ray refracted_ray = Ray(_point - EPSILON * _normal, refracted_ray_dir);
       vec3 color_traced = trace(refracted_ray, _depth + 1, next_refraction_index);
-      std::cout << color_traced << '\n';
       color += color_traced;
 
 
