@@ -29,7 +29,7 @@
 #endif
 
 #define PATHS_PER_PIXEL 20
-#define MAX_BOUNCE 15
+#define MAX_BOUNCE 10
 
 Image Scene::render()
 {
