@@ -33,9 +33,9 @@ public:
     x_size = BLOCK_SIDE*x_size;
     y_size = BLOCK_SIDE*y_size;
 
-    x_axis    = vec3(1,0, 0);
-    y_axis    = vec3(0,1, 0);
-    direction = vec3(0,0,-1);
+    x_axis    = vec3(1,0,0);
+    y_axis    = vec3(0,0,1);
+    direction = vec3(0,1,0);
 
     plane = Plane(center, direction);
   }
