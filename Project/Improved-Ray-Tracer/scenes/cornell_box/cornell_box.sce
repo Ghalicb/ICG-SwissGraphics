@@ -6,9 +6,6 @@ camera   0 0 600   0 0 0   0 1 0  90  1500 1500
 # background color
 background   0 0 0
 
-# global ambient light
-ambience   0.3 0.3 0.3
-
 # lights: position and color
 light   0 399.99999 0   1.0 1.0 1.0
 
