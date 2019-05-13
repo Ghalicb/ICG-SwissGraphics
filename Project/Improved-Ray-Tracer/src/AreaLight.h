@@ -40,6 +40,8 @@ public:
     plane = Plane(center, direction);
   }
 
+  const vec3 getColor() const { return color; }
+
 private:
   vec3 center;
   vec3 color;
