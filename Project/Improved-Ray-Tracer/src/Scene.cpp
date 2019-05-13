@@ -171,7 +171,6 @@ vec3 Scene::lighting(const vec3& _point, const vec3& _normal, const vec3& _view,
 
               // the dot_normal_light and dot_reflection_light_view must be positive
               // to produce any effect to the viewed image
-              double emittance_coeff = 0.2;
               if (dot_normal_light > 0) {
                   direct_illumination += light.color * _material.diffuse * dot_normal_light;
               }
