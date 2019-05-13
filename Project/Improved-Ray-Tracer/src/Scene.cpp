@@ -145,9 +145,35 @@ vec3 Scene::lighting(const vec3& _point, const vec3& _normal, const vec3& _view,
       //take a vector only in the semi-space in normal direction, otherwise a ray can be traced inside objects
       // reflected_ray_dir = dot(reflected_ray_dir, _normal) < 0 ? -reflected_ray_dir : reflected_ray_dir;
       Ray reflected_ray = Ray(_point + EPSILON * _normal, reflected_ray_dir);
-      vec3 color_traced = trace(reflected_ray, _depth + 1);
+      vec3 color_traced = trace(reflected_ray, _depth + 1, _current_refraction_index);
 
       color += color_traced;
+
+    } else if(random_number < mirror_coeff + transparency_coeff){
+      //here do transparent work (using refraction laws)
+      double refraction_index = _material.refraction_index;
+
+      double refraction_indexes_quotient;
+      double next_refraction_index;
+
+      if(_current_refraction_index == AMBIENT_REFRACTION_INDEX){
+        // go into the object
+        refraction_indexes_quotient = AMBIENT_REFRACTION_INDEX/refraction_index;
+        next_refraction_index = refraction_index;
+      } else {
+        // go out of the object
+        refraction_indexes_quotient = refraction_index/AMBIENT_REFRACTION_INDEX;
+        next_refraction_index = AMBIENT_REFRACTION_INDEX;
+      }
+
+      vec3 refracted_ray_dir = refract(-_view, _normal, refraction_indexes_quotient);
+
+      // here -EPSILON*normal because we go inside the object
+      Ray refracted_ray = Ray(_point - EPSILON * _normal, refracted_ray_dir);
+      vec3 color_traced = trace(refracted_ray, _depth + 1, next_refraction_index);
+      std::cout << color_traced << '\n';
+      color += color_traced;
+
 
     } else {
       //diffuse objects
