@@ -92,9 +92,6 @@ private:
 
     /// background color
     vec3 background = vec3(0, 0, 0);
-
-    /// global ambient light
-    vec3 ambience = vec3(0, 0, 0);
 };
 
 //=============================================================================

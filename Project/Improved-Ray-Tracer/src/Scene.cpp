@@ -90,7 +90,6 @@ vec3 Scene::trace(const Ray& _ray, int _depth) {
         return background;
     }
 
-    // compute local Phong lighting (ambient+diffuse+specular)
     vec3 color = lighting(point, normal, -_ray.direction, object->material, _depth);
 
     return color;
@@ -186,7 +185,6 @@ void Scene::read(const std::string &_filename)
     const std::map<std::string, std::function<void(void)>> entityParser = {
         {"camera",     [&]() { ifs >> camera; }},
         {"background", [&]() { ifs >> background; }},
-        {"ambience",   [&]() { ifs >> ambience; }},
         {"light",      [&]() { lights .emplace_back(ifs); }},
         {"plane",      [&]() { objects.emplace_back(new    Plane(ifs)); }},
         {"sphere",     [&]() { objects.emplace_back(new   Sphere(ifs)); }},
