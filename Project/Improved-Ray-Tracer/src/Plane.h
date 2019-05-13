@@ -10,12 +10,8 @@ class Plane : public Object
 {
 public:
     Plane(const vec3& _center=vec3(0,0,0),
-          const vec3& _normal=vec3(0,1,0),
-          const double _outer_radius=FLT_MAX,
-          const double _hole_radius=0.0):center(_center),
-                                         normal(_normal),
-                                         outer_radius(_outer_radius),
-                                         hole_radius(_hole_radius){}
+          const vec3& _normal=vec3(0,1,0)):center(_center),
+                                           normal(_normal){}
 
     Plane(std::istream &is) { parse(is); }
 
@@ -26,19 +22,9 @@ public:
 
     virtual void parse(std::istream &is) override
     {
-        is >> center >> normal >> outer_radius >> hole_radius >> material;
+        is >> center >> normal >> material;
 
         normal = normalize(normal);
-
-        if (outer_radius <= 0.0)
-        {
-          outer_radius = 0.0;
-        }
-
-        if (hole_radius <= 0.0)
-        {
-          hole_radius = 0.0;
-        }
     }
 
     const vec3 getCenter() const { return center; }
@@ -46,9 +32,6 @@ public:
 private:
     vec3 center;
     vec3 normal;
-
-    double outer_radius;
-    double hole_radius;
 };
 
 #endif
