@@ -96,6 +96,7 @@ vec3 Scene::trace(const Ray& _ray, int _depth, double _current_refraction_index)
         return background;
     }
 
+    normal = dot(normal, -_ray.direction) > 0 ? normal : -normal;
     vec3 color = lighting(point, normal, -_ray.direction, object->material, _depth, _current_refraction_index);
 
     return color;
@@ -155,7 +156,6 @@ vec3 Scene::lighting(const vec3& _point, const vec3& _normal, const vec3& _view,
 
       double refraction_indexes_quotient;
       double next_refraction_index;
-
       if(_current_refraction_index == AMBIENT_REFRACTION_INDEX){
         // go into the object
         refraction_indexes_quotient = AMBIENT_REFRACTION_INDEX/refraction_index;
