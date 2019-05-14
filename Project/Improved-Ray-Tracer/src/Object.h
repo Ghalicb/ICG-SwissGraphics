@@ -52,6 +52,8 @@ public:
     /// parse object properties from an input stream
     virtual void parse(std::istream &is) { throw std::logic_error("Unimplemented"); }
 
+    virtual bool isLight() { return false; }
+
     /// The material of this object
     Material material;
 

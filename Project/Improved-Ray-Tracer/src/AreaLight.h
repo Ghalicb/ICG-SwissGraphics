@@ -40,6 +40,8 @@ public:
     plane = Plane(center, direction);
   }
 
+  virtual bool isLight() override { return true; }
+
   const vec3 getColor() const { return color; }
 
 private:
