@@ -26,11 +26,6 @@ int main(int argc, char **argv) {
 
     if (argc == 3)
         jobs.emplace_back(RaytraceJob{argv[1], argv[2]});
-    else if ((argc == 2) && argv[1][0] == '0') {
-        jobs = { {
-            {"../scenes/cornell_box/cornell_box.sce", "../results/cornell_box.png"}
-        } };
-    }
     else {
         std::cerr << "Usage: " << argv[0] << " input.sce output.png\n";
         std::cerr << "Or: " << argv[0] << " 0\n";
