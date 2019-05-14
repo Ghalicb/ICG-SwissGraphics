@@ -17,7 +17,6 @@
 #include <assert.h>
 #include <math.h>
 #include <algorithm>
-#include <cmath>
 
 #include <stdlib.h>     // for rand()
 
@@ -252,10 +251,10 @@ inline const vec3 reflect(const vec3& v, const vec3& n)
 inline const vec3 refract(const vec3& v, const vec3& n, const double refraction_indexes_quotient)
 {
     vec3 proj_v_on_n = dot(n,v) * n;
-    vec3 vec = v - proj_v_on_n;
-    double alpha = std::acos(dot(n, -v));
-    double sinb = std::sin(alpha)*refraction_indexes_quotient;
-    return -proj_v_on_n + sinb*vec;
+    vec3 vec = v + proj_v_on_n;
+    vec3 res = normalize(-proj_v_on_n + refraction_indexes_quotient*vec);
+    return res;
+
 }
 
 /// mirrors vector \c v at normal \c n
