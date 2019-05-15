@@ -41,8 +41,6 @@ public:
     top_left -= temp;
 
     plane = Plane(center, direction);
-
-    std::cout << center << top_left;
   }
 
   AreaLight(std::istream &is) { parse(is); }
@@ -79,8 +77,6 @@ public:
     top_left -= temp;
 
     plane = Plane(center, direction);
-
-    std::cout << center << top_left;
   }
 
   virtual bool isLight() override { return true; }
