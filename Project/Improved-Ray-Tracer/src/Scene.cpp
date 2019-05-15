@@ -1,14 +1,3 @@
-//=============================================================================
-//
-//   Exercise code for the lecture
-//   "Introduction to Computer Graphics"
-//   by Prof. Dr. Mario Botsch, Bielefeld University
-//
-//   Copyright (C) Computer Graphics Group, Bielefeld University.
-//
-//=============================================================================
-
-//== INCLUDES =================================================================
 #include "Scene.h"
 
 #include "Plane.h"
@@ -105,14 +94,29 @@ bool Scene::intersect(const Ray& _ray, Object_ptr& _object, vec3& _point, vec3& 
     double  t, tmin(Object::NO_INTERSECTION);
     vec3    p, n;
 
-    for (const auto &o: objects) // for each object
+    for (const auto &o: objects)
     {
-        if (o->intersect(_ray, p, n, t)) // does ray intersect object?
+        if (o->intersect(_ray, p, n, t))
         {
-            if (t < tmin) // is intersection point the currently closest one?
+            if (t < tmin)
             {
-                tmin = t;
+                tmin    = t;
                 _object = o.get();
+                _point  = p;
+                _normal = n;
+                _t      = t;
+            }
+        }
+    }
+
+    for (const auto &al: areaLights)
+    {
+        if (al->intersect(_ray, p, n, t))
+        {
+            if (t < tmin)
+            {
+                tmin    = t;
+                _object = al.get();
                 _point  = p;
                 _normal = n;
                 _t      = t;
@@ -201,8 +205,6 @@ vec3 Scene::lighting(const vec3& _point, const vec3& _normal, const vec3& _view,
     return color;
 }
 
-//-----------------------------------------------------------------------------
-
 void Scene::read(const std::string &_filename)
 {
     std::ifstream ifs(_filename);
@@ -212,8 +214,8 @@ void Scene::read(const std::string &_filename)
     const std::map<std::string, std::function<void(void)>> entityParser = {
         {"camera",     [&]() { ifs >> camera; }},
         {"background", [&]() { ifs >> background; }},
-        {"light",      [&]() { lights .emplace_back(ifs); }},
-        {"areaLight",  [&]() { objects.emplace_back(new AreaLight(ifs)); }},
+        {"light",      [&]() { lights.emplace_back(ifs); }},
+        {"areaLight",  [&]() { areaLights.emplace_back(new AreaLight(ifs)); }},
         {"plane",      [&]() { objects.emplace_back(new Plane(ifs)); }},
         {"sphere",     [&]() { objects.emplace_back(new Sphere(ifs)); }},
         {"cylinder",   [&]() { objects.emplace_back(new Cylinder(ifs)); }},
@@ -234,6 +236,3 @@ void Scene::read(const std::string &_filename)
         entityParser.at(token)();
     }
 }
-
-
-//=============================================================================
