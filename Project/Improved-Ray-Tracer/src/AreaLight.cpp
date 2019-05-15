@@ -26,7 +26,19 @@ intersect(const Ray&  _ray,
 
 vec3
 AreaLight::
-get_light_intensity(int light_index)
+getLightPosition(int light_index)
+{
+  int ligth_x_index = light_index % x_parts ;
+  int light_y_index = light_index / x_parts;
+
+  vec3 temp = top_left + (ligth_x_index + 0.5) * block_side * x_axis + (light_y_index + 0.5) * block_side * y_axis;
+
+  return temp;
+}
+
+vec3
+AreaLight::
+getLightIntensity(int light_index)
 {
   return vec3(1);
 }

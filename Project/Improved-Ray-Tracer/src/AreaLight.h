@@ -5,7 +5,7 @@
 #include "Plane.h"
 #include "vec3.h"
 
-#define BLOCK_SIDE 5
+#define BLOCK_SIDE 40
 
 class AreaLight : public Object
 {
@@ -27,8 +27,10 @@ public:
       y_parts = 1;
     }
 
-    x_size = BLOCK_SIDE * x_parts;
-    y_size = BLOCK_SIDE * y_parts;
+    block_side = BLOCK_SIDE;
+
+    x_size = block_side * x_parts;
+    y_size = block_side * y_parts;
 
     x_axis    = vec3(1,0,0);
     y_axis    = vec3(0,0,1);
@@ -63,8 +65,10 @@ public:
       y_parts = 1;
     }
 
-    x_size = BLOCK_SIDE * x_parts;
-    y_size = BLOCK_SIDE * y_parts;
+    block_side = BLOCK_SIDE;
+
+    x_size = block_side * x_parts;
+    y_size = block_side * y_parts;
 
     x_axis    = vec3(1,0,0);
     y_axis    = vec3(0,0,1);
@@ -81,15 +85,21 @@ public:
 
   virtual bool isLight() override { return true; }
 
-  int number_of_lights() { return x_parts * y_parts; }
+  int numberOfLights() { return x_parts * y_parts; }
 
-  vec3 get_light_intensity(int light_index);
+  vec3 getLightPosition(int light_index);
+
+  vec3 getLightIntensity(int light_index);
 
   vec3 getColor() { return color; }
+
+  vec3 getTopLeft() { return top_left; }
 
 private:
   vec3 center;
   vec3 color;
+
+  int block_side;
 
   int x_parts;
   int y_parts;

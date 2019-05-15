@@ -82,7 +82,15 @@ vec3 Scene::trace(const Ray& _ray, int _depth) {
         return background;
     }
 
-    vec3 color = lighting(point, normal, -_ray.direction, object->material, _depth);
+    normal = dot(normal, -_ray.direction) > 0 ? normal : -normal;
+    vec3 color = vec3(0.0);
+
+    if(object->isLight()){
+      AreaLight* al = dynamic_cast<AreaLight*>(object);
+      color = al->getColor();
+    } else {
+      color = lighting(point, normal, -_ray.direction, object->material, _depth);
+    }
 
     return color;
 }
@@ -157,15 +165,9 @@ vec3 Scene::lighting(const vec3& _point, const vec3& _normal, const vec3& _view,
       //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
       for (const auto &al: areaLights)
       {
-        for (size_t i = 0; i < al->number_of_lights(); ++i)
+        for (size_t i = 0; i < al->numberOfLights(); ++i)
         {
-
-        }
-      }
-
-
-      for (Light light : lights) {
-          vec3 to_light_source = normalize(light.position - _point);
+          vec3 to_light_source = normalize(al->getLightPosition(i) - vec3(0, EPSILON, 0) - _point);
 
           // Add EPSILON times (*) the _normal to get the _point out of the object
           Ray        ray_to_light = Ray(_point + EPSILON * _normal, to_light_source);
@@ -180,16 +182,18 @@ vec3 Scene::lighting(const vec3& _point, const vec3& _normal, const vec3& _view,
 
           // if there is no intersection of if the intersection is beyond the
           // the light source, then there is no shadow
-          if (!does_intersect || t_intersect > distance(light.position, _point)) {
+          if (!does_intersect || t_intersect > distance(al->getLightPosition(i), _point)) {
               double dot_normal_light = dot(_normal, to_light_source);
 
               // the dot_normal_light and dot_reflection_light_view must be positive
               // to produce any effect to the viewed image
               double emittance_coeff = 0.2;
               if (dot_normal_light > 0) {
-                  direct_illumination += light.color * _material.diffuse * dot_normal_light;
+                  direct_illumination += al->getColor() * _material.diffuse * dot_normal_light;
               }
           }
+        }
+        direct_illumination /= al->numberOfLights();
       }
       //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
       color += direct_illumination;
