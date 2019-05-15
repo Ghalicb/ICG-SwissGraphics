@@ -17,8 +17,8 @@
 #include <tbb/parallel_for.h>
 #endif
 
-#define PATHS_PER_PIXEL 2
-#define MAX_BOUNCE 2
+#define PATHS_PER_PIXEL 300
+#define MAX_BOUNCE 3
 #define AMBIENT_REFRACTION_INDEX (1.0)
 
 Image Scene::render()

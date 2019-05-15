@@ -5,7 +5,7 @@
 #include "Plane.h"
 #include "vec3.h"
 
-#define BLOCK_SIDE 40
+#define BLOCK_SIDE 20
 
 class AreaLight : public Object
 {
