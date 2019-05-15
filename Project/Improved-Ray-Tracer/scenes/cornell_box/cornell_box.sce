@@ -13,11 +13,11 @@ light       0   0.999    0   1.0 1.0 1.0
 areaLight   0 399.999    0   1.0 1.0 1.0   5   5
 
 # planes: center, normal,  material
-# ground, roof and back wall
+# ground, roof and back wall (white)
 plane      0 -400    0    0  1  0   1.0 1.0 1.0   0.0  0.0  0.0
 plane      0  400    0    0 -1  0   1.0 1.0 1.0   0.0  0.0  0.0
 plane      0    0 -400    0  0  1   1.0 1.0 1.0   0.0  0.0  0.0
-# left and right walls
+# left (red) and right (green) walls
 plane   -400    0    0    1  0  0   1.0 0.0 0.0   0.0  0.0  0.0
 plane    400    0    0   -1  0  0   0.0 1.0 0.0   0.0  0.0  0.0
 
