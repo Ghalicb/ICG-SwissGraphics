@@ -9,7 +9,7 @@ background   0 0 0
 # lights: position and color
 light       0   0.999    0   1.0 1.0 1.0
 
-# AreaLights : center, color, x_size, y_size
+# AreaLights : center, color, x_parts, y_parts
 areaLight   0 399.999    0   1 1 1   50   30
 
 # planes: center, normal,  material
