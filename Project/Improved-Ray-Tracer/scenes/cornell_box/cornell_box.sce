@@ -10,11 +10,11 @@ background   0 0 0
 light       0   0.999    0   1.0 1.0 1.0
 
 # AreaLights : center, color, x_parts, y_parts
-areaLight   0 399.999    0   1 1 1   5   5
+areaLight   0 399.999    0   1.0 1.0 1.0   5   5
 
 # planes: center, normal,  material
 # ground, roof and back wall
-plane      0 -400    0    0  1  0   0.9 0.8 0.6   0.0
+plane      0 -400    0    0  1  0   1.0 1.0 1.0   0.0
 plane      0  400    0    0 -1  0   1.0 1.0 1.0   0.0
 plane      0    0 -400    0  0  1   1.0 1.0 1.0   0.0
 # left and right walls
