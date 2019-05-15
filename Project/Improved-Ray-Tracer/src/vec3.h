@@ -110,7 +110,7 @@ public:
     {
         double a = 2*PI*(rand()%100000)/100000.0;
         double b = 2*PI*(rand()%100000)/100000.0;
-        
+
         double sina = sin(a);
         double sinb = sin(b);
         double cosa = cos(a);
@@ -245,6 +245,16 @@ inline const vec3 cross(const vec3& v0, const vec3& v1)
 inline const vec3 reflect(const vec3& v, const vec3& n)
 {
     return v - (2.0 * dot(n,v)) * n;
+}
+
+/// refract vector \c v at normal \c n according to \c refraction_indexes_quotient (n1/n2)
+inline const vec3 refract(const vec3& v, const vec3& n, const double refraction_indexes_quotient)
+{
+    vec3 proj_v_on_n = dot(n,v) * n;
+    vec3 vec = v + proj_v_on_n;
+    vec3 res = normalize(-proj_v_on_n + refraction_indexes_quotient*vec);
+    return res;
+
 }
 
 /// mirrors vector \c v at normal \c n
