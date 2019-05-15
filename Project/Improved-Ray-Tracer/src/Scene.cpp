@@ -249,7 +249,6 @@ void Scene::read(const std::string &_filename)
     const std::map<std::string, std::function<void(void)>> entityParser = {
         {"camera",     [&]() { ifs >> camera; }},
         {"background", [&]() { ifs >> background; }},
-        {"light",      [&]() { lights.emplace_back(ifs); }},
         {"areaLight",  [&]() { areaLights.emplace_back(new AreaLight(ifs)); }},
         {"plane",      [&]() { objects.emplace_back(new Plane(ifs)); }},
         {"sphere",     [&]() { objects.emplace_back(new Sphere(ifs)); }},
