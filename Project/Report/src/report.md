@@ -51,9 +51,15 @@ This describes a rectangular light, which is discretized into blocks of a a give
 
 # Path Tracing
 ## Technique de path tracing 1
+This is the main technique. We implemented the path tracer with explicit shadow rays. To do this we trace a ray and when it intersects an object, we choose randomly (according to material properties : mirror, transparency) between diffuse, mirror or refractive comportment. If the surface is
+1. diffuse, we compute direct lightning by tracing a ray to each light source, if the light source is visible, we add to the color contribution the material color times the light color times the dot product between object's normal and point-to-light vector. Then we randomly choose a vector and trace a ray in this direction and add the obtained color to the color contribution.
+2. mirror, we compute the reflect vector and trace it, the color obtained is the color contribution.
+3. refractive, we compute the refracted vector (that goes inside the object using the refractive index described in material) and trace it. The contribution is the obtained color.
+The trace method is recursive and we defined a maximum bounces number to not infinitly loop.
 
+We trace a certain number (~1000 to ~10000) of this path per pixel and its final color is the average of every results.
 ## Technique de path tracing 2
-
+We began to implement the second technique to have caustics. This technique is the same as the first one but without the explicit shadow rays. That produces beautiful images but is extremly costly to compute so we will see if we keep this implementation or not. We will probably keep both.
 # Plane
 !!! These modifications have been implemented but we discarded them !!!
 
