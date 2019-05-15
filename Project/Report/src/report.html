@@ -13,21 +13,29 @@
 <h1 class="title">Improved Ray Tracer with Path Tracing (Group 21)</h1>
 </div>
 <p><img src="../res/images/test.png" alt="Fig. 1" width="300" /> <img src="../res/images/test.png" alt="Fig. 2" width="300" /> <img src="../res/images/test.png" alt="Fig. 3" width="300" /></p>
+<h1 id="request">Request</h1>
+<p>We would like to know if you could give us a few points for the implementation of the Cuboid class as well as for the Cornell Box description as these were not mentionned in the proposal.</p>
 <h1 id="goal">Goal</h1>
 <h2 id="core-4.0">Core (4.0):</h2>
 <ul>
-<li>Basic path tracing with explicit shadow rays at each surface interaction</li>
-<li>Diffuse surfaces</li>
-<li>Rectangular area lights</li>
-<li>Mirrors</li>
+<li>Basic path tracing with explicit shadow rays at each surface interaction (implemented)</li>
+<li>Diffuse surfaces (implemented)</li>
+<li>Rectangular area lights (implemented)</li>
+<li>Mirrors (implemented)</li>
 </ul>
 <h2 id="extensions-1-each">Extensions (+1 each):</h2>
 <ul>
 <li>Fractals</li>
-<li>depth of field</li>
-<li>glossy/blurry reflections, multiple possible outgoing rays based on surface roughness</li>
-<li>refractions</li>
+<li>Depth of field</li>
+<li>Glossy/blurry reflections, multiple possible outgoing rays based on surface roughness</li>
+<li>Refractions (implemented)</li>
 <li>Special light sources. E.g. spotlights</li>
+</ul>
+<h1 id="schedule-for-the-next-weeks">Schedule for the next weeks</h1>
+<ul>
+<li>Debug</li>
+<li>Improve Cuboid, AreaLight and overall path tracing stuff</li>
+<li>implement one more extension</li>
 </ul>
 <h1 id="build-project">Build Project</h1>
 <ul>
@@ -40,13 +48,18 @@
 <li>Ray trace our Cornell Box : <code>./build/raytrace ./scenes/cornell_box/cornell_box.sce ./results/cornell_box.png</code></li>
 </ul>
 <h1 id="cuboid">Cuboid</h1>
-<p>We implemented the class Cuboid, which is described by its center, {x, y, z}_size, rotation_angle and material. The faces of this object are planes. We intersect the ray with the Plane associated with the corresponding face to compute intersections and we restrict them to be on the faces computing the the dot product of the face_center_to_intersection_vector with the {x, y, z}_axis. In order to speed up the computations, we came up with the following tricks :</p>
+<p>We implemented the class Cuboid, which is described by its center, {x, y, z}_size, rotation_angle around the y_axis and material. The faces of this object are planes. We intersect the ray with the Plane associated with the corresponding face to compute intersections and we restrict them to be on the faces computing the the dot product of the face_center_to_intersection_vector with the {x, y, z}_axis. In order to speed up the computations, we came up with the following tricks :</p>
 <ul>
 <li>We keep track of the number of possible intersections so that we do not necessarly need to iterate over all the faces if the already have computed two intersections.</li>
 <li>We evaluate the norm of face_center_to_intersection_vector and compare it with the norm of (x_size/2,y_size/2,z_size/2), which is the biggest value face_center_to_intersection_vector could have when intersection_point is on a face, before starting any heavy computations (circumscribed sphere).</li>
 </ul>
 <h1 id="cornell-box">Cornell Box</h1>
 <p>We described a Cornell Box scene (/Improved-Ray-Tracer/scenes/cornell_box/). It is composed of five walls, one light, one cuboid and one sphere. It has 800x800x800 dimensions, the origin (0,0,0) is at the center of the box and the camera located at (0, 0, 600) is looking at the origin with a field of view of 90 degrees. The x-axis is pointing the the right-hand side of the image, the y-axis is pointing up and the z-axis is pointing to the camera.</p>
+<h1 id="arealight">AreaLight</h1>
+<p>This describes a rectangular light, which is discretized into blocks of a a given side length. When checking the lighting during the ray tracing, we iterate over all the contained lights of each AreaLight. This will be improved so that we can give an orientation, a direction and an aperture to it. Moreover, we will take a probabilistic approach to check the lighting at a random point inside a block instead of always checking at the center of the blocks. These improvements will allow us to use AreaLight as a simple light as well as for more specific lights like spotlights.</p>
+<h1 id="path-tracing">Path Tracing</h1>
+<h2 id="technique-de-path-tracing-1">Technique de path tracing 1</h2>
+<h2 id="technique-de-path-tracing-2">Technique de path tracing 2</h2>
 <h1 id="plane">Plane</h1>
 <p>!!! These modifications have been implemented but we discarded them !!!</p>
 <p>We modified the provided Plane class in order to support two new functionalities :</p>
