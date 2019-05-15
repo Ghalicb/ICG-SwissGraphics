@@ -1,14 +1,3 @@
-//=============================================================================
-//
-//   Exercise code for the lecture
-//   "Introduction to Computer Graphics"
-//   by Prof. Dr. Mario Botsch, Bielefeld University
-//
-//   Copyright (C) Computer Graphics Group, Bielefeld University.
-//
-//=============================================================================
-
-//== INCLUDES =================================================================
 #include "Scene.h"
 
 #include "Plane.h"
@@ -28,8 +17,8 @@
 #include <tbb/parallel_for.h>
 #endif
 
-#define PATHS_PER_PIXEL 20
-#define MAX_BOUNCE 10
+#define PATHS_PER_PIXEL 2
+#define MAX_BOUNCE 2
 #define AMBIENT_REFRACTION_INDEX (1.0)
 
 Image Scene::render()
@@ -97,7 +86,14 @@ vec3 Scene::trace(const Ray& _ray, int _depth, double _current_refraction_index)
     }
 
     normal = dot(normal, -_ray.direction) > 0 ? normal : -normal;
-    vec3 color = lighting(point, normal, -_ray.direction, object->material, _depth, _current_refraction_index);
+    vec3 color = vec3(0.0);
+
+    if(object->isLight()){
+      AreaLight* al = dynamic_cast<AreaLight*>(object);
+      color = al->getColor();
+    } else {
+      color = lighting(point, normal, -_ray.direction, object->material, _depth, _current_refraction_index);
+    }
 
     return color;
 }
@@ -109,19 +105,34 @@ bool Scene::intersect(const Ray& _ray, Object_ptr& _object, vec3& _point, vec3& 
     double  t, tmin(Object::NO_INTERSECTION);
     vec3    p, n;
 
-    for (const auto &o: objects) // for each object
+    for (const auto &o: objects)
     {
-        if (o->intersect(_ray, p, n, t)) // does ray intersect object?
+      if (o->intersect(_ray, p, n, t))
+      {
+        if (t < tmin)
         {
-            if (t < tmin) // is intersection point the currently closest one?
-            {
-                tmin = t;
-                _object = o.get();
-                _point  = p;
-                _normal = n;
-                _t      = t;
-            }
+          tmin    = t;
+          _object = o.get();
+          _point  = p;
+          _normal = n;
+          _t      = t;
         }
+      }
+    }
+
+    for (const auto &al: areaLights)
+    {
+      if (al->intersect(_ray, p, n, t))
+      {
+        if (t < tmin)
+        {
+          tmin    = t;
+          _object = al.get();
+          _point  = p;
+          _normal = n;
+          _t      = t;
+        }
+      }
     }
 
     return (tmin != Object::NO_INTERSECTION);
@@ -129,8 +140,9 @@ bool Scene::intersect(const Ray& _ray, Object_ptr& _object, vec3& _point, vec3& 
 
 vec3 Scene::lighting(const vec3& _point, const vec3& _normal, const vec3& _view, const Material& _material, const int _depth, double _current_refraction_index) {
 
-    vec3 color = vec3(0.0);
+    vec3 point = _point + EPSILON * _normal;
 
+    vec3 color = vec3(0.0);
     double mirror_coeff = _material.mirror;
     double transparency_coeff = _material.transparency;
 
@@ -145,7 +157,7 @@ vec3 Scene::lighting(const vec3& _point, const vec3& _normal, const vec3& _view,
 
       //take a vector only in the semi-space in normal direction, otherwise a ray can be traced inside objects
       // reflected_ray_dir = dot(reflected_ray_dir, _normal) < 0 ? -reflected_ray_dir : reflected_ray_dir;
-      Ray reflected_ray = Ray(_point + EPSILON * _normal, reflected_ray_dir);
+      Ray reflected_ray = Ray(point, reflected_ray_dir);
       vec3 color_traced = trace(reflected_ray, _depth + 1, _current_refraction_index);
 
       color += color_traced;
@@ -179,11 +191,16 @@ vec3 Scene::lighting(const vec3& _point, const vec3& _normal, const vec3& _view,
 
       vec3 direct_illumination = vec3(0.0);
 
-      for (Light light : lights) {
-          vec3 to_light_source = normalize(light.position - _point);
+      //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+      for (const auto &al: areaLights)
+      {
+        for (size_t i = 0; i < al->numberOfLights(); ++i)
+        {
+          vec3 lightPosition = al->getLightPosition(i) - vec3(0, EPSILON, 0);
+          vec3 to_light_source = normalize(lightPosition - point);
 
-          // Add EPSILON times (*) the _normal to get the _point out of the object
-          Ray        ray_to_light = Ray(_point + EPSILON * _normal, to_light_source);
+          // Add EPSILON times (*) the _normal to get the point out of the object
+          Ray        ray_to_light = Ray(point, to_light_source);
           Object_ptr object_intersect;
           vec3       point_intersect;
           vec3       normal_intersect;
@@ -193,19 +210,15 @@ vec3 Scene::lighting(const vec3& _point, const vec3& _normal, const vec3& _view,
                                           point_intersect, normal_intersect,
                                           t_intersect);
 
-          // if there is no intersection of if the intersection is beyond the
-          // the light source, then there is no shadow
-          if (!does_intersect || t_intersect > distance(light.position, _point)) {
+          if (!does_intersect || t_intersect > distance(lightPosition, point)) {
               double dot_normal_light = dot(_normal, to_light_source);
-
-              // the dot_normal_light and dot_reflection_light_view must be positive
-              // to produce any effect to the viewed image
               if (dot_normal_light > 0) {
-                  direct_illumination += light.color * _material.diffuse * dot_normal_light;
+                  direct_illumination += al->getLightIntensity(i) * _material.diffuse * dot_normal_light;
               }
           }
-
+        }
       }
+      //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
       color += direct_illumination;
 
 
@@ -216,20 +229,16 @@ vec3 Scene::lighting(const vec3& _point, const vec3& _normal, const vec3& _view,
 
       //take a vector only in the semi-space in normal direction, otherwise a ray can be traced inside objects
       random_reflected_ray_dir = dot(random_reflected_ray_dir, _normal) < 0 ? -random_reflected_ray_dir : random_reflected_ray_dir;
-      Ray random_reflected_ray = Ray(_point + EPSILON * _normal, random_reflected_ray_dir);
+      Ray random_reflected_ray = Ray(point, random_reflected_ray_dir);
       vec3 color_traced = trace(random_reflected_ray, _depth + 1, _current_refraction_index);
 
       indirect_illumination += color_traced * dot(random_reflected_ray_dir, _normal);
 
       color += indirect_illumination;
-
-
     }
 
     return color;
 }
-
-//-----------------------------------------------------------------------------
 
 void Scene::read(const std::string &_filename)
 {
@@ -240,8 +249,8 @@ void Scene::read(const std::string &_filename)
     const std::map<std::string, std::function<void(void)>> entityParser = {
         {"camera",     [&]() { ifs >> camera; }},
         {"background", [&]() { ifs >> background; }},
-        {"light",      [&]() { lights .emplace_back(ifs); }},
-        {"areaLight",  [&]() { objects.emplace_back(new AreaLight(ifs)); }},
+        {"light",      [&]() { lights.emplace_back(ifs); }},
+        {"areaLight",  [&]() { areaLights.emplace_back(new AreaLight(ifs)); }},
         {"plane",      [&]() { objects.emplace_back(new Plane(ifs)); }},
         {"sphere",     [&]() { objects.emplace_back(new Sphere(ifs)); }},
         {"cylinder",   [&]() { objects.emplace_back(new Cylinder(ifs)); }},
@@ -262,6 +271,3 @@ void Scene::read(const std::string &_filename)
         entityParser.at(token)();
     }
 }
-
-
-//=============================================================================
