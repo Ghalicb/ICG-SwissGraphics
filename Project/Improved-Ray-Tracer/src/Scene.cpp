@@ -86,7 +86,14 @@ vec3 Scene::trace(const Ray& _ray, int _depth, double _current_refraction_index)
     }
 
     normal = dot(normal, -_ray.direction) > 0 ? normal : -normal;
-    vec3 color = lighting(point, normal, -_ray.direction, object->material, _depth, _current_refraction_index);
+    vec3 color = vec3(0.0);
+
+    if(object->isLight()){
+      AreaLight* al = dynamic_cast<AreaLight*>(object);
+      color = al->getColor();
+    } else {
+      color = lighting(point, normal, -_ray.direction, object->material, _depth, _current_refraction_index);
+    }
 
     return color;
 }
@@ -151,7 +158,7 @@ vec3 Scene::lighting(const vec3& _point, const vec3& _normal, const vec3& _view,
       //take a vector only in the semi-space in normal direction, otherwise a ray can be traced inside objects
       // reflected_ray_dir = dot(reflected_ray_dir, _normal) < 0 ? -reflected_ray_dir : reflected_ray_dir;
       Ray reflected_ray = Ray(point, reflected_ray_dir);
-      vec3 color_traced = trace(reflected_ray, _depth + 1);
+      vec3 color_traced = trace(reflected_ray, _depth + 1, _current_refraction_index);
 
       color += color_traced;
 
