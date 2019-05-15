@@ -154,6 +154,16 @@ vec3 Scene::lighting(const vec3& _point, const vec3& _normal, const vec3& _view,
 
       vec3 direct_illumination = vec3(0.0);
 
+      //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+      for (const auto &al: areaLights)
+      {
+        for (size_t i = 0; i < al->number_of_lights(); ++i)
+        {
+
+        }
+      }
+
+
       for (Light light : lights) {
           vec3 to_light_source = normalize(light.position - _point);
 
@@ -180,8 +190,8 @@ vec3 Scene::lighting(const vec3& _point, const vec3& _normal, const vec3& _view,
                   direct_illumination += light.color * _material.diffuse * dot_normal_light;
               }
           }
-
       }
+      //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
       color += direct_illumination;
 
 

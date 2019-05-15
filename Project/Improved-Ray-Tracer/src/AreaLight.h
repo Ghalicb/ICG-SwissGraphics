@@ -19,8 +19,16 @@ public:
                                   y_parts(_y_parts)
 
   {
-    x_size = BLOCK_SIDE*x_parts;
-    y_size = BLOCK_SIDE*y_parts;
+    if (x_parts <= 0) {
+      x_parts = 1;
+    }
+
+    if (y_parts <= 0) {
+      y_parts = 1;
+    }
+
+    x_size = BLOCK_SIDE * x_parts;
+    y_size = BLOCK_SIDE * y_parts;
 
     x_axis    = vec3(1,0,0);
     y_axis    = vec3(0,0,1);
@@ -49,8 +57,16 @@ public:
   {
     is >> center >> color >> x_parts >> y_parts;
 
-    x_size = BLOCK_SIDE*x_parts;
-    y_size = BLOCK_SIDE*y_parts;
+    if (x_parts <= 0) {
+      x_parts = 1;
+    }
+
+    if (y_parts <= 0) {
+      y_parts = 1;
+    }
+
+    x_size = BLOCK_SIDE * x_parts;
+    y_size = BLOCK_SIDE * y_parts;
 
     x_axis    = vec3(1,0,0);
     y_axis    = vec3(0,0,1);
@@ -69,7 +85,11 @@ public:
 
   virtual bool isLight() override { return true; }
 
-  const vec3 getColor() const { return color; }
+  int number_of_lights() { return x_parts * y_parts; }
+
+  vec3 get_light_intensity(int light_index);
+
+  vec3 getColor() { return color; }
 
 private:
   vec3 center;

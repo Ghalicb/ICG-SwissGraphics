@@ -23,3 +23,10 @@ intersect(const Ray&  _ray,
   }
   return false;
 }
+
+vec3
+AreaLight::
+get_light_intensity(int light_index)
+{
+  return vec3(1);
+}
