@@ -28,7 +28,7 @@ public:
     }
 
     if (block_side < 0) {
-      0;
+      block_side = 0;
     }
 
     x_size = block_side * x_parts;
