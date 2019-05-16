@@ -2,7 +2,7 @@
 title: Improved Ray Tracer with Path Tracing (Group 21)
 ---
 
-![Fig. 1](../res/images/cornell_box.png){width="300px"}
+![Fig. 1](../res/images/cornell_box.png){width="900px"}
 
 # Request
 We would like to know if you could give us a few points for the implementation of the Cuboid class as well as for the Cornell Box description as these were not mentionned in the proposal.
@@ -48,7 +48,7 @@ We described a Cornell Box scene (/Improved-Ray-Tracer/scenes/cornell_box/). It 
 This describes a rectangular light, which is discretized into blocks of a a given side length. When checking the lighting during the ray tracing, we iterate over all the contained lights of each AreaLight. This will be improved so that we can give an orientation, a direction and an aperture to it. Moreover, we will take a probabilistic approach to check the lighting at a random point inside a block instead of always checking at the center of the blocks. These improvements will allow us to use AreaLight as a simple light as well as for more specific lights like spotlights.
 
 # Path Tracing
-## Path tracing with explicit shadow rays (see image above)
+## Path tracing with explicit shadow rays (Fig. 1)
 To do this, we trace a ray for each pixel and when it intersects an object, we choose randomly (according to material properties : mirror, transparency) between diffuse, mirror or refractive behavior. If the surface is
 
 1. diffuse, we compute direct lightning by tracing a ray to each light source, if the light source is visible, we add to the color contribution the material color times the light color times the dot product between object's normal and point-to-light vector (Monte-Carlo integration). Then we randomly choose a vector and trace a ray in this direction and add the obtained color to the color contribution.

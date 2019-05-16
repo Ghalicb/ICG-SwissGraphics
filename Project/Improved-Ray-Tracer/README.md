@@ -22,29 +22,6 @@ To build a pretty documentation use:
 
 and open the `index.html` in the html folder with your favourite browser. To build the documentation, you must install Doxygen.
 
-Building with XCode (macOS)
----------------------------
-
-If you wish, you can use the CMake build system to generate an XCode project.
-Inside the exercise's top-level directory, execute the following commands:
-
-    mkdir xcode
-    cd xcode
-    cmake -G Xcode ..
-    open RayTracing.xcodeproj
-
-
-Building under Microsoft Windows (Visual Studio)
-------------------------------------------------
-
-* Start the CMake-GUI.
-* Open the RayTracing top-level directory as source directory.
-* Choose a build directory.
-* Click on configure and select Visual Studio as generator.
-* Click generate to create the Visual Studio project files.
-* Open the Visual Studio solution file that is in the build directory you chose in CMake.
-
-
 Running the Ray Tracer
 ----------------------
 
@@ -52,15 +29,3 @@ The program expects two command line arguments: an input scene (`*.sce`) and an 
 
     ./raytrace ../scenes/spheres/spheres.sce output.png
 
-If you have finished all exercise tasks, use
-
-    ./raytrace 0
-
-to render all scenes at once.
-
-To set the command line parameters in MSVC or Xcode, please refer to the documentation of these programs (or use the command line...).
-
-
-Assignment 2: Phong Lighting
-----------------------------
-In this assignment you will implement the Phong Lighting Model, shadows and reflections. Fill in the missing code in the file Scene.cpp. Follow the instructions in TODO comments and assignment sheet.
