@@ -6,6 +6,7 @@
 #include "Mesh.h"
 #include "Cuboid.h"
 #include "AreaLight.h"
+#include "ClosedCylinder.h"
 
 #include <limits>
 #include <map>
@@ -247,15 +248,16 @@ void Scene::read(const std::string &_filename)
         throw std::runtime_error("Cannot open file " + _filename);
 
     const std::map<std::string, std::function<void(void)>> entityParser = {
-        {"camera",     [&]() { ifs >> camera; }},
-        {"background", [&]() { ifs >> background; }},
-        {"light",      [&]() { lights.emplace_back(ifs); }},
-        {"areaLight",  [&]() { areaLights.emplace_back(new AreaLight(ifs)); }},
-        {"plane",      [&]() { objects.emplace_back(new Plane(ifs)); }},
-        {"sphere",     [&]() { objects.emplace_back(new Sphere(ifs)); }},
-        {"cylinder",   [&]() { objects.emplace_back(new Cylinder(ifs)); }},
-        {"mesh",       [&]() { objects.emplace_back(new Mesh(ifs, _filename)); }},
-        {"cuboid",     [&]() { objects.emplace_back(new Cuboid(ifs)); }}
+        {"camera",        [&]() { ifs >> camera; }},
+        {"background",    [&]() { ifs >> background; }},
+        {"light",         [&]() { lights.emplace_back(ifs); }},
+        {"areaLight",     [&]() { areaLights.emplace_back(new AreaLight(ifs)); }},
+        {"plane",         [&]() { objects.emplace_back(new Plane(ifs)); }},
+        {"sphere",        [&]() { objects.emplace_back(new Sphere(ifs)); }},
+        {"cylinder",      [&]() { objects.emplace_back(new Cylinder(ifs)); }},
+        {"mesh",          [&]() { objects.emplace_back(new Mesh(ifs, _filename)); }},
+        {"cuboid",        [&]() { objects.emplace_back(new Cuboid(ifs)); }},
+        {"closedCylinder",[&]() { objects.emplace_back(new ClosedCylinder(ifs)); }}
     };
 
     // parse file
