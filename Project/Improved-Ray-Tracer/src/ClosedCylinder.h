@@ -33,11 +33,18 @@ class ClosedCylinder : public Object {
                            vec3&       _intersection_normal,
                            double&     _intersection_t) const override;
 
-        /// parse cylinder from an input stream
+        /// parse closed cylinder from an input stream
         virtual void parse(std::istream &is) override {
-            cylinder.parse(is);
-            upperPlane.parse(is);
-            bottomPlane.parse(is);
+            vec3 center;
+            double radius;
+            vec3 axis;
+            double height; 
+            axis = normalize(axis);
+
+            is >> center >> radius >> axis >> height >> material;
+            cylinder = Cylinder(center, radius, axis, height);
+            upperPlane = Plane(center + height/2.*axis, axis);
+            upperPlane = Plane(center - height/2.*axis, -axis);
         }
 
     private:
