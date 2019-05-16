@@ -1,13 +1,13 @@
 #The origin is at the center of the box
 
 # camera: eye, center, up, fovy, width, height
-camera   0 0 600   0 0 0   0 1 0   90   500 500
+camera   0 0 600   0 0 0   0 1 0   90   1000 1000
 
 # background color
 background   0 0 0
 
-# AreaLights : center, color, x_parts, y_parts
-areaLight   0 399.999   0   1.0 1.0 1.0   4   4
+# AreaLights : center, color, block_side, x_parts, y_parts
+areaLight   0 399.999 0   1.0 1.0 1.0   50   4   4
 
 # planes: center, normal,  material
 # ground, roof and back wall (white)

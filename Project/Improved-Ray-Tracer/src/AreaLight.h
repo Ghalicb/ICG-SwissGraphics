@@ -5,18 +5,18 @@
 #include "Plane.h"
 #include "vec3.h"
 
-#define BLOCK_SIDE 50
-
 class AreaLight : public Object
 {
 public:
   AreaLight(const vec3 &_center=vec3(0,0,0),
             const vec3 &_color=vec3(0,0,0),
+                   int _block_side=10,
                    int _x_parts=1,
                    int _y_parts=1):center(_center),
-                                  color(_color),
-                                  x_parts(_x_parts),
-                                  y_parts(_y_parts)
+                                   color(_color),
+                                   block_side(_block_side),
+                                   x_parts(_x_parts),
+                                   y_parts(_y_parts)
 
   {
     if (x_parts <= 0) {
@@ -27,7 +27,9 @@ public:
       y_parts = 1;
     }
 
-    block_side = BLOCK_SIDE;
+    if (block_side < 0) {
+      0;
+    }
 
     x_size = block_side * x_parts;
     y_size = block_side * y_parts;
@@ -55,7 +57,7 @@ public:
 
   virtual void parse(std::istream &is) override
   {
-    is >> center >> color >> x_parts >> y_parts;
+    is >> center >> color >> block_side >> x_parts >> y_parts;
 
     if (x_parts <= 0) {
       x_parts = 1;
@@ -65,7 +67,9 @@ public:
       y_parts = 1;
     }
 
-    block_side = BLOCK_SIDE;
+    if (block_side < 0) {
+      0;
+    }
 
     x_size = block_side * x_parts;
     y_size = block_side * y_parts;
