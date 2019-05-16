@@ -2,9 +2,7 @@
 title: Improved Ray Tracer with Path Tracing (Group 21)
 ---
 
-![Fig. 1](../res/images/test.png){width="300px"}
-![Fig. 2](../res/images/test.png){width="300px"}
-![Fig. 3](../res/images/test.png){width="300px"}
+![Fig. 1](../res/images/cornell_box.png){width="900px"}
 
 # Request
 We would like to know if you could give us a few points for the implementation of the Cuboid class as well as for the Cornell Box description as these were not mentionned in the proposal.
@@ -50,14 +48,23 @@ We described a Cornell Box scene (/Improved-Ray-Tracer/scenes/cornell_box/). It 
 This describes a rectangular light, which is discretized into blocks of a a given side length. When checking the lighting during the ray tracing, we iterate over all the contained lights of each AreaLight. This will be improved so that we can give an orientation, a direction and an aperture to it. Moreover, we will take a probabilistic approach to check the lighting at a random point inside a block instead of always checking at the center of the blocks. These improvements will allow us to use AreaLight as a simple light as well as for more specific lights like spotlights.
 
 # Path Tracing
-## Technique de path tracing 1
+## Path tracing with explicit shadow rays (Fig. 1)
+To do this, we trace a ray for each pixel and when it intersects an object, we choose randomly (according to material properties : mirror, transparency) between diffuse, mirror or refractive behavior. If the surface is
 
-## Technique de path tracing 2
+1. diffuse, we compute direct lightning by tracing a ray to each light source, if the light source is visible, we add to the color contribution the material color times the light color times the dot product between object's normal and point-to-light vector (Monte-Carlo integration). Then we randomly choose a vector and trace a ray in this direction and add the obtained color to the color contribution.
+2. mirror, we compute the reflect vector and trace it, the color obtained is the color contribution.
+3. refractive, we compute the refracted vector (that goes inside the object using the refractive index described in material) and trace it. The contribution is the obtained color. The refractive index is the real one.
+The trace method is recursive and we defined a maximum bounces number to not infinitly loop.
+
+We trace a certain number (~1000 to ~10000) of these paths per pixel and its final color is the average of every results.
+
+## Path tracing without shadow rays
+We began to implement the second technique to produce caustics. This technique is the same as the first one but without the explicit shadow rays. It produces beautiful images but is extremly costly to compute because only rays that finally hit the light source are contributing to the final color. We will see if we keep this implementation or not. We will probably keep both.
 
 # Plane
 !!! These modifications have been implemented but we discarded them !!!
 
 We modified the provided Plane class in order to support two new functionalities :
 
-- A plane cat be cut, it can have a hole around center of a given hole_radius
+- A plane can be cut, it can have a hole around center of a given hole_radius
 - A plane is not necessarly infinite, it can be bounded by a circle of a given outer_radius. This implied the function intersect to be updated (circumscribed circle).
