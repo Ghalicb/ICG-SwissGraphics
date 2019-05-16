@@ -39,9 +39,10 @@ class ClosedCylinder : public Object {
             double radius;
             vec3 axis;
             double height; 
-            axis = normalize(axis);
 
             is >> center >> radius >> axis >> height >> material;
+            axis = normalize(axis);
+
             cylinder = Cylinder(center, radius, axis, height);
             upperPlane = Plane(center + height/2.*axis, axis);
             upperPlane = Plane(center - height/2.*axis, -axis);
