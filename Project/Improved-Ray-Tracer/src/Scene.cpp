@@ -54,8 +54,10 @@ Image Scene::render()
     // https://github.com/01org/tbb/releases
 #if HAS_TBB
     tbb::parallel_for(tbb::blocked_range<int>(0, camera.width), [&raytraceColumn](const tbb::blocked_range<int> &range) {
-        for (size_t i = range.begin(); i < range.end(); ++i)
+        for (size_t i = range.begin(); i < range.end(); ++i){
             raytraceColumn(i);
+            std::cout << "column done :" << i << '\n';
+        }
     });
 #else
 #if defined(_OPENMP)
