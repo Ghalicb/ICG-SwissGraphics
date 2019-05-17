@@ -15,6 +15,7 @@
 #if HAS_TBB
 #include <tbb/tbb.h>
 #include <tbb/parallel_for.h>
+#include <tbb/mutex.h>
 #endif
 
 #define PATHS_PER_PIXEL 10
@@ -53,10 +54,25 @@ Image Scene::render()
     // You can install TBB with MacPorts/Homebrew, or from Intel:
     // https://github.com/01org/tbb/releases
 #if HAS_TBB
-    tbb::parallel_for(tbb::blocked_range<int>(0, camera.width), [&raytraceColumn](const tbb::blocked_range<int> &range) {
+    using namespace tbb;
+    typedef mutex myMutex;
+    static myMutex mut;
+    myMutex::scoped_lock lock;
+    int done = 0;
+    int total = camera.width;
+    int done_percents = 0;
+    std::cout << '\n';
+    tbb::parallel_for(tbb::blocked_range<int>(0, camera.width), [&raytraceColumn, &done, &lock, &total, &done_percents](const tbb::blocked_range<int> &range) {
         for (size_t i = range.begin(); i < range.end(); ++i){
             raytraceColumn(i);
-            std::cout << "column done :" << i << '\n';
+            lock.acquire(mut);
+            done = done + 1;
+            int done_percents_temp = done*100/total;
+            if(done_percents_temp > done_percents){
+              done_percents = done_percents_temp;
+              std::cout << "\r" << done_percents << " percents" << std::flush;
+            }
+            lock.release();
         }
     });
 #else
