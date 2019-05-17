@@ -35,8 +35,8 @@ public:
     y_size = block_side * y_parts;
 
     x_axis    = vec3(1,0,0);
-    y_axis    = vec3(0,0,1);
     direction = vec3(0,1,0);
+    y_axis    = vec3(0,0,1);
 
     top_left  = center;
     vec3 temp = x_size/2 * x_axis;
