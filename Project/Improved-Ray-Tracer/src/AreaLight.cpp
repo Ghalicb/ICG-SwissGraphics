@@ -43,5 +43,5 @@ vec3
 AreaLight::
 getLightIntensity(int light_index)
 {
-  return color / numberOfLights() ;
+  return color / getNumberOfLights() ;
 }

@@ -212,7 +212,7 @@ vec3 Scene::lighting(const vec3& _point, const vec3& _normal, const vec3& _view,
       //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
       for (const auto &al: lights)
       {
-        for (size_t i = 0; i < al->numberOfLights(); ++i)
+        for (size_t i = 0; i < al->getNumberOfLights(); ++i)
         {
           vec3 lightPosition = al->getLightPosition(i) - vec3(0, EPSILON, 0);
           vec3 to_light_source = normalize(lightPosition - point);

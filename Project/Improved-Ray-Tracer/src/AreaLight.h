@@ -89,7 +89,7 @@ public:
 
   virtual bool isLight() override { return true; }
 
-  int numberOfLights() { return x_parts * y_parts; }
+  int getNumberOfLights() { return x_parts * y_parts; }
 
   vec3 getLightPosition(int light_index);
 
