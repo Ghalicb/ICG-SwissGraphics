@@ -272,9 +272,7 @@ inline const vec3 refract(const vec3& v, const vec3& n, const float refr_ind)
     return vec3(0.0);
   }
   //refraction
-
-  vec3 res = normalize(eta*v + (eta*cosIn -sqrtf(cosOutSquare)) * normal);
-  return res;
+  return normalize(eta*v + (eta*cosIn -sqrtf(cosOutSquare)) * normal);
 }
 
 inline const float fresnel(const vec3& v, const vec3&n, float refr_ind){
@@ -284,7 +282,7 @@ inline const float fresnel(const vec3& v, const vec3&n, float refr_ind){
   float etaIn = 1.0;
   float etaOut = refr_ind;
 
-  if(cosIn < 0){
+  if(cosIn > 0){
     //the ray is going out of the object
     std::swap(etaIn, etaOut);
   }
