@@ -249,28 +249,48 @@ inline const vec3 reflect(const vec3& v, const vec3& n)
 
 /// refract vector \c v at normal \c n according to \c eta = refraction_indexes_quotient (n1/n2)
 /// this method takes into account the total reflection possibility
-inline const vec3 refract(const vec3& v, const vec3& n, const double eta)
+inline const vec3 refract(const vec3& v, const vec3& n, const float refr_ind)
 {
-    float cosi = dot(n,v);
+  float cosIn = dot(n,v);
+  vec3 normal = n;
+  // assume ambient material is air with index = 1.0
+  float etaIn = 1.0;
+  float etaOut = refr_ind;
 
-    // float k = 1 - eta * eta * (1 - cosi * cosi);
-    //
-    // if(k<0){
-    //   //here total reflection: the ray is reflected
-    //   return reflect(v, n);
-    // }
-
-    vec3 proj_v_on_n = cosi * n;
-    vec3 vec = v + proj_v_on_n;
-    vec3 res = normalize(-proj_v_on_n + eta*vec);
-    return res;
-}
-
-inline const float fresnel(const vec3& v, const vec3&n, const double etaIn, const double etaOut){
-  float cosi = dot(n,v);
+  if(cosIn < 0){
+    //the ray is going into the object
+    cosIn = -cosIn;
+  } else{
+    std::swap(etaIn, etaOut);
+    normal = -normal;
+  }
   float eta = etaIn/etaOut;
 
-  float sinOut = eta*sqrtf(std::max(0.f, 1 - cosi * cosi));
+  float cosOutSquare = 1 - eta*eta*(1-cosIn*cosIn);
+  if(cosOutSquare < 0){
+    //reflection on the surface
+    return vec3(0.0);
+  }
+  //refraction
+
+  vec3 res = normalize(eta*v + (eta*cosIn -sqrtf(cosOutSquare)) * normal);
+  return res;
+}
+
+inline const float fresnel(const vec3& v, const vec3&n, float refr_ind){
+  float cosIn = dot(n,v);
+
+  // assume ambient material is air with index = 1.0
+  float etaIn = 1.0;
+  float etaOut = refr_ind;
+
+  if(cosIn < 0){
+    //the ray is going out of the object
+    std::swap(etaIn, etaOut);
+  }
+  float eta = etaIn/etaOut;
+
+  float sinOut = eta*sqrtf(std::max(0.f, 1 - cosIn * cosIn));
 
 
   if(sinOut >= 1){
@@ -279,9 +299,9 @@ inline const float fresnel(const vec3& v, const vec3&n, const double etaIn, cons
   }
 
   float cosOut = sqrtf(std::max(0.f, 1 - sinOut * sinOut));
-  cosi = cosi < 0 ? -cosi : cosi;
-  float Rs = ((etaOut * cosi) - (etaIn * cosOut)) / ((etaOut * cosi) + (etaIn * cosOut));
-  float Rp = ((etaIn * cosi) - (etaOut * cosOut)) / ((etaIn * cosi) + (etaOut * cosOut));
+  cosIn = cosIn < 0 ? -cosIn : cosIn;
+  float Rs = ((etaOut * cosIn) - (etaIn * cosOut)) / ((etaOut * cosIn) + (etaIn * cosOut));
+  float Rp = ((etaIn * cosIn) - (etaOut * cosOut)) / ((etaIn * cosIn) + (etaOut * cosOut));
   return (Rs * Rs + Rp * Rp) / 2;
 }
 
