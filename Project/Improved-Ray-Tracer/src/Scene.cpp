@@ -19,7 +19,7 @@
 #endif
 
 #define PATHS_PER_PIXEL 10
-#define MAX_BOUNCE 3
+#define MAX_BOUNCE 10
 #define AMBIENT_REFRACTION_INDEX (1.0)
 
 Image Scene::render()
@@ -103,7 +103,6 @@ vec3 Scene::trace(const Ray& _ray, int _depth, double _current_refraction_index)
         return background;
     }
 
-    normal = dot(normal, -_ray.direction) > 0 ? normal : -normal;
     vec3 color = vec3(0.0);
 
     if(object->isLight()){
@@ -181,27 +180,49 @@ vec3 Scene::lighting(const vec3& _point, const vec3& _normal, const vec3& _view,
       color += color_traced;
 
     } else if(random_number < mirror_coeff + transparency_coeff){
-      //here do transparent work (using refraction laws)
+      //here do transparent work (using fresnel and refraction laws)
+
+      bool goes_out_object = dot(_view, _normal) < 0;
       double refraction_index = _material.refraction_index;
 
       double refraction_indexes_quotient;
       double next_refraction_index;
-      if(_current_refraction_index == AMBIENT_REFRACTION_INDEX){
-        // go into the object
-        refraction_indexes_quotient = AMBIENT_REFRACTION_INDEX/refraction_index;
-        next_refraction_index = refraction_index;
-      } else {
+      double fresnel_coeff = 0.0;
+
+      vec3 normal = _normal;
+      if(goes_out_object){
+        normal = -normal;
         // go out of the object
         refraction_indexes_quotient = refraction_index/AMBIENT_REFRACTION_INDEX;
         next_refraction_index = AMBIENT_REFRACTION_INDEX;
+        fresnel_coeff = fresnel(-_view, normal, refraction_index, AMBIENT_REFRACTION_INDEX);
+      } else {
+        // go into the object
+        refraction_indexes_quotient = AMBIENT_REFRACTION_INDEX/refraction_index;
+        next_refraction_index = refraction_index;
+        fresnel_coeff = fresnel(-_view, normal, AMBIENT_REFRACTION_INDEX, refraction_index);
       }
 
-      vec3 refracted_ray_dir = refract(-_view, _normal, refraction_indexes_quotient);
+      if(fresnel_coeff < 1){
+        //refract
+        vec3 refracted_ray_dir = refract(-_view, normal, refraction_indexes_quotient);
 
-      // here -EPSILON*normal because we go inside the object
-      Ray refracted_ray = Ray(_point - EPSILON * _normal, refracted_ray_dir);
-      vec3 color_traced = trace(refracted_ray, _depth + 1, next_refraction_index);
-      color += color_traced;
+        // here -EPSILON*normal because we go inside the object
+        Ray refracted_ray = Ray(_point - EPSILON * normal, refracted_ray_dir);
+        vec3 color_traced = trace(refracted_ray, _depth + 1, next_refraction_index);
+        color += color_traced*(1-fresnel_coeff);
+      }
+
+      //reflect
+      vec3 reflected_ray_dir = reflect(-_view, normal);
+
+      //take a vector only in the semi-space in normal direction, otherwise a ray can be traced inside objects
+      // reflected_ray_dir = dot(reflected_ray_dir, _normal) < 0 ? -reflected_ray_dir : reflected_ray_dir;
+      Ray reflected_ray = Ray(point, reflected_ray_dir);
+      vec3 color_traced = trace(reflected_ray, _depth + 1, _current_refraction_index);
+
+      std::cout << fresnel_coeff << '\n';
+      color += color_traced * std::min(1.0, fresnel_coeff);
 
 
     } else {

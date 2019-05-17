@@ -247,14 +247,42 @@ inline const vec3 reflect(const vec3& v, const vec3& n)
     return v - (2.0 * dot(n,v)) * n;
 }
 
-/// refract vector \c v at normal \c n according to \c refraction_indexes_quotient (n1/n2)
-inline const vec3 refract(const vec3& v, const vec3& n, const double refraction_indexes_quotient)
+/// refract vector \c v at normal \c n according to \c eta = refraction_indexes_quotient (n1/n2)
+/// this method takes into account the total reflection possibility
+inline const vec3 refract(const vec3& v, const vec3& n, const double eta)
 {
-    vec3 proj_v_on_n = dot(n,v) * n;
-    vec3 vec = v + proj_v_on_n;
-    vec3 res = normalize(-proj_v_on_n + refraction_indexes_quotient*vec);
-    return res;
+    float cosi = dot(n,v);
 
+    // float k = 1 - eta * eta * (1 - cosi * cosi);
+    //
+    // if(k<0){
+    //   //here total reflection: the ray is reflected
+    //   return reflect(v, n);
+    // }
+
+    vec3 proj_v_on_n = cosi * n;
+    vec3 vec = v + proj_v_on_n;
+    vec3 res = normalize(-proj_v_on_n + eta*vec);
+    return res;
+}
+
+inline const float fresnel(const vec3& v, const vec3&n, const double etaIn, const double etaOut){
+  float cosi = dot(n,v);
+  float eta = etaIn/etaOut;
+
+  float sinOut = eta*sqrtf(std::max(0.f, 1 - cosi * cosi));
+
+
+  if(sinOut >= 1){
+    //total reflection
+    return 1;
+  }
+
+  float cosOut = sqrtf(std::max(0.f, 1 - sinOut * sinOut));
+  cosi = cosi < 0 ? -cosi : cosi;
+  float Rs = ((etaOut * cosi) - (etaIn * cosOut)) / ((etaOut * cosi) + (etaIn * cosOut));
+  float Rp = ((etaIn * cosi) - (etaOut * cosOut)) / ((etaIn * cosi) + (etaOut * cosOut));
+  return (Rs * Rs + Rp * Rp) / 2;
 }
 
 /// mirrors vector \c v at normal \c n
