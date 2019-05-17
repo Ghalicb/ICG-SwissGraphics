@@ -27,10 +27,9 @@ public:
     /**
     *   @param[in] _ray passed Ray
     *   @param[in] _depth holds the information, how many times the `_ray` had been reflected. Goes from 0 to max_depth. Should be used for recursive function call.
-    *   @param[in] _current_refraction_index keeps track of the material in which the ray evolves
     *   @return    color
     **/
-    vec3  trace(const Ray& _ray, int _depth, double _current_refraction_index);
+    vec3  trace(const Ray& _ray, int _depth);
 
     bool  intersect(const Ray& _ray, Object_ptr& _Object_ptr, vec3& _point, vec3& _normal, double& _t);
 
@@ -41,9 +40,8 @@ public:
     *   @param _view normalized direction from the point to the viewer's position.
     *   @param _material holds material parameters of the `_point`, that should be lit.
     *   @param[in] _depth holds the information, how many times the `_ray` had been reflected. Goes from 0 to max_depth. Should be used for recursive function call.
-    *   @param[in] _current_refraction_index keeps track of the material in which the ray evolves
     */
-    vec3  lighting(const vec3& _point, const vec3& _normal, const vec3& _view, const Material& _material, int _depth, double _current_refraction_index);
+    vec3  lighting(const vec3& _point, const vec3& _normal, const vec3& _view, const Material& _material, int _depth);
 
     void read(const std::string &filename);
 
