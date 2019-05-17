@@ -180,47 +180,36 @@ vec3 Scene::lighting(const vec3& _point, const vec3& _normal, const vec3& _view,
     } else if(random_number < mirror_coeff + transparency_coeff){
       //here do transparent work (using fresnel and refraction laws)
 
-      bool goes_out_object = dot(_view, _normal) < 0;
+      bool goes_inside_object = dot(-_view, _normal) < 0;
       double refraction_index = _material.refraction_index;
 
-      double refraction_indexes_quotient;
-      double next_refraction_index;
-      double fresnel_coeff = 0.0;
-
-      vec3 normal = _normal;
-      if(goes_out_object){
-        normal = -normal;
-        // go out of the object
-        refraction_indexes_quotient = refraction_index/AMBIENT_REFRACTION_INDEX;
-        next_refraction_index = AMBIENT_REFRACTION_INDEX;
-        fresnel_coeff = fresnel(-_view, normal, refraction_index, AMBIENT_REFRACTION_INDEX);
+      vec3 refraction_point = point;
+      if(goes_inside_object){
+        // here -EPSILON*normal because we go inside the object
+        refraction_point = _point - EPSILON*_normal;
       } else {
-        // go into the object
-        refraction_indexes_quotient = AMBIENT_REFRACTION_INDEX/refraction_index;
-        next_refraction_index = refraction_index;
-        fresnel_coeff = fresnel(-_view, normal, AMBIENT_REFRACTION_INDEX, refraction_index);
+        point = _point - EPSILON*_normal;
       }
+
+      float fresnel_coeff = fresnel(-_view, _normal, refraction_index);
 
       if(fresnel_coeff < 1){
         //refract
-        vec3 refracted_ray_dir = refract(-_view, normal, refraction_indexes_quotient);
+        vec3 refracted_ray_dir = refract(-_view, _normal, refraction_index);
 
-        // here -EPSILON*normal because we go inside the object
-        Ray refracted_ray = Ray(_point - EPSILON * normal, refracted_ray_dir);
-        vec3 color_traced = trace(refracted_ray, _depth + 1, next_refraction_index);
+        Ray refracted_ray = Ray(refraction_point, refracted_ray_dir);
+        vec3 color_traced = trace(refracted_ray, _depth + 1);
         color += color_traced*(1-fresnel_coeff);
       }
 
       //reflect
-      vec3 reflected_ray_dir = reflect(-_view, normal);
+      vec3 reflected_ray_dir = reflect(-_view, _normal);
 
-      //take a vector only in the semi-space in normal direction, otherwise a ray can be traced inside objects
-      // reflected_ray_dir = dot(reflected_ray_dir, _normal) < 0 ? -reflected_ray_dir : reflected_ray_dir;
       Ray reflected_ray = Ray(point, reflected_ray_dir);
       vec3 color_traced = trace(reflected_ray, _depth + 1);
 
-      std::cout << fresnel_coeff << '\n';
-      color += color_traced * std::min(1.0, fresnel_coeff);
+
+      color += color_traced * std::min(1.0f, fresnel_coeff);
 
 
     } else {
