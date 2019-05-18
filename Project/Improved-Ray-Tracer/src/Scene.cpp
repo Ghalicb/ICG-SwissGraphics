@@ -181,7 +181,7 @@ vec3 Scene::lighting(const vec3& _point, const vec3& _normal, const vec3& _view,
       //here do transparent work (using fresnel and refraction laws)
 
       bool goes_inside_object = dot(-_view, _normal) < 0;
-      double refraction_index = _material.refraction_index;
+      float refraction_index = _material.refraction_index;
 
       vec3 refraction_point = point;
       if(goes_inside_object){
@@ -191,25 +191,22 @@ vec3 Scene::lighting(const vec3& _point, const vec3& _normal, const vec3& _view,
         point = _point - EPSILON*_normal;
       }
 
-      float fresnel_coeff = fresnel(-_view, _normal, refraction_index);
-
-      if(fresnel_coeff < 1){
-        //refract
-        vec3 refracted_ray_dir = refract(-_view, _normal, refraction_index);
-
-        Ray refracted_ray = Ray(refraction_point, refracted_ray_dir);
-        vec3 color_traced = trace(refracted_ray, _depth + 1);
-        color += color_traced*(1-fresnel_coeff);
-      }
-
-      //reflect
       vec3 reflected_ray_dir = reflect(-_view, _normal);
-
       Ray reflected_ray = Ray(point, reflected_ray_dir);
-      vec3 color_traced = trace(reflected_ray, _depth + 1);
 
+      if(total_reflection(-_view, _normal, refraction_index)){
+        color += _material.diffuse * trace(reflected_ray, _depth + 1);
 
-      color += color_traced * std::min(1.0f, fresnel_coeff);
+      } else {
+        vec3 refracted_ray_dir = refract(-_view, _normal, refraction_index);
+        Ray refracted_ray = Ray(refraction_point, refracted_ray_dir);
+
+        float fresnel_coeff = fresnel(-_view, _normal, refraction_index, refracted_ray_dir);
+
+        color += _material.diffuse * trace(reflected_ray, _depth + 1)*fresnel_coeff;
+        color += _material.diffuse * trace(refracted_ray, _depth + 1)*(1 - fresnel_coeff);
+
+      }
 
 
     } else {

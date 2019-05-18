@@ -251,55 +251,41 @@ inline const vec3 reflect(const vec3& v, const vec3& n)
 /// this method takes into account the total reflection possibility
 inline const vec3 refract(const vec3& v, const vec3& n, const float refr_ind)
 {
-  float cosIn = dot(n,v);
-  vec3 normal = n;
-  // assume ambient material is air with index = 1.0
+  bool ray_going_into = dot(n,v) > 0;
+  vec3 normal = ray_going_into ? n : -n;
   float etaIn = 1.0;
   float etaOut = refr_ind;
+  float eta = ray_going_into ? etaIn/etaOut : etaOut/etaIn;
+  float cosIn = dot(v, normal);
+  float cosSquareOut = 1.0f - eta*eta*(1 - cosIn*cosIn);
 
-  if(cosIn < 0){
-    //the ray is going into the object
-    cosIn = -cosIn;
-  } else{
-    std::swap(etaIn, etaOut);
-    normal = -n;
-  }
-  float eta = etaIn/etaOut;
-
-  float cosOutSquare = 1 - eta*eta*(1-cosIn*cosIn);
-  if(cosOutSquare < 0){
-    //reflection on the surface
-    return vec3(0.0);
-  }
-  //refraction
-  return normalize(eta*v + (eta*cosIn - sqrtf(cosOutSquare)) * normal);
+  return normalize(v*eta - normal*(cosIn*eta + sqrtf(cosSquareOut)));
 }
 
-inline const float fresnel(const vec3& v, const vec3&n, float refr_ind){
-  float cosIn = dot(n,v);
-  // assume ambient material is air with index = 1.0
+inline const float fresnel(const vec3& v, const vec3& n, float refr_ind, const vec3& refracted_dir){
+  bool ray_going_into = dot(n,v) > 0;
   float etaIn = 1.0;
   float etaOut = refr_ind;
+  float eta = ray_going_into ? etaIn/etaOut : etaOut/etaIn;
 
-  if(cosIn > 0){
-    //the ray is going out of the object
-    std::swap(etaIn, etaOut);
-  }
-  float eta = etaIn/etaOut;
+  float a = etaOut - etaIn;
+  float b = etaOut + etaIn;
+  float f0 = a*a/(b*b);
 
-  float sinOut = eta*sqrtf(std::max(0.f, 1 - cosIn * cosIn));
+  float cosIn = ray_going_into ? dot(v,n) : dot(v,-n);
 
+  float c = ray_going_into ? (1 - cosIn) : (1 - dot(refracted_dir, n));
 
-  if(sinOut >= 1){
-    //total reflection
-    return 1;
-  }
+  return f0 + (1 - f0)*c*c*c*c*c;
+}
 
-  float cosOut = sqrtf(std::max(0.f, 1.0f - sinOut * sinOut));
-  cosIn = fabsf(cosIn);
-  float Rs = ((etaOut * cosIn) - (etaIn * cosOut)) / ((etaOut * cosIn) + (etaIn * cosOut));
-  float Rp = ((etaIn * cosIn) - (etaOut * cosOut)) / ((etaIn * cosIn) + (etaOut * cosOut));
-  return (Rs * Rs + Rp * Rp) / 2;
+inline const bool total_reflection(const vec3& v, const vec3& n, float refr_ind){
+  bool ray_going_into = dot(n,v) > 0;
+  float etaIn = 1.0;
+  float etaOut = refr_ind;
+  float eta = ray_going_into ? etaIn/etaOut : etaOut/etaIn;
+  float cosIn = ray_going_into ? dot(v,n) : dot(v,-n);
+  return 1.0f - eta*eta*(1 - cosIn*cosIn) < 0;
 }
 
 /// mirrors vector \c v at normal \c n
