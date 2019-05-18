@@ -16,10 +16,11 @@
 #if HAS_TBB
 #include <tbb/tbb.h>
 #include <tbb/parallel_for.h>
+#include <tbb/mutex.h>
 #endif
 
-#define PATHS_PER_PIXEL 2
-#define MAX_BOUNCE 2
+#define PATHS_PER_PIXEL 10
+#define MAX_BOUNCE 3
 #define AMBIENT_REFRACTION_INDEX (1.0)
 
 Image Scene::render()
@@ -54,9 +55,26 @@ Image Scene::render()
     // You can install TBB with MacPorts/Homebrew, or from Intel:
     // https://github.com/01org/tbb/releases
 #if HAS_TBB
-    tbb::parallel_for(tbb::blocked_range<int>(0, camera.width), [&raytraceColumn](const tbb::blocked_range<int> &range) {
-        for (size_t i = range.begin(); i < range.end(); ++i)
+    using namespace tbb;
+    typedef mutex myMutex;
+    static myMutex mut;
+    myMutex::scoped_lock lock;
+    int done = 0;
+    int total = camera.width;
+    int done_percents = 0;
+    std::cout << '\n';
+    tbb::parallel_for(tbb::blocked_range<int>(0, camera.width), [&raytraceColumn, &done, &lock, &total, &done_percents](const tbb::blocked_range<int> &range) {
+        for (size_t i = range.begin(); i < range.end(); ++i){
             raytraceColumn(i);
+            lock.acquire(mut);
+            done = done + 1;
+            int done_percents_temp = done*100/total;
+            if(done_percents_temp > done_percents){
+              done_percents = done_percents_temp;
+              std::cout << "\r" << done_percents << " percents" << std::flush;
+            }
+            lock.release();
+        }
     });
 #else
 #if defined(_OPENMP)
@@ -235,7 +253,7 @@ vec3 Scene::lighting(const vec3& _point, const vec3& _normal, const vec3& _view,
 
       indirect_illumination += color_traced * dot(random_reflected_ray_dir, _normal);
 
-      color += indirect_illumination;
+      color += _material.diffuse*indirect_illumination;
     }
 
     return color;
@@ -250,7 +268,6 @@ void Scene::read(const std::string &_filename)
     const std::map<std::string, std::function<void(void)>> entityParser = {
         {"camera",        [&]() { ifs >> camera; }},
         {"background",    [&]() { ifs >> background; }},
-        {"light",         [&]() { lights.emplace_back(ifs); }},
         {"areaLight",     [&]() { areaLights.emplace_back(new AreaLight(ifs)); }},
         {"plane",         [&]() { objects.emplace_back(new Plane(ifs)); }},
         {"sphere",        [&]() { objects.emplace_back(new Sphere(ifs)); }},
