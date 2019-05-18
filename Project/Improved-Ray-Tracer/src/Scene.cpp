@@ -201,10 +201,13 @@ vec3 Scene::lighting(const vec3& _point, const vec3& _normal, const vec3& _view,
         vec3 refracted_ray_dir = refract(-_view, _normal, refraction_index);
         Ray refracted_ray = Ray(refraction_point, refracted_ray_dir);
 
-        float fresnel_coeff = fresnel(-_view, _normal, refraction_index, refracted_ray_dir);
+        float reflected = fresnel(-_view, _normal, refraction_index, refracted_ray_dir);
+        float refracted = 1 - reflected;
 
-        color += _material.diffuse * trace(reflected_ray, _depth + 1)*fresnel_coeff;
-        color += _material.diffuse * trace(refracted_ray, _depth + 1)*(1 - fresnel_coeff);
+
+        color += _material.diffuse * trace(reflected_ray, _depth + 1)*reflected;
+        color += _material.diffuse * trace(refracted_ray, _depth + 1)*refracted;
+
 
       }
 
