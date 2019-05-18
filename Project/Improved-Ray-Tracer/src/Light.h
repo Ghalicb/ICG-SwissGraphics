@@ -18,7 +18,8 @@ class Light : public Object {
 
         virtual vec3 getLightIntensity() const = 0;
 
-        int getNumberOfLights() const = 0;
+        virtual vec3 getLightPosition(int light_index) const { return center; };
+        virtual int getNumberOfLights() const { return 1;};
 
 
     protected:
