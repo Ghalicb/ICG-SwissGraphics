@@ -1,13 +1,12 @@
 #include "AreaLight.h"
+#include "Object.h"
 
-bool
-AreaLight::
-intersect(const Ray&  _ray,
+bool AreaLight::intersect(const Ray&  _ray,
                vec3&  _intersection_point,
                vec3&  _intersection_normal,
              double&  _intersection_t) const
 {
-  _intersection_t = NO_INTERSECTION;
+  _intersection_t = Object::NO_INTERSECTION;
 
   if (plane.intersect(_ray, _intersection_point, _intersection_normal, _intersection_t))
   {
@@ -24,9 +23,7 @@ intersect(const Ray&  _ray,
   return false;
 }
 
-vec3
-AreaLight::
-getLightPosition(int light_index)
+vec3 AreaLight::getLightPosition(int light_index)
 {
   int ligth_x_index = light_index % x_parts;
   int light_y_index = light_index / x_parts;
@@ -39,9 +36,7 @@ getLightPosition(int light_index)
   return temp;
 }
 
-vec3
-AreaLight::
-getLightIntensity(int light_index)
+vec3 AreaLight::getLightIntensity() const
 {
-  return color / getNumberOfLights() ;
+  return color / getNumberOfLights();
 }
