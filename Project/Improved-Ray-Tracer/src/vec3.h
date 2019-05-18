@@ -262,7 +262,7 @@ inline const vec3 refract(const vec3& v, const vec3& n, const float refr_ind)
     cosIn = -cosIn;
   } else{
     std::swap(etaIn, etaOut);
-    normal = -normal;
+    normal = -n;
   }
   float eta = etaIn/etaOut;
 
@@ -272,12 +272,11 @@ inline const vec3 refract(const vec3& v, const vec3& n, const float refr_ind)
     return vec3(0.0);
   }
   //refraction
-  return normalize(eta*v + (eta*cosIn -sqrtf(cosOutSquare)) * normal);
+  return normalize(eta*v + (eta*cosIn - sqrtf(cosOutSquare)) * normal);
 }
 
 inline const float fresnel(const vec3& v, const vec3&n, float refr_ind){
   float cosIn = dot(n,v);
-
   // assume ambient material is air with index = 1.0
   float etaIn = 1.0;
   float etaOut = refr_ind;
@@ -296,8 +295,8 @@ inline const float fresnel(const vec3& v, const vec3&n, float refr_ind){
     return 1;
   }
 
-  float cosOut = sqrtf(std::max(0.f, 1 - sinOut * sinOut));
-  cosIn = cosIn < 0 ? -cosIn : cosIn;
+  float cosOut = sqrtf(std::max(0.f, 1.0f - sinOut * sinOut));
+  cosIn = fabsf(cosIn);
   float Rs = ((etaOut * cosIn) - (etaIn * cosOut)) / ((etaOut * cosIn) + (etaIn * cosOut));
   float Rp = ((etaIn * cosIn) - (etaOut * cosOut)) / ((etaIn * cosIn) + (etaOut * cosOut));
   return (Rs * Rs + Rp * Rp) / 2;
