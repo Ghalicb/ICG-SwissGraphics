@@ -251,40 +251,44 @@ inline const vec3 reflect(const vec3& v, const vec3& n)
 /// this method takes into account the total reflection possibility
 inline const vec3 refract(const vec3& v, const vec3& n, const float refr_ind)
 {
-  bool ray_going_into = dot(n,v) > 0;
+  bool ray_going_into = dot(n,v) < 0;
   vec3 normal = ray_going_into ? n : -n;
-  float etaIn = 1.0;
-  float etaOut = refr_ind;
-  float eta = ray_going_into ? etaIn/etaOut : etaOut/etaIn;
-  float cosIn = dot(v, normal);
-  float cosSquareOut = 1.0f - eta*eta*(1 - cosIn*cosIn);
+  double etaIn = 1.0;
+  double etaOut = refr_ind;
+  double eta = ray_going_into ? etaIn/etaOut : etaOut/etaIn;
+  double cosIn = dot(v, normal);
+  double cosSquareOut = 1.0f - eta*eta*(1 - cosIn*cosIn);
 
   return normalize(v*eta - normal*(cosIn*eta + sqrtf(cosSquareOut)));
 }
 
+/// compute the Schlick's approximation of the Fresnel reflectivity coefficient
 inline const float fresnel(const vec3& v, const vec3& n, float refr_ind, const vec3& refracted_dir){
-  bool ray_going_into = dot(n,v) > 0;
-  float etaIn = 1.0;
-  float etaOut = refr_ind;
-  float eta = ray_going_into ? etaIn/etaOut : etaOut/etaIn;
+  bool ray_going_into = dot(n,v) < 0;
+  double etaIn = 1.0;
+  double etaOut = refr_ind;
+  double eta = ray_going_into ? etaIn/etaOut : etaOut/etaIn;
 
-  float a = etaOut - etaIn;
-  float b = etaOut + etaIn;
-  float f0 = a*a/(b*b);
+  double a = etaOut - etaIn;
+  double b = etaOut + etaIn;
+  double f0 = a*a/(b*b);
 
-  float cosIn = ray_going_into ? dot(v,n) : dot(v,-n);
+  double cosIn = ray_going_into ? dot(v,-n) : dot(v,n);
 
-  float c = ray_going_into ? (1 - cosIn) : (1 - dot(refracted_dir, n));
+  // float c = ray_going_into ? (1 - cosIn) : (1 - dot(refracted_dir, n));
+  double c = 1 - cosIn;
+  double res = f0 + (1 - f0)*c*c*c*c*c;
 
-  return f0 + (1 - f0)*c*c*c*c*c;
+  std::cout << "angle : " << acos(cosIn)*180/3.14 << "  fresnel = " << res << "\n" << std::flush;
+  return res;
 }
 
 inline const bool total_reflection(const vec3& v, const vec3& n, float refr_ind){
-  bool ray_going_into = dot(n,v) > 0;
-  float etaIn = 1.0;
-  float etaOut = refr_ind;
-  float eta = ray_going_into ? etaIn/etaOut : etaOut/etaIn;
-  float cosIn = ray_going_into ? dot(v,n) : dot(v,-n);
+  bool ray_going_into = dot(n,v) < 0;
+  double etaIn = 1.0;
+  double etaOut = refr_ind;
+  double eta = ray_going_into ? etaIn/etaOut : etaOut/etaIn;
+  double cosIn = ray_going_into ? dot(v,n) : dot(v,-n);
   return 1.0f - eta*eta*(1 - cosIn*cosIn) < 0;
 }
 
