@@ -23,7 +23,7 @@ bool AreaLight::intersect(const Ray&  _ray,
   return false;
 }
 
-vec3 AreaLight::getLightPosition(int light_index)
+vec3 AreaLight::getLightPosition(int light_index) const
 {
   int ligth_x_index = light_index % x_parts;
   int light_y_index = light_index / x_parts;

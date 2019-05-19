@@ -88,12 +88,8 @@ public:
   }
 
   int getNumberOfLights() const override { return x_parts * y_parts; }
-
-  vec3 getLightPosition(int light_index);
-
+  vec3 getLightPosition(int light_index) const override;
   vec3 getLightIntensity() const override;
-
-  vec3 getTopLeft() { return top_left; }
 
 private:
   int block_side;
