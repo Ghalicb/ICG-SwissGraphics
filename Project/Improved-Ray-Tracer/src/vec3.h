@@ -279,7 +279,6 @@ inline const float fresnel(const vec3& v, const vec3& n, float refr_ind, const v
   double c = 1 - cosIn;
   double res = f0 + (1 - f0)*c*c*c*c*c;
 
-  std::cout << "angle : " << acos(cosIn)*180/3.14 << "  fresnel = " << res << "\n" << std::flush;
   return res;
 }
 
