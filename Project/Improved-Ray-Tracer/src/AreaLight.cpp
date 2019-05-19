@@ -35,8 +35,3 @@ vec3 AreaLight::getLightPosition(int light_index) const
 
   return temp;
 }
-
-vec3 AreaLight::getLightIntensity() const
-{
-  return color / getNumberOfLights();
-}
