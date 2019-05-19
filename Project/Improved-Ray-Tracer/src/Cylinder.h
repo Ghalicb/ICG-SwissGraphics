@@ -56,6 +56,8 @@ public:
         axis = normalize(axis);
     }
 
+    double getRadius() const {  return radius;  }
+
 private:
     /// center position
     vec3 center;
