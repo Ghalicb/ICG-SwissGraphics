@@ -1,7 +1,6 @@
 #ifndef AREA_LIGHT_H
 #define AREA_LIGHT_H
 
-#include "Object.h"
 #include "Light.h"
 #include "Plane.h"
 #include "vec3.h"

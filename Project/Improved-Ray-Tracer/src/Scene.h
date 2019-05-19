@@ -5,7 +5,7 @@
 
 #include "StopWatch.h"
 #include "Object.h"
-#include "AreaLight.h"
+#include "Light.h"
 #include "Ray.h"
 #include "Material.h"
 #include "Image.h"
@@ -57,7 +57,7 @@ private:
     Camera camera;
 
     std::vector<std::unique_ptr<Object>> objects;
-    std::vector<std::unique_ptr<Light>> lights;
+    std::vector<std::unique_ptr<Light>>  lights;
 
     vec3 background = vec3(0, 0, 0);
 };

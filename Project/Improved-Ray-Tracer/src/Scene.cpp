@@ -5,6 +5,7 @@
 #include "Cylinder.h"
 #include "Mesh.h"
 #include "Cuboid.h"
+#include "Light.h"
 #include "AreaLight.h"
 #include "ClosedCylinder.h"
 
@@ -108,7 +109,7 @@ vec3 Scene::trace(const Ray& _ray, int _depth, double _current_refraction_index)
     vec3 color = vec3(0.0);
 
     if(object->isLight()){
-      AreaLight* al = dynamic_cast<AreaLight*>(object);
+      Light* al = dynamic_cast<Light*>(object);
       color = al->getColor();
     } else {
       color = lighting(point, normal, -_ray.direction, object->material, _depth, _current_refraction_index);
@@ -268,7 +269,7 @@ void Scene::read(const std::string &_filename)
     const std::map<std::string, std::function<void(void)>> entityParser = {
         {"camera",        [&]() { ifs >> camera; }},
         {"background",    [&]() { ifs >> background; }},
-        {"areaLight",     [&]() { areaLights.emplace_back(new AreaLight(ifs)); }},
+        {"areaLight",     [&]() { lights.emplace_back(new AreaLight(ifs)); }},
         {"plane",         [&]() { objects.emplace_back(new Plane(ifs)); }},
         {"sphere",        [&]() { objects.emplace_back(new Sphere(ifs)); }},
         {"cylinder",      [&]() { objects.emplace_back(new Cylinder(ifs)); }},
