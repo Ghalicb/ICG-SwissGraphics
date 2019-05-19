@@ -57,7 +57,7 @@ private:
     Camera camera;
 
     std::vector<std::unique_ptr<Object>> objects;
-    std::vector<std::unique_ptr<AreaLight>> areaLights;
+    std::vector<std::unique_ptr<Light>> lights;
 
     vec3 background = vec3(0, 0, 0);
 };

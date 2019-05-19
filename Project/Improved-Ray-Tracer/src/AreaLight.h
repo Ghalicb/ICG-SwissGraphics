@@ -2,18 +2,18 @@
 #define AREA_LIGHT_H
 
 #include "Object.h"
+#include "Light.h"
 #include "Plane.h"
 #include "vec3.h"
 
-class AreaLight : public Object
+class AreaLight : public Light
 {
 public:
   AreaLight(const vec3 &_center=vec3(0,0,0),
             const vec3 &_color=vec3(0,0,0),
                    int _block_side=10,
                    int _x_parts=1,
-                   int _y_parts=1):center(_center),
-                                   color(_color),
+                   int _y_parts=1):Light(_center, _color),
                                    block_side(_block_side),
                                    x_parts(_x_parts),
                                    y_parts(_y_parts)
@@ -35,16 +35,16 @@ public:
     y_size = block_side * y_parts;
 
     x_axis    = vec3(1,0,0);
-    y_axis    = vec3(0,0,1);
     direction = vec3(0,1,0);
+    y_axis    = vec3(0,0,1);
 
-    top_left  = center;
+    top_left  = _center;
     vec3 temp = x_size/2 * x_axis;
     top_left -= temp;
     temp      = y_size/2 * y_axis;
     top_left -= temp;
 
-    plane = Plane(center, direction);
+    plane = Plane(_center, direction);
   }
 
   AreaLight(std::istream &is) { parse(is); }
@@ -87,22 +87,11 @@ public:
     plane = Plane(center, direction);
   }
 
-  virtual bool isLight() override { return true; }
-
-  int numberOfLights() { return x_parts * y_parts; }
-
-  vec3 getLightPosition(int light_index);
-
-  vec3 getLightIntensity(int light_index);
-
-  vec3 getColor() { return color; }
-
-  vec3 getTopLeft() { return top_left; }
+  int getNumberOfLights() const override { return x_parts * y_parts; }
+  vec3 getLightPosition(int light_index) const override;
+  vec3 getLightIntensity() const override;
 
 private:
-  vec3 center;
-  vec3 color;
-
   int block_side;
 
   int x_parts;

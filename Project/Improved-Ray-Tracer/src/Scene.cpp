@@ -19,8 +19,8 @@
 #include <tbb/mutex.h>
 #endif
 
-#define PATHS_PER_PIXEL 10
-#define MAX_BOUNCE 3
+#define PATHS_PER_PIXEL 4
+#define MAX_BOUNCE 2
 #define AMBIENT_REFRACTION_INDEX (1.0)
 
 Image Scene::render()
@@ -139,7 +139,7 @@ bool Scene::intersect(const Ray& _ray, Object_ptr& _object, vec3& _point, vec3& 
       }
     }
 
-    for (const auto &al: areaLights)
+    for (const auto &al: lights)
     {
       if (al->intersect(_ray, p, n, t))
       {
@@ -211,9 +211,9 @@ vec3 Scene::lighting(const vec3& _point, const vec3& _normal, const vec3& _view,
       vec3 direct_illumination = vec3(0.0);
 
       //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-      for (const auto &al: areaLights)
+      for (const auto &al: lights)
       {
-        for (size_t i = 0; i < al->numberOfLights(); ++i)
+        for (size_t i = 0; i < al->getNumberOfLights(); ++i)
         {
           vec3 lightPosition = al->getLightPosition(i) - vec3(0, EPSILON, 0);
           vec3 to_light_source = normalize(lightPosition - point);
@@ -232,7 +232,7 @@ vec3 Scene::lighting(const vec3& _point, const vec3& _normal, const vec3& _view,
           if (!does_intersect || t_intersect > distance(lightPosition, point)) {
               double dot_normal_light = dot(_normal, to_light_source);
               if (dot_normal_light > 0) {
-                  direct_illumination += al->getLightIntensity(i) * _material.diffuse * dot_normal_light;
+                  direct_illumination += al->getLightIntensity() * _material.diffuse * dot_normal_light;
               }
           }
         }
