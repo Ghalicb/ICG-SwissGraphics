@@ -13,12 +13,14 @@ class Light : public Object {
         virtual ~Light() {}
 
         virtual bool isLight() override { return true; }
+        virtual bool isSpotlight()      { return false; }
 
         vec3 getColor() { return color; }
 
         virtual vec3 getLightIntensity() const { return color / getNumberOfLights(); }
         virtual vec3 getLightPosition(int light_index) const { return center; }
         virtual int  getNumberOfLights() const { return 1; }
+        virtual double      getSurface() const { return 0.0; };
 
     protected:
         vec3 center;

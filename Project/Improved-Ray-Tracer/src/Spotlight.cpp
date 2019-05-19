@@ -32,3 +32,8 @@ vec3 Spotlight::getLightPosition(int light_index) const
 
   return temp;
 }
+
+double Spotlight::getSurface() const
+{
+  return PI * radius * radius;
+}

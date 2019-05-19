@@ -230,10 +230,11 @@ vec3 Scene::lighting(const vec3& _point, const vec3& _normal, const vec3& _view,
                                           point_intersect, normal_intersect,
                                           t_intersect);
 
-          if (!does_intersect || t_intersect > distance(lightPosition, point)) {
+          if ((!does_intersect || t_intersect > distance(lightPosition, point)) &&
+              (!al->isSpotlight() || (al->isSpotlight() && to_light_source[1] >= 0.98))) {
               double dot_normal_light = dot(_normal, to_light_source);
               if (dot_normal_light > 0) {
-                  direct_illumination += al->getLightIntensity() / lights.size() * _material.diffuse * dot_normal_light;
+                  direct_illumination += al->getLightIntensity() * al->getSurface() / lightsTotalSurface * _material.diffuse * dot_normal_light;
               }
           }
         }
@@ -288,5 +289,10 @@ void Scene::read(const std::string &_filename)
         if (entityParser.count(token) == 0)
             throw std::runtime_error("Invalid token encountered: " + token);
         entityParser.at(token)();
+    }
+
+    for (const auto &l: lights)
+    {
+      lightsTotalSurface += l->getSurface();
     }
 }

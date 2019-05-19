@@ -31,7 +31,10 @@ vec3 AreaLight::getLightPosition(int light_index) const
   double x_offset = (rand()%1000)/1000.0;
   double y_offset = (rand()%1000)/1000.0;
 
-  vec3 temp = top_left + (ligth_x_index + x_offset) * block_side * x_axis + (light_y_index + y_offset) * block_side * y_axis;
+  return top_left + (ligth_x_index + x_offset) * block_side * x_axis + (light_y_index + y_offset) * block_side * y_axis;
+}
 
-  return temp;
+double AreaLight::getSurface() const
+{
+  return x_size * y_size;
 }

@@ -14,8 +14,7 @@ public:
                  double _radius   =0,
                  double _angle    =0):Light(_center, _color),
                                       direction(_direction),
-                                      radius(_radius),
-                                      angle(_angle)
+                                      radius(_radius)
   {
     if (radius <= 0)
     {
@@ -34,17 +33,18 @@ public:
 
   virtual void parse(std::istream &is) override
   {
-    is >> center >> color >> direction >> radius >> angle;
+    is >> center >> color >> direction >> radius;
 
     plane = Plane(center, direction);
   }
 
+  bool isSpotlight() override { return true; }
   vec3 getLightPosition(int light_index) const override;
+  double  getSurface() const override;
 
 private:
   vec3   direction;
   double radius;
-  double angle;
 
   Plane plane;
 };

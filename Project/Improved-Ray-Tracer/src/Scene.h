@@ -53,6 +53,8 @@ public:
 
     const Camera &getCamera() const { return camera; }
 
+    double lightsTotalSurface = 0;
+
 private:
     Camera camera;
 
