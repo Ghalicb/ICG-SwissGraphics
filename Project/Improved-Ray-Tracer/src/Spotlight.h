@@ -5,6 +5,8 @@
 #include "vec3.h"
 #include "Plane.h"
 
+#define APERTURE 0.98
+
 class Spotlight : public Light
 {
 public:
@@ -38,9 +40,10 @@ public:
     plane = Plane(center, direction);
   }
 
-  bool isSpotlight() override { return true; }
-  vec3 getLightPosition(int light_index) const override;
-  double  getSurface() const override;
+  bool   isSpotlight()                           override { return true; }
+  double getAperture()                     const override { return APERTURE; }
+  vec3   getLightPosition(int light_index) const override;
+  double getSurface()                      const override;
 
 private:
   vec3   direction;

@@ -231,7 +231,7 @@ vec3 Scene::lighting(const vec3& _point, const vec3& _normal, const vec3& _view,
                                           t_intersect);
 
           if ((!does_intersect || t_intersect > distance(lightPosition, point)) &&
-              (!al->isSpotlight() || (al->isSpotlight() && to_light_source[1] >= 0.98))) {
+              (!al->isSpotlight() || (al->isSpotlight() && to_light_source[1] >= al->getAperture()))) {
               double dot_normal_light = dot(_normal, to_light_source);
               if (dot_normal_light > 0) {
                   direct_illumination += al->getLightIntensity() * al->getSurface() / lightsTotalSurface * _material.diffuse * dot_normal_light;

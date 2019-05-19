@@ -7,10 +7,10 @@ camera   0 0 600   0 0 0   0 1 0   90   1000 1000
 background   0 0 0
 
 # AreaLights : center, color, block_side, x_parts, y_parts
-areaLight   0 399.999 0   1.0 1.0 1.0   50   2   2
+areaLight   0 399.999 0   1.0 1.0 1.0   20   2   2
 
 # Spotlight : center, color, direction, radius
-light   200 399.999 50   1.0 1.0 1.0   0 -1 0   100
+light   200 399.999 50   1.0 1.0 1.0   0 -1 0   50
 
 # planes: center, normal,  material
 # ground, roof and back wall (white)
