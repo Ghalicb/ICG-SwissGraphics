@@ -85,17 +85,18 @@ int done_percents = 0;
 std::cout << '\n';
 #pragma omp parallel for
 #endif
-    for (int x=0; x<int(camera.width); ++x)
-        raytraceColumn(x);
-        #pragma omp critical
-        {
-          done = done + 1;
-          int done_percents_temp = done*100/total;
-          if(done_percents_temp > done_percents){
-            done_percents = done_percents_temp;
-            std::cout << "\r" << done_percents << "%" << std::flush;
-          }
-        }
+  for (int x=0; x<int(camera.width); ++x)
+  {
+    raytraceColumn(x);
+    #pragma omp critical
+      done = done + 1;
+      int done_percents_temp = done*100/total;
+      if(done_percents_temp > done_percents)
+      {
+        done_percents = done_percents_temp;
+        std::cout << "\r" << done_percents << "%" << std::flush;
+      }
+    }
 #endif
 
     // Note: compiler will elide copy.
