@@ -79,27 +79,26 @@ Image Scene::render()
     });
 #else
 #if defined(_OPENMP)
-int done = 0;
-int total = camera.width;
-int done_percents = 0;
-std::cout << '\n';
+int step      = 0;
+int done      = 0;
+int done_temp = 0;
+int total     = camera.width;
+std::cout << std::endl;
 #pragma omp parallel for
 #endif
-  for (int x=0; x<int(camera.width); ++x)
+  for (int x=0; x<total; ++x)
   {
     raytraceColumn(x);
     #pragma omp critical
-      done = done + 1;
-      int done_percents_temp = done*100/total;
-      if(done_percents_temp > done_percents)
+      done_temp = ++step * 100 / total;
+      if(done_temp > done)
       {
-        done_percents = done_percents_temp;
-        std::cout << "\r" << done_percents << "%" << std::flush;
+        done = done_temp;
+        std::cout << "\r" << done << "%" << std::flush;
       }
     }
 #endif
 
-    // Note: compiler will elide copy.
     return img;
 }
 
