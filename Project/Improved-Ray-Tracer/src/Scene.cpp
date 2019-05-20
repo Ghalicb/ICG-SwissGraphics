@@ -166,18 +166,8 @@ vec3 Scene::lighting(const vec3& _point, const vec3& _normal, const vec3& _view,
     // if yes, do as specular, if not do as diffuse
     double random_number = (rand()%100)/100.0;
 
-    if(random_number < mirror_coeff){
-      //for specular, trace a new ray but reflected with respect to normal
-      vec3 reflected_ray_dir = reflect(-_view, _normal);
-
-      //take a vector only in the semi-space in normal direction, otherwise a ray can be traced inside objects
-      // reflected_ray_dir = dot(reflected_ray_dir, _normal) < 0 ? -reflected_ray_dir : reflected_ray_dir;
-      Ray reflected_ray = Ray(point, reflected_ray_dir);
-      vec3 color_traced = trace(reflected_ray, _depth + 1);
-
-      color += color_traced/mirror_coeff;
-
-    } else if(random_number < mirror_coeff + transparency_coeff){
+    // assume that an object is transparent or not
+    if(transparency_coeff > 0.0){
       //here do transparent work (using fresnel and refraction laws)
 
       bool goes_inside_object = dot(-_view, _normal) < 0;
@@ -207,11 +197,18 @@ vec3 Scene::lighting(const vec3& _point, const vec3& _normal, const vec3& _view,
 
         color += _material.diffuse * trace(reflected_ray, _depth + 1)*reflected;
         color += _material.diffuse * trace(refracted_ray, _depth + 1)*refracted;
-
-
       }
+    } else if(random_number < mirror_coeff){
+      //for specular, trace a new ray but reflected with respect to normal
+      vec3 reflected_ray_dir = reflect(-_view, _normal);
 
+      //take a vector only in the semi-space in normal direction, otherwise a ray can be traced inside objects
+      // reflected_ray_dir = dot(reflected_ray_dir, _normal) < 0 ? -reflected_ray_dir : reflected_ray_dir;
+      Ray reflected_ray = Ray(point, reflected_ray_dir);
+      vec3 color_traced = trace(reflected_ray, _depth + 1);
 
+      color += color_traced/mirror_coeff;
+      
     } else {
       //diffuse objects
 
