@@ -29,7 +29,7 @@ public:
     *   @param[in] _depth holds the information, how many times the `_ray` had been reflected. Goes from 0 to max_depth. Should be used for recursive function call.
     *   @return    color
     **/
-    vec3  trace(const Ray& _ray, int _depth);
+    vec3  trace(const Ray& _ray, int _depth, bool shadow_rays);
 
     bool  intersect(const Ray& _ray, Object_ptr& _Object_ptr, vec3& _point, vec3& _normal, double& _t);
 
@@ -41,7 +41,7 @@ public:
     *   @param _material holds material parameters of the `_point`, that should be lit.
     *   @param[in] _depth holds the information, how many times the `_ray` had been reflected. Goes from 0 to max_depth. Should be used for recursive function call.
     */
-    vec3  lighting(const vec3& _point, const vec3& _normal, const vec3& _view, const Material& _material, int _depth);
+    vec3  lighting(const vec3& _point, const vec3& _normal, const vec3& _view, const Material& _material, int _depth, bool shadow_rays);
 
     void read(const std::string &filename);
 
