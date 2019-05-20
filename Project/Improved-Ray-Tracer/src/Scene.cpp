@@ -175,7 +175,7 @@ vec3 Scene::lighting(const vec3& _point, const vec3& _normal, const vec3& _view,
       Ray reflected_ray = Ray(point, reflected_ray_dir);
       vec3 color_traced = trace(reflected_ray, _depth + 1);
 
-      color += color_traced;
+      color += color_traced/mirror_coeff;
 
     } else if(random_number < mirror_coeff + transparency_coeff){
       //here do transparent work (using fresnel and refraction laws)
@@ -260,7 +260,7 @@ vec3 Scene::lighting(const vec3& _point, const vec3& _normal, const vec3& _view,
 
       indirect_illumination += color_traced * dot(random_reflected_ray_dir, _normal);
 
-      color += _material.diffuse*indirect_illumination;
+      color += _material.diffuse*indirect_illumination/(1-mirror_coeff);
     }
 
     return color;
