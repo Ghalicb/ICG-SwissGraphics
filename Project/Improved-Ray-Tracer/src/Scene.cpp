@@ -20,8 +20,8 @@
 #include <tbb/mutex.h>
 #endif
 
-#define PATHS_PER_PIXEL 4
-#define MAX_BOUNCE 2
+#define PATHS_PER_PIXEL 200
+#define MAX_BOUNCE 3
 #define AMBIENT_REFRACTION_INDEX (1.0)
 
 Image Scene::render()
