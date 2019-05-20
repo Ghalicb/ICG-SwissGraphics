@@ -5,7 +5,10 @@
 #include "Cylinder.h"
 #include "Mesh.h"
 #include "Cuboid.h"
+#include "Light.h"
 #include "AreaLight.h"
+#include "Spotlight.h"
+#include "ClosedCylinder.h"
 
 #include <limits>
 #include <map>
@@ -18,8 +21,8 @@
 #include <tbb/mutex.h>
 #endif
 
-#define PATHS_PER_PIXEL 10
-#define MAX_BOUNCE 10
+#define PATHS_PER_PIXEL 4
+#define MAX_BOUNCE 2
 
 Image Scene::render()
 {
@@ -104,7 +107,7 @@ vec3 Scene::trace(const Ray& _ray, int _depth) {
     vec3 color = vec3(0.0);
 
     if(object->isLight()){
-      AreaLight* al = dynamic_cast<AreaLight*>(object);
+      Light* al = dynamic_cast<Light*>(object);
       color = al->getColor();
     } else {
       color = lighting(point, normal, -_ray.direction, object->material, _depth);
@@ -135,7 +138,7 @@ bool Scene::intersect(const Ray& _ray, Object_ptr& _object, vec3& _point, vec3& 
       }
     }
 
-    for (const auto &al: areaLights)
+    for (const auto &al: lights)
     {
       if (al->intersect(_ray, p, n, t))
       {
@@ -214,10 +217,9 @@ vec3 Scene::lighting(const vec3& _point, const vec3& _normal, const vec3& _view,
 
       vec3 direct_illumination = vec3(0.0);
 
-      //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-      for (const auto &al: areaLights)
+      for (const auto &al: lights)
       {
-        for (size_t i = 0; i < al->numberOfLights(); ++i)
+        for (size_t i = 0; i < al->getNumberOfLights(); ++i)
         {
           vec3 lightPosition = al->getLightPosition(i) - vec3(0, EPSILON, 0);
           vec3 to_light_source = normalize(lightPosition - point);
@@ -233,17 +235,16 @@ vec3 Scene::lighting(const vec3& _point, const vec3& _normal, const vec3& _view,
                                           point_intersect, normal_intersect,
                                           t_intersect);
 
-          if (!does_intersect || t_intersect > distance(lightPosition, point)) {
+          if ((!does_intersect || t_intersect > distance(lightPosition, point)) &&
+              (!al->isSpotlight() || (al->isSpotlight() && to_light_source[1] >= al->getAperture()))) {
               double dot_normal_light = dot(_normal, to_light_source);
               if (dot_normal_light > 0) {
-                  direct_illumination += al->getLightIntensity(i) * _material.diffuse * dot_normal_light;
+                  direct_illumination += al->getLightIntensity() * al->getSurface() / lightsTotalSurface * _material.diffuse * dot_normal_light;
               }
           }
         }
       }
-      //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
       color += direct_illumination;
-
 
       vec3 indirect_illumination = vec3(0.0);
 
@@ -270,14 +271,16 @@ void Scene::read(const std::string &_filename)
         throw std::runtime_error("Cannot open file " + _filename);
 
     const std::map<std::string, std::function<void(void)>> entityParser = {
-        {"camera",     [&]() { ifs >> camera; }},
-        {"background", [&]() { ifs >> background; }},
-        {"areaLight",  [&]() { areaLights.emplace_back(new AreaLight(ifs)); }},
-        {"plane",      [&]() { objects.emplace_back(new Plane(ifs)); }},
-        {"sphere",     [&]() { objects.emplace_back(new Sphere(ifs)); }},
-        {"cylinder",   [&]() { objects.emplace_back(new Cylinder(ifs)); }},
-        {"mesh",       [&]() { objects.emplace_back(new Mesh(ifs, _filename)); }},
-        {"cuboid",     [&]() { objects.emplace_back(new Cuboid(ifs)); }}
+        {"camera",        [&]() { ifs >> camera; }},
+        {"background",    [&]() { ifs >> background; }},
+        {"areaLight",     [&]() { lights.emplace_back(new AreaLight(ifs)); }},
+        {"light",         [&]() { lights.emplace_back(new Spotlight(ifs)); }},
+        {"plane",         [&]() { objects.emplace_back(new Plane(ifs)); }},
+        {"sphere",        [&]() { objects.emplace_back(new Sphere(ifs)); }},
+        {"cylinder",      [&]() { objects.emplace_back(new Cylinder(ifs)); }},
+        {"mesh",          [&]() { objects.emplace_back(new Mesh(ifs, _filename)); }},
+        {"cuboid",        [&]() { objects.emplace_back(new Cuboid(ifs)); }},
+        {"closedCylinder",[&]() { objects.emplace_back(new ClosedCylinder(ifs)); }}
     };
 
     // parse file
@@ -291,5 +294,10 @@ void Scene::read(const std::string &_filename)
         if (entityParser.count(token) == 0)
             throw std::runtime_error("Invalid token encountered: " + token);
         entityParser.at(token)();
+    }
+
+    for (const auto &l: lights)
+    {
+      lightsTotalSurface += l->getSurface();
     }
 }
