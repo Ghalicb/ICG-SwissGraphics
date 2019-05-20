@@ -72,7 +72,7 @@ Image Scene::render()
             int done_percents_temp = done*100/total;
             if(done_percents_temp > done_percents){
               done_percents = done_percents_temp;
-              std::cout << "\r" << done_percents << " percents" << std::flush;
+              std::cout << "\r" << done_percents << "%" << std::flush;
             }
             lock.release();
         }
@@ -93,7 +93,7 @@ std::cout << '\n';
           int done_percents_temp = done*100/total;
           if(done_percents_temp > done_percents){
             done_percents = done_percents_temp;
-            std::cout << "\r" << done_percents << " percents" << std::flush;
+            std::cout << "\r" << done_percents << "%" << std::flush;
           }
         }
 #endif
