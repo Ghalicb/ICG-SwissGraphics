@@ -275,7 +275,6 @@ inline const float fresnel(const vec3& v, const vec3& n, float refr_ind, const v
 
   double cosIn = ray_going_into ? dot(v,-n) : dot(v,n);
 
-  // float c = ray_going_into ? (1 - cosIn) : (1 - dot(refracted_dir, n));
   double c = 1 - cosIn;
   double res = f0 + (1 - f0)*c*c*c*c*c;
 

@@ -208,7 +208,7 @@ vec3 Scene::lighting(const vec3& _point, const vec3& _normal, const vec3& _view,
       vec3 color_traced = trace(reflected_ray, _depth + 1);
 
       color += color_traced/mirror_coeff;
-      
+
     } else {
       //diffuse objects
 
