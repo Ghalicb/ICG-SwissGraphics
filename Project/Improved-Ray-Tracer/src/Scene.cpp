@@ -20,8 +20,8 @@
 #include <tbb/mutex.h>
 #endif
 
-#define PATHS_PER_PIXEL 200
-#define MAX_BOUNCE 3
+#define PATHS_PER_PIXEL 2
+#define MAX_BOUNCE 2
 #define AMBIENT_REFRACTION_INDEX (1.0)
 
 Image Scene::render()
@@ -72,20 +72,33 @@ Image Scene::render()
             int done_percents_temp = done*100/total;
             if(done_percents_temp > done_percents){
               done_percents = done_percents_temp;
-              std::cout << "\r" << done_percents << " percents" << std::flush;
+              std::cout << "\r" << done_percents << "%" << std::flush;
             }
             lock.release();
         }
     });
 #else
 #if defined(_OPENMP)
+int step      = 0;
+int done      = 0;
+int done_temp = 0;
+int total     = camera.width;
+std::cout << std::endl;
 #pragma omp parallel for
 #endif
-    for (int x=0; x<int(camera.width); ++x)
-        raytraceColumn(x);
+  for (int x=0; x<total; ++x)
+  {
+    raytraceColumn(x);
+    #pragma omp critical
+      done_temp = ++step * 100 / total;
+      if(done_temp > done)
+      {
+        done = done_temp;
+        std::cout << "\r" << done << "%" << std::flush;
+      }
+    }
 #endif
 
-    // Note: compiler will elide copy.
     return img;
 }
 
