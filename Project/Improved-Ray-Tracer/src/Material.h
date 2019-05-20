@@ -30,10 +30,10 @@ struct Material
     /// reflectivity factor (1=perfect mirror, 0=no reflection).
     double mirror;
 
-    /// refraction index (air=1, water=1.333, window glass=1.52)
+    /// refraction index (air=1, water=1.333, window glass=1.52, diamond=1.8)
     double refraction_index;
 
-    /// transparency factor (1=perfectly transparent, 0=complete opacity)
+    /// transparency factor (if >0.0, material is refractive)
     double transparency;
 };
 
