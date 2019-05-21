@@ -20,9 +20,6 @@
 #include <tbb/mutex.h>
 #endif
 
-#define PATHS_PER_PIXEL 2
-#define MAX_BOUNCE 2
-#define AMBIENT_REFRACTION_INDEX (1.0)
 
 Image Scene::render()
 {
@@ -37,13 +34,13 @@ Image Scene::render()
 
             vec3 color = vec3(0.0);
             // compute color by tracing this ray
-            for(int i=0; i<PATHS_PER_PIXEL; ++i){
+            for(int i=0; i<paths_per_pixel; ++i){
               //assume that we raytrace scenes where camera is in air (refraction_index = 1.0)
               double _ambient_refraction_index = 1.0;
               color += trace(ray, 0, AMBIENT_REFRACTION_INDEX);
             }
             // avoid over-saturation
-            color = min(color/PATHS_PER_PIXEL, vec3(1, 1, 1));
+            color = min(color/paths_per_pixel, vec3(1, 1, 1));
 
             // store pixel color
             img(x,y) = color;
@@ -106,7 +103,7 @@ std::cout << std::endl;
 
 vec3 Scene::trace(const Ray& _ray, int _depth, double _current_refraction_index) {
     // stop if recursion depth (=number of reflections) is too large
-    if (_depth > MAX_BOUNCE) return vec3(0,0,0);
+    if (_depth > max_depth) return vec3(0,0,0);
 
     // Find first intersection with an object. If an intersection is found,
     // it is stored in object, point, normal, and t.
@@ -280,15 +277,18 @@ void Scene::read(const std::string &_filename)
         throw std::runtime_error("Cannot open file " + _filename);
 
     const std::map<std::string, std::function<void(void)>> entityParser = {
-        {"camera",        [&]() { ifs >> camera; }},
-        {"background",    [&]() { ifs >> background; }},
-        {"areaLight",     [&]() { lights.emplace_back(new AreaLight(ifs)); }},
-        {"plane",         [&]() { objects.emplace_back(new Plane(ifs)); }},
-        {"sphere",        [&]() { objects.emplace_back(new Sphere(ifs)); }},
-        {"cylinder",      [&]() { objects.emplace_back(new Cylinder(ifs)); }},
-        {"mesh",          [&]() { objects.emplace_back(new Mesh(ifs, _filename)); }},
-        {"cuboid",        [&]() { objects.emplace_back(new Cuboid(ifs)); }},
-        {"closedCylinder",[&]() { objects.emplace_back(new ClosedCylinder(ifs)); }}
+        {"max_depth",      [&]() { ifs >> max_depth; }},
+        {"paths_per_pixel",[&]() { ifs >> paths_per_pixel; }},
+        {"camera",         [&]() { ifs >> camera; }},
+        {"background",     [&]() { ifs >> background; }},
+        {"areaLight",      [&]() { lights.emplace_back(new AreaLight(ifs)); }},
+        {"light",          [&]() { lights.emplace_back(new Spotlight(ifs)); }},
+        {"plane",          [&]() { objects.emplace_back(new Plane(ifs)); }},
+        {"sphere",         [&]() { objects.emplace_back(new Sphere(ifs)); }},
+        {"cylinder",       [&]() { objects.emplace_back(new Cylinder(ifs)); }},
+        {"mesh",           [&]() { objects.emplace_back(new Mesh(ifs, _filename)); }},
+        {"cuboid",         [&]() { objects.emplace_back(new Cuboid(ifs)); }},
+        {"closedCylinder", [&]() { objects.emplace_back(new ClosedCylinder(ifs)); }}
     };
 
     // parse file

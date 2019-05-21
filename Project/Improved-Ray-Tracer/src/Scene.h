@@ -60,6 +60,10 @@ private:
     std::vector<std::unique_ptr<Light>>  lights;
 
     vec3 background = vec3(0, 0, 0);
+
+    int max_depth = 0;
+
+    int paths_per_pixel = 0;
 };
 
 #endif
