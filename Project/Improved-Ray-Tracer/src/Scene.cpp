@@ -21,8 +21,6 @@
 #include <tbb/mutex.h>
 #endif
 
-#define PATHS_PER_PIXEL 4
-#define MAX_BOUNCE 5
 
 Image Scene::render()
 {
@@ -37,12 +35,12 @@ Image Scene::render()
 
             vec3 color = vec3(0.0);
             // compute color by tracing this ray
-            for(int i=0; i<PATHS_PER_PIXEL; ++i){
+            for(int i=0; i<paths_per_pixel; ++i){
               //assume that we raytrace scenes where camera is in air (refraction_index = 1.0)
               color += trace(ray, 0, false);
             }
             // avoid over-saturation
-            color = min(color/PATHS_PER_PIXEL, vec3(1, 1, 1));
+            color = min(color/paths_per_pixel, vec3(1, 1, 1));
 
             // store pixel color
             img(x,y) = color;
@@ -78,26 +76,26 @@ Image Scene::render()
     });
 #else
 #if defined(_OPENMP)
-int done = 0;
-int total = camera.width;
-int done_percents = 0;
-std::cout << '\n';
+int step      = 0;
+int done      = 0;
+int done_temp = 0;
+int total     = camera.width;
+std::cout << std::endl;
 #pragma omp parallel for
 #endif
-    for (int x=0; x<int(camera.width); ++x)
-        raytraceColumn(x);
-        #pragma omp critical
-        {
-          done = done + 1;
-          int done_percents_temp = done*100/total;
-          if(done_percents_temp > done_percents){
-            done_percents = done_percents_temp;
-            std::cout << "\r" << done_percents << "%" << std::flush;
-          }
-        }
+  for (int x=0; x<total; ++x)
+  {
+    raytraceColumn(x);
+    #pragma omp critical
+      done_temp = ++step * 100 / total;
+      if(done_temp > done)
+      {
+        done = done_temp;
+        std::cout << "\r" << done << "%" << std::flush;
+      }
+    }
 #endif
 
-    // Note: compiler will elide copy.
     return img;
 }
 
@@ -105,7 +103,7 @@ std::cout << '\n';
 
 vec3 Scene::trace(const Ray& _ray, int _depth, bool shadow_rays) {
     // stop if recursion depth (=number of reflections) is too large
-    if (_depth > MAX_BOUNCE) return vec3(0,0,0);
+    if (_depth > max_depth) return vec3(0,0,0);
 
     // Find first intersection with an object. If an intersection is found,
     // it is stored in object, point, normal, and t.
@@ -304,16 +302,18 @@ void Scene::read(const std::string &_filename)
         throw std::runtime_error("Cannot open file " + _filename);
 
     const std::map<std::string, std::function<void(void)>> entityParser = {
-        {"camera",        [&]() { ifs >> camera; }},
-        {"background",    [&]() { ifs >> background; }},
-        {"areaLight",     [&]() { lights.emplace_back(new AreaLight(ifs)); }},
-        {"light",         [&]() { lights.emplace_back(new Spotlight(ifs)); }},
-        {"plane",         [&]() { objects.emplace_back(new Plane(ifs)); }},
-        {"sphere",        [&]() { objects.emplace_back(new Sphere(ifs)); }},
-        {"cylinder",      [&]() { objects.emplace_back(new Cylinder(ifs)); }},
-        {"mesh",          [&]() { objects.emplace_back(new Mesh(ifs, _filename)); }},
-        {"cuboid",        [&]() { objects.emplace_back(new Cuboid(ifs)); }},
-        {"closedCylinder",[&]() { objects.emplace_back(new ClosedCylinder(ifs)); }}
+        {"max_depth",      [&]() { ifs >> max_depth; }},
+        {"paths_per_pixel",[&]() { ifs >> paths_per_pixel; }},
+        {"camera",         [&]() { ifs >> camera; }},
+        {"background",     [&]() { ifs >> background; }},
+        {"areaLight",      [&]() { lights.emplace_back(new AreaLight(ifs)); }},
+        {"light",          [&]() { lights.emplace_back(new Spotlight(ifs)); }},
+        {"plane",          [&]() { objects.emplace_back(new Plane(ifs)); }},
+        {"sphere",         [&]() { objects.emplace_back(new Sphere(ifs)); }},
+        {"cylinder",       [&]() { objects.emplace_back(new Cylinder(ifs)); }},
+        {"mesh",           [&]() { objects.emplace_back(new Mesh(ifs, _filename)); }},
+        {"cuboid",         [&]() { objects.emplace_back(new Cuboid(ifs)); }},
+        {"closedCylinder", [&]() { objects.emplace_back(new ClosedCylinder(ifs)); }}
     };
 
     // parse file
