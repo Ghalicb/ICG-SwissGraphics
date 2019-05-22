@@ -284,7 +284,7 @@ vec3 Scene::lighting(const vec3& _point, const vec3& _normal, const vec3& _view,
         Ray random_reflected_ray = Ray(point, random_reflected_ray_dir);
         vec3 color_traced = trace(random_reflected_ray, _depth + 1, false);
 
-        indirect_illumination += color_traced * dot(random_reflected_ray_dir, _normal);
+        indirect_illumination += 2 * color_traced * dot(random_reflected_ray_dir, _normal);
 
         color += _material.diffuse*indirect_illumination/(1-mirror_coeff);
       } else {
