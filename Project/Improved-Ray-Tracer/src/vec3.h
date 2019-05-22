@@ -247,14 +247,47 @@ inline const vec3 reflect(const vec3& v, const vec3& n)
     return v - (2.0 * dot(n,v)) * n;
 }
 
-/// refract vector \c v at normal \c n according to \c refraction_indexes_quotient (n1/n2)
-inline const vec3 refract(const vec3& v, const vec3& n, const double refraction_indexes_quotient)
+/// refract vector \c v at normal \c n according to \c eta = refraction_indexes_quotient (n1/n2)
+/// this method takes into account the total reflection possibility
+inline const vec3 refract(const vec3& v, const vec3& n, const float refr_ind)
 {
-    vec3 proj_v_on_n = dot(n,v) * n;
-    vec3 vec = v + proj_v_on_n;
-    vec3 res = normalize(-proj_v_on_n + refraction_indexes_quotient*vec);
-    return res;
+  bool ray_going_into = dot(n,v) < 0;
+  vec3 normal = ray_going_into ? n : -n;
+  double etaIn = 1.0;
+  double etaOut = refr_ind;
+  double eta = ray_going_into ? etaIn/etaOut : etaOut/etaIn;
+  double cosIn = dot(v, normal);
+  double cosSquareOut = 1.0f - eta*eta*(1 - cosIn*cosIn);
 
+  return normalize(v*eta - normal*(cosIn*eta + sqrtf(cosSquareOut)));
+}
+
+/// compute the Schlick's approximation of the Fresnel reflectivity coefficient
+inline const float fresnel(const vec3& v, const vec3& n, float refr_ind, const vec3& refracted_dir){
+  bool ray_going_into = dot(n,v) < 0;
+  double etaIn = 1.0;
+  double etaOut = refr_ind;
+  double eta = ray_going_into ? etaIn/etaOut : etaOut/etaIn;
+
+  double a = etaOut - etaIn;
+  double b = etaOut + etaIn;
+  double f0 = a*a/(b*b);
+
+  double cosIn = ray_going_into ? dot(v,-n) : dot(v,n);
+
+  double c = 1 - cosIn;
+  double res = f0 + (1 - f0)*c*c*c*c*c;
+
+  return res;
+}
+
+inline const bool total_reflection(const vec3& v, const vec3& n, float refr_ind){
+  bool ray_going_into = dot(n,v) < 0;
+  double etaIn = 1.0;
+  double etaOut = refr_ind;
+  double eta = ray_going_into ? etaIn/etaOut : etaOut/etaIn;
+  double cosIn = ray_going_into ? dot(v,n) : dot(v,-n);
+  return 1.0f - eta*eta*(1 - cosIn*cosIn) < 0;
 }
 
 /// mirrors vector \c v at normal \c n

@@ -88,7 +88,7 @@ public:
 
   int getNumberOfLights() const override { return x_parts * y_parts; }
   vec3 getLightPosition(int light_index) const override;
-  vec3 getLightIntensity() const override;
+  double getSurface() const override;
 
 private:
   int block_side;
