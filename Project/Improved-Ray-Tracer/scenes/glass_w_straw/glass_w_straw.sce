@@ -1,8 +1,8 @@
 #The origin is at the center of the box
 
 # maximum recursion depth and number of paths per pixel
-max_depth 10
-paths_per_pixel 10
+max_depth 15
+paths_per_pixel 5000
 
 # camera: eye, center, up, fovy, width, height
 camera   -150 200 600   0 1 -4   0 1 0   75   1000 1000
