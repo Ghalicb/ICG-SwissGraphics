@@ -33,6 +33,9 @@ struct Material
     /// refraction index (air=1, water=1.333, window glass=1.52, diamond=1.8)
     double refraction_index;
 
+    /// glossy index for reflections (0=perfect mirror, 1~=diffuse)
+    double glossy;
+
     /// transparency factor (if >0.0, material is refractive)
     double transparency;
 };
@@ -44,7 +47,7 @@ struct Material
 /// read material from stream
 inline std::istream& operator>>(std::istream& is, Material& m)
 {
-    is >> m.diffuse >> m.mirror >> m.refraction_index >> m.transparency;
+    is >> m.diffuse >> m.mirror >> m.refraction_index >> m.glossy >> m.transparency;
     return is;
 }
 

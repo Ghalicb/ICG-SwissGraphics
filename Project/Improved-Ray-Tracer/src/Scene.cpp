@@ -221,7 +221,14 @@ vec3 Scene::lighting(const vec3& _point, const vec3& _normal, const vec3& _view,
       }
     } else if(random_number < mirror_coeff){
       //for specular, trace a new ray but reflected with respect to normal
-      vec3 reflected_ray_dir = reflect(-_view, _normal);
+      vec3 reflected_ray_dir;
+      if (_material.glossy <= 0.05)
+      {
+        reflected_ray_dir = reflect(-_view, _normal);
+      } else
+      {
+        reflected_ray_dir = reflect_glossy(-_view, _normal, _material.glossy*PI/2);
+      }
 
       //take a vector only in the semi-space in normal direction, otherwise a ray can be traced inside objects
       // reflected_ray_dir = dot(reflected_ray_dir, _normal) < 0 ? -reflected_ray_dir : reflected_ray_dir;
