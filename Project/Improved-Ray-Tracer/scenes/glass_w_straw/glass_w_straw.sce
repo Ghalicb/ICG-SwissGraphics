@@ -16,12 +16,12 @@ areaLight   0 699 0   1.0 1.0 1.0   100   2   2
 
 # planes: center, normal,  material
 # ground, roof and back wall (white)
-plane      0 -700    0    0  1  0   0.07 0.32 0.5   0.0  0.0  0.0
-plane      0  700    0    0 -1  0   0.14 0.64 1.0   0.0  0.0  0.0
-plane      0    0 -700    0  0  1   0.14 0.64 1.0   0.0  0.0  0.0
+plane      0 -700    0    0  1  0   0.03 0.16 0.25   0.0  0.0  0.0
+plane      0  700    0    0 -1  0   0.07 0.32 0.5    0.0  0.0  0.0
+plane      0    0 -700    0  0  1   0.8 0.8 0.8      0.0  0.0  0.0
 # left (red) and right (green) walls
-plane   -700    0    0    1  0  0   0.14 0.64 1.0   0.0  0.0  0.0
-plane    700    0    0   -1  0  0   0.14 0.64 1.0   0.0  0.0  0.0
+plane   -700    0    0    1  0  0   0.8 0.8 0.8      0.0  0.0  0.0
+plane    700    0    0   -1  0  0   0.8 0.8 0.8      0.0  0.0  0.0
 
 
 # closed cylinders : center, radius, axis, height, material
