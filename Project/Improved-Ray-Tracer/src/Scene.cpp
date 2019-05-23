@@ -226,7 +226,8 @@ vec3 Scene::lighting(const vec3& _point, const vec3& _normal, const vec3& _view,
 
       color += color_traced;
 
-    } else {
+    } else
+    {
       if (shadow_rays) { return vec3(0.0); }
 
       vec3 direct_illumination = vec3(0.0);
@@ -251,15 +252,17 @@ vec3 Scene::lighting(const vec3& _point, const vec3& _normal, const vec3& _view,
           double dot_normal_light = dot(_normal, to_light_source);
 
           if ((!does_intersect || t_intersect > distance(lightPosition, point)) &&
-              (!al->isSpotlight() || (al->isSpotlight() && to_light_source[1] >= al->getAperture()))) {
-
-                if (dot_normal_light > 0) {
-                    direct_illumination += al->getLightIntensity() * al->getSurface() / lightsTotalSurface * _material.diffuse * dot_normal_light;
-                }
-            } else if(does_intersect && t_intersect < distance(lightPosition, point)){
-              if(!object_intersect->isLight()){
-                direct_illumination += trace(ray_to_light, _depth+1, true)*dot_normal_light * _material.diffuse;
-              }
+              (!al->isSpotlight() || (al->isSpotlight() && to_light_source[1] >= al->getAperture())))
+          {
+            if (dot_normal_light > 0)
+            {
+              direct_illumination += al->getLightIntensity() * al->getSurface() / lightsTotalSurface * _material.color * dot_normal_light;
+            }
+          } else if (does_intersect && t_intersect < distance(lightPosition, point))
+          {
+            if (!object_intersect->isLight())
+            {
+              direct_illumination += trace(ray_to_light, _depth+1, true)*dot_normal_light * _material.color;
             }
           }
         }
