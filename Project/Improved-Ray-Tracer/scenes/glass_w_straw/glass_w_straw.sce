@@ -5,7 +5,7 @@ max_depth 10
 paths_per_pixel 10
 
 # camera: eye, center, up, fovy, width, height
-camera   -150 200 600   0 1 -3   0 1 0   90   1000 1000
+camera   -150 200 600   0 1 -4   0 1 0   75   1000 1000
 
 # background color
 background   0 0 0
@@ -16,12 +16,12 @@ areaLight   0 699 0   1.0 1.0 1.0   100   2   2
 
 # planes: center, normal,  material
 # ground, roof and back wall (white)
-plane      0 -700    0    0  1  0   0.2 0.63 0.9   0.0  0.0  0.0
-plane      0  700    0    0 -1  0   0.4 0.4 0.4   0.0  0.0  0.0
-plane      0    0 -700    0  0  1   0.4 0.4 0.4   0.0  0.0  0.0
+plane      0 -700    0    0  1  0   0.07 0.32 0.5   0.0  0.0  0.0
+plane      0  700    0    0 -1  0   0.14 0.64 1.0   0.0  0.0  0.0
+plane      0    0 -700    0  0  1   0.14 0.64 1.0   0.0  0.0  0.0
 # left (red) and right (green) walls
-plane   -700    0    0    1  0  0   0.4 0.4 0.4   0.0  0.0  0.0
-plane    700    0    0   -1  0  0   0.4 0.4 0.4   0.0  0.0  0.0
+plane   -700    0    0    1  0  0   0.14 0.64 1.0   0.0  0.0  0.0
+plane    700    0    0   -1  0  0   0.14 0.64 1.0   0.0  0.0  0.0
 
 
 # closed cylinders : center, radius, axis, height, material
