@@ -170,25 +170,18 @@ bool Scene::intersect(const Ray& _ray, Object_ptr& _object, vec3& _point, vec3& 
 vec3 Scene::lighting(const vec3& _point, const vec3& _normal, const vec3& _view, const Material& _material, const int _depth, const bool shadow_rays) {
 
     vec3 point = _point + EPSILON * _normal;
-
     vec3 color = vec3(0.0);
-    double mirror_coeff = _material.mirror;
-    double transparency_coeff = _material.transparency;
-
-    // now we will do diffuse or specular with a probability mirror_coeff (it is between 0 and 1)
-    // for that, generate a random number between 0 and 1 and check if it is smaller than mirror_coeff
-    // if yes, do as specular, if not do as diffuse
-    double random_number = (rand()%100)/100.0;
 
     // assume that an object is transparent or not
-    if(transparency_coeff > 0.0){
+    if (_material.transparent){
       //here do transparent work (using fresnel and refraction laws)
 
       bool goes_inside_object = dot(-_view, _normal) < 0;
       float refraction_index = _material.refraction_index;
 
       vec3 refraction_point = point;
-      if(goes_inside_object){
+
+      if (goes_inside_object) {
         // here -EPSILON*normal because we go inside the object
         refraction_point = _point - EPSILON*_normal;
       } else {
@@ -196,104 +189,97 @@ vec3 Scene::lighting(const vec3& _point, const vec3& _normal, const vec3& _view,
       }
 
       vec3 reflected_ray_dir = reflect(-_view, _normal);
-      Ray reflected_ray = Ray(point, reflected_ray_dir);
+      Ray  reflected_ray     = Ray(point, reflected_ray_dir);
 
-      if(total_reflection(-_view, _normal, refraction_index)){
-        if(shadow_rays){
+      if (total_reflection(-_view, _normal, refraction_index)) {
+        if (shadow_rays) {
           return trace(reflected_ray, _depth + 1, true);
         }
-        color += _material.diffuse * trace(reflected_ray, _depth + 1, false);
-
+        color += _material.color * trace(reflected_ray, _depth + 1, false);
       } else {
         vec3 refracted_ray_dir = refract(-_view, _normal, refraction_index);
-        Ray refracted_ray = Ray(refraction_point, refracted_ray_dir);
+        Ray  refracted_ray     = Ray(refraction_point, refracted_ray_dir);
 
         float reflected = fresnel(-_view, _normal, refraction_index, refracted_ray_dir);
         float refracted = 1 - reflected;
 
-        if(shadow_rays){
-          return _material.diffuse * trace(reflected_ray, _depth + 1, true)*reflected +
-                 _material.diffuse * trace(refracted_ray, _depth + 1, true)*refracted;
+        if (shadow_rays) {
+          return _material.color * trace(reflected_ray, _depth + 1, true)*reflected +
+                 _material.color * trace(refracted_ray, _depth + 1, true)*refracted;
         }
 
-        color += _material.diffuse * trace(reflected_ray, _depth + 1, false)*reflected;
-        color += _material.diffuse * trace(refracted_ray, _depth + 1, false)*refracted;
+        color += _material.color * trace(reflected_ray, _depth + 1, false)*reflected;
+        color += _material.color * trace(refracted_ray, _depth + 1, false)*refracted;
       }
-    } else if(random_number < mirror_coeff){
+    } else if (_material.mirror)
+    {
       //for specular, trace a new ray but reflected with respect to normal
       vec3 reflected_ray_dir = reflect(-_view, _normal);
+      Ray  reflected_ray     = Ray(point, reflected_ray_dir);
 
-      //take a vector only in the semi-space in normal direction, otherwise a ray can be traced inside objects
-      // reflected_ray_dir = dot(reflected_ray_dir, _normal) < 0 ? -reflected_ray_dir : reflected_ray_dir;
-      Ray reflected_ray = Ray(point, reflected_ray_dir);
-
-
-      if(shadow_rays){
+      if(shadow_rays)
+      {
         return trace(reflected_ray, _depth + 1, true);
       }
 
       vec3 color_traced = trace(reflected_ray, _depth + 1, false);
 
-      color += color_traced/mirror_coeff;
+      color += color_traced;
 
-    } else {
-      //diffuse objects
-      if(!shadow_rays){
-        vec3 direct_illumination = vec3(0.0);
+    } else
+    {
+      if (shadow_rays) { return vec3(0.0); }
 
-        for (const auto &al: lights)
+      vec3 direct_illumination = vec3(0.0);
+
+      for (const auto &al: lights)
+      {
+        for (size_t i = 0; i < al->getNumberOfLights(); ++i)
         {
-          for (size_t i = 0; i < al->getNumberOfLights(); ++i)
+          vec3 lightPosition = al->getLightPosition(i) - vec3(0, EPSILON, 0);
+          vec3 to_light_source = normalize(lightPosition - point);
+
+          Ray        ray_to_light = Ray(point, to_light_source);
+          Object_ptr object_intersect;
+          vec3       point_intersect;
+          vec3       normal_intersect;
+          double     t_intersect = 0.0;
+
+          bool does_intersect = intersect(ray_to_light, object_intersect,
+                                          point_intersect, normal_intersect,
+                                          t_intersect);
+
+          double dot_normal_light = dot(_normal, to_light_source);
+
+          if ((!does_intersect || t_intersect > distance(lightPosition, point)) &&
+              (!al->isSpotlight() || (al->isSpotlight() && to_light_source[1] >= al->getAperture())))
           {
-            vec3 lightPosition = al->getLightPosition(i) - vec3(0, EPSILON, 0);
-            vec3 to_light_source = normalize(lightPosition - point);
-
-            // Add EPSILON times (*) the _normal to get the point out of the object
-            Ray        ray_to_light = Ray(point, to_light_source);
-            Object_ptr object_intersect;
-            vec3       point_intersect;
-            vec3       normal_intersect;
-            double     t_intersect = 0.0;
-
-            bool does_intersect = intersect(ray_to_light, object_intersect,
-                                            point_intersect, normal_intersect,
-                                            t_intersect);
-
-            double dot_normal_light = dot(_normal, to_light_source);
-
-            if ((!does_intersect || t_intersect > distance(lightPosition, point)) &&
-                (!al->isSpotlight() || (al->isSpotlight() && to_light_source[1] >= al->getAperture()))) {
-
-                if (dot_normal_light > 0) {
-                    direct_illumination += al->getLightIntensity() * al->getSurface() / lightsTotalSurface * _material.diffuse * dot_normal_light;
-                }
-            } else if(does_intersect && t_intersect < distance(lightPosition, point)){
-              if(!object_intersect->isLight()){
-                direct_illumination += trace(ray_to_light, _depth+1, true)*dot_normal_light * _material.diffuse;
-              }
+            if (dot_normal_light > 0)
+            {
+              direct_illumination += al->getLightIntensity() * al->getSurface() / lightsTotalSurface * _material.color * dot_normal_light;
+            }
+          } else if (does_intersect && t_intersect < distance(lightPosition, point))
+          {
+            if (!object_intersect->isLight())
+            {
+              direct_illumination += trace(ray_to_light, _depth+1, true)*dot_normal_light * _material.color;
             }
           }
         }
-        color += direct_illumination;
-
-        vec3 indirect_illumination = vec3(0.0);
-
-        // generate a random vector in 3D space
-        vec3 random_reflected_ray_dir = vec3::random_vector();
-
-        //take a vector only in the semi-space in normal direction, otherwise a ray can be traced inside objects
-        random_reflected_ray_dir = dot(random_reflected_ray_dir, _normal) < 0 ? -random_reflected_ray_dir : random_reflected_ray_dir;
-        Ray random_reflected_ray = Ray(point, random_reflected_ray_dir);
-        vec3 color_traced = trace(random_reflected_ray, _depth + 1, false);
-
-        indirect_illumination += 2 * color_traced * dot(random_reflected_ray_dir, _normal);
-
-        color += _material.diffuse*indirect_illumination/(1-mirror_coeff);
-      } else {
-        color = vec3(0.0);
       }
-    }
 
+      color += direct_illumination;
+
+      vec3 indirect_illumination = vec3(0.0);
+
+      vec3 random_reflected_ray_dir = reflect_glossy(-_view, _normal, _material.glossy_index);
+      random_reflected_ray_dir      = dot(random_reflected_ray_dir, _normal) < 0 ? -random_reflected_ray_dir : random_reflected_ray_dir;
+      vec3 color_traced             = trace(Ray(point, random_reflected_ray_dir), _depth + 1, false);
+
+      indirect_illumination += _material.color * 2 * color_traced * dot(random_reflected_ray_dir, _normal);
+
+      color +=  indirect_illumination;
+    }
     return color;
 }
 
@@ -308,8 +294,8 @@ void Scene::read(const std::string &_filename)
         {"paths_per_pixel",[&]() { ifs >> paths_per_pixel; }},
         {"camera",         [&]() { ifs >> camera; }},
         {"background",     [&]() { ifs >> background; }},
-        {"areaLight",      [&]() { lights.emplace_back(new AreaLight(ifs)); }},
-        {"light",          [&]() { lights.emplace_back(new Spotlight(ifs)); }},
+        {"areaLight",      [&]() { lights .emplace_back(new AreaLight(ifs)); }},
+        {"light",          [&]() { lights .emplace_back(new Spotlight(ifs)); }},
         {"plane",          [&]() { objects.emplace_back(new Plane(ifs)); }},
         {"sphere",         [&]() { objects.emplace_back(new Sphere(ifs)); }},
         {"cylinder",       [&]() { objects.emplace_back(new Cylinder(ifs)); }},

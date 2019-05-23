@@ -247,6 +247,50 @@ inline const vec3 reflect(const vec3& v, const vec3& n)
     return v - (2.0 * dot(n,v)) * n;
 }
 
+/// reflect vector \c v at normal \c n
+inline const vec3 reflect_glossy(const vec3& v, const vec3& n, const double glossy_index)
+{
+  double random_angle = glossy_index*PI/2*(rand()%100000)/100000.0;
+
+  if ((rand()%10)/10.0 >= 0.5)
+  {
+    random_angle *= -1;
+  }
+
+  double c = cos(random_angle);
+  double s = sin(random_angle);
+
+  vec3 rotate_around_vector = normalize(cross(v, n));
+  double x = rotate_around_vector[0];
+  double y = rotate_around_vector[1];
+  double z = rotate_around_vector[2];
+
+  vec3 reflected_vector = v - (2.0 * dot(n,v)) * n;
+
+  reflected_vector = vec3((x*x*(1-c)+c)  *reflected_vector[0] + (x*y*(1-c)-z*s)*reflected_vector[1] + (x*z*(1-c)+y*s)*reflected_vector[2],
+                          (x*y*(1-c)+z*s)*reflected_vector[0] + (y*y*(1-c)+c)  *reflected_vector[1] + (y*z*(1-c)-x*s)*reflected_vector[2],
+                          (x*z*(1-c)-y*s)*reflected_vector[0] + (y*z*(1-c)+x*s)*reflected_vector[1] + (z*z*(1-c)+c)  *reflected_vector[2]);
+
+  random_angle = glossy_index*PI/2*(rand()%100000)/100000.0;
+
+  if ((rand()%100000)/100000.0 >= 0.5)
+  {
+    random_angle *= -1;
+  }
+
+  c = cos(random_angle);
+  s = sin(random_angle);
+
+  rotate_around_vector = normalize(n);
+  x = rotate_around_vector[0];
+  y = rotate_around_vector[1];
+  z = rotate_around_vector[2];
+
+  return vec3((x*x*(1-c)+c)  *reflected_vector[0] + (x*y*(1-c)-z*s)*reflected_vector[1] + (x*z*(1-c)+y*s)*reflected_vector[2],
+              (x*y*(1-c)+z*s)*reflected_vector[0] + (y*y*(1-c)+c)  *reflected_vector[1] + (y*z*(1-c)-x*s)*reflected_vector[2],
+              (x*z*(1-c)-y*s)*reflected_vector[0] + (y*z*(1-c)+x*s)*reflected_vector[1] + (z*z*(1-c)+c)  *reflected_vector[2]);
+}
+
 /// refract vector \c v at normal \c n according to \c eta = refraction_indexes_quotient (n1/n2)
 /// this method takes into account the total reflection possibility
 inline const vec3 refract(const vec3& v, const vec3& n, const float refr_ind)
