@@ -211,15 +211,14 @@ vec3 Scene::lighting(const vec3& _point, const vec3& _normal, const vec3& _view,
         color += _material.color * trace(reflected_ray, _depth + 1, false)*reflected;
         color += _material.color * trace(refracted_ray, _depth + 1, false)*refracted;
       }
-    } else if (_material.mirror) {
+    } else if (_material.mirror)
+    {
       //for specular, trace a new ray but reflected with respect to normal
       vec3 reflected_ray_dir = reflect(-_view, _normal);
+      Ray  reflected_ray     = Ray(point, reflected_ray_dir);
 
-      //take a vector only in the semi-space in normal direction, otherwise a ray can be traced inside objects
-      // reflected_ray_dir = dot(reflected_ray_dir, _normal) < 0 ? -reflected_ray_dir : reflected_ray_dir;
-      Ray reflected_ray = Ray(point, reflected_ray_dir);
-
-      if(shadow_rays){
+      if(shadow_rays)
+      {
         return trace(reflected_ray, _depth + 1, true);
       }
 
@@ -272,12 +271,11 @@ vec3 Scene::lighting(const vec3& _point, const vec3& _normal, const vec3& _view,
       random_reflected_ray_dir      = dot(random_reflected_ray_dir, _normal) < 0 ? -random_reflected_ray_dir : random_reflected_ray_dir;
       vec3 color_traced             = trace(Ray(point, random_reflected_ray_dir), _depth + 1, false);
 
-      indirect_illumination += 2 * color_traced * dot(random_reflected_ray_dir, _normal);
+      indirect_illumination += _material.color * 2 * color_traced * dot(random_reflected_ray_dir, _normal);
 
-      color += _material.color * indirect_illumination;
-
-      return color;
+      color +=  indirect_illumination;
     }
+    return color;
 }
 
 void Scene::read(const std::string &_filename)
