@@ -21,7 +21,7 @@ class ClosedCylinder : public Object {
                 double _radius = 1,
                 const vec3 &_axis = vec3(1,0,0),
                 double _height = 1)
-            :  cylinder(_center,_radius,_axis,_height), 
+            :  cylinder(_center,_radius,_axis,_height),
                 upperPlane(_center + _height/2.*_axis, _axis),
                 bottomPlane(_center - _height/2*_axis, -_axis) { }
 
@@ -38,14 +38,14 @@ class ClosedCylinder : public Object {
             vec3 center;
             double radius;
             vec3 axis;
-            double height; 
+            double height;
 
             is >> center >> radius >> axis >> height >> material;
             axis = normalize(axis);
 
             cylinder = Cylinder(center, radius, axis, height);
             upperPlane = Plane(center + height/2.*axis, axis);
-            upperPlane = Plane(center - height/2.*axis, -axis);
+            bottomPlane = Plane(center - height/2.*axis, -axis);
         }
 
     private:
