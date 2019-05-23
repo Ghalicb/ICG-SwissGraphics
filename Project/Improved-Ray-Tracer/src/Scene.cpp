@@ -268,7 +268,9 @@ vec3 Scene::lighting(const vec3& _point, const vec3& _normal, const vec3& _view,
                     direct_illumination += al->getLightIntensity() * al->getSurface() / lightsTotalSurface * _material.diffuse * dot_normal_light;
                 }
             } else if(does_intersect && t_intersect < distance(lightPosition, point)){
-              direct_illumination += trace(ray_to_light, _depth+1, true)*dot_normal_light;
+              if(!object_intersect->isLight()){
+                direct_illumination += trace(ray_to_light, _depth+1, true)*dot_normal_light;
+              }
             }
           }
         }
