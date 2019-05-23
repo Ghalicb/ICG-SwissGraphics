@@ -26,6 +26,6 @@ plane    700    0    0   -1  0  0   0.4 0.4 0.4   0.0  0.0  0.0
 
 # closed cylinders : center, radius, axis, height, material
 # glass
-closedCylinder    0 -160 0   200   0 1 0   300    1.0 1.0 1.0  0.0 1.52 1.0
+closedCylinder    0 -160 0   200   0 1 0   300    1.0 1.0 1.0  0.0 1.33 1.0
 #straw
-closedCylinder    74 -74 0   30   200 200 0   700    1.0 0.0 0.0  0.0 1.52 0.0
+cylinder    74 -74 0   30   200 200 0   700    1.0 0.0 0.0  0.0 0.0 0.0
