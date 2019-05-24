@@ -267,9 +267,9 @@ inline const vec3 reflect_glossy(const vec3& v, const vec3& n, const double glos
 
   vec3 reflected_vector = v - (2.0 * dot(n,v)) * n;
 
-  reflected_vector = vec3((x*x*(1-c)+c)  *reflected_vector[0] + (x*y*(1-c)-z*s)*reflected_vector[1] + (x*z*(1-c)+y*s)*reflected_vector[2],
-                          (x*y*(1-c)+z*s)*reflected_vector[0] + (y*y*(1-c)+c)  *reflected_vector[1] + (y*z*(1-c)-x*s)*reflected_vector[2],
-                          (x*z*(1-c)-y*s)*reflected_vector[0] + (y*z*(1-c)+x*s)*reflected_vector[1] + (z*z*(1-c)+c)  *reflected_vector[2]);
+  vec3 reflected_vector_prime = vec3((x*x*(1-c)+c)  *reflected_vector[0] + (x*y*(1-c)-z*s)*reflected_vector[1] + (x*z*(1-c)+y*s)*reflected_vector[2],
+                                     (x*y*(1-c)+z*s)*reflected_vector[0] + (y*y*(1-c)+c)  *reflected_vector[1] + (y*z*(1-c)-x*s)*reflected_vector[2],
+                                     (x*z*(1-c)-y*s)*reflected_vector[0] + (y*z*(1-c)+x*s)*reflected_vector[1] + (z*z*(1-c)+c)  *reflected_vector[2]);
 
   random_angle = glossy_index*PI/2*(rand()%100000)/100000.0;
 
@@ -281,14 +281,14 @@ inline const vec3 reflect_glossy(const vec3& v, const vec3& n, const double glos
   c = cos(random_angle);
   s = sin(random_angle);
 
-  rotate_around_vector = normalize(n);
+  rotate_around_vector = reflected_vector;
   x = rotate_around_vector[0];
   y = rotate_around_vector[1];
   z = rotate_around_vector[2];
 
-  return vec3((x*x*(1-c)+c)  *reflected_vector[0] + (x*y*(1-c)-z*s)*reflected_vector[1] + (x*z*(1-c)+y*s)*reflected_vector[2],
-              (x*y*(1-c)+z*s)*reflected_vector[0] + (y*y*(1-c)+c)  *reflected_vector[1] + (y*z*(1-c)-x*s)*reflected_vector[2],
-              (x*z*(1-c)-y*s)*reflected_vector[0] + (y*z*(1-c)+x*s)*reflected_vector[1] + (z*z*(1-c)+c)  *reflected_vector[2]);
+  return vec3((x*x*(1-c)+c)  *reflected_vector_prime[0] + (x*y*(1-c)-z*s)*reflected_vector_prime[1] + (x*z*(1-c)+y*s)*reflected_vector_prime[2],
+              (x*y*(1-c)+z*s)*reflected_vector_prime[0] + (y*y*(1-c)+c)  *reflected_vector_prime[1] + (y*z*(1-c)-x*s)*reflected_vector_prime[2],
+              (x*z*(1-c)-y*s)*reflected_vector_prime[0] + (y*z*(1-c)+x*s)*reflected_vector_prime[1] + (z*z*(1-c)+c)  *reflected_vector_prime[2]);
 }
 
 /// refract vector \c v at normal \c n according to \c eta = refraction_indexes_quotient (n1/n2)
