@@ -2,7 +2,7 @@
 
 # maximum recursion depth and number of paths per pixel
 max_depth 10
-paths_per_pixel 10
+paths_per_pixel 5
 
 # camera: eye, center, up, fovy, width, height
 camera   0 0 800   0 0 0   0 1 0   75   1000 1000
@@ -11,7 +11,10 @@ camera   0 0 800   0 0 0   0 1 0   75   1000 1000
 background   0 0 0
 
 # AreaLights : center, color, block_side, x_parts, y_parts
-areaLight   0 399.999 0   1.0 1.0 1.0   100   2   2
+areaLight   0 399.999 0   1.0 1.0 1.0   30   2   2
+
+# Spotlight : center, color, direction, radius
+light   250 320 -120   1.0 1.0 1.0   -350 -570 -30   120
 
 # planes: center, normal,  material
 # ground, roof and back wall (white)
@@ -25,5 +28,8 @@ plane    400    0    0   -1  0  0   0.0 1.0 0.0   0 0 0.0 1.0
 
 # spheres: center, radius, material
 sphere    200 -300   50   100   1.0 1.0 1.0   0 0 0.0  0.3
-sphere   -100 -250 -150   150   1.0 1.0 1.0   1 0 0.0  0.0
-sphere    -90 -200  70    100   1.0 1.0 1.0   0 1 1.52 0.3
+sphere   -100 -250 -150   150   1.0 0.0 1.0   0 0 0.0  0.6
+#sphere    -200 -250  70    100   1.0 1.0 1.0   0 1 1.52 0.3
+
+# cuboids: center, x_size, y_size, z_size, rotation_anglem material
+cuboid   -150 -150 100   200   500   150   20   1.0 1.0 1.0   0 1 1.52 1.0
