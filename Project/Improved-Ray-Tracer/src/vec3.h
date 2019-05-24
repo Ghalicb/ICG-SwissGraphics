@@ -23,6 +23,7 @@
 #define PI 3.14159265
 
 
+
 //== CLASS DEFINITION =========================================================
 
 
@@ -108,8 +109,8 @@ public:
     /// create a random vector in space, normalized
     static vec3 random_vector()
     {
-        double a = 2*PI*(rand()%100000)/100000.0;
-        double b = 2*PI*(rand()%100000)/100000.0;
+        double a = 2.0*PI*(rand()*1.0)/RAND_MAX;
+        double b = 2.0*PI*(rand()*1.0)/RAND_MAX;
 
         double sina = sin(a);
         double sinb = sin(b);
@@ -250,7 +251,7 @@ inline const vec3 reflect(const vec3& v, const vec3& n)
 /// reflect vector \c v at normal \c n
 inline const vec3 reflect_glossy(const vec3& v, const vec3& n, const double glossy_index)
 {
-  double random_angle = glossy_index*PI/2*(rand()%100000)/100000.0;
+  double random_angle = glossy_index*PI/2*(rand()*1.0)/RAND_MAX;
 
   if ((rand()%10)/10.0 >= 0.5)
   {
@@ -271,7 +272,7 @@ inline const vec3 reflect_glossy(const vec3& v, const vec3& n, const double glos
                                      (x*y*(1-c)+z*s)*reflected_vector[0] + (y*y*(1-c)+c)  *reflected_vector[1] + (y*z*(1-c)-x*s)*reflected_vector[2],
                                      (x*z*(1-c)-y*s)*reflected_vector[0] + (y*z*(1-c)+x*s)*reflected_vector[1] + (z*z*(1-c)+c)  *reflected_vector[2]);
 
-  random_angle = glossy_index*PI/2*(rand()%100000)/100000.0;
+  random_angle = glossy_index*PI/2*(rand()*1.0)/RAND_MAX;
 
   if ((rand()%100000)/100000.0 >= 0.5)
   {
