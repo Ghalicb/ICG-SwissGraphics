@@ -28,8 +28,8 @@ vec3 AreaLight::getLightPosition(int light_index) const
   int ligth_x_index = light_index % x_parts;
   int light_y_index = light_index / x_parts;
 
-  double x_offset = (rand()%1000)/1000.0;
-  double y_offset = (rand()%1000)/1000.0;
+  double x_offset = (rand()*1.0)/RAND_MAX;
+  double y_offset = (rand()*1.0)/RAND_MAX;
 
   return top_left + (ligth_x_index + x_offset) * block_side * x_axis + (light_y_index + y_offset) * block_side * y_axis;
 }
