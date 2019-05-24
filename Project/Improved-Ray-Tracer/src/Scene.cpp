@@ -252,7 +252,7 @@ vec3 Scene::lighting(const vec3& _point, const vec3& _normal, const vec3& _view,
           double dot_normal_light = dot(_normal, to_light_source);
 
           if ((!does_intersect || t_intersect > distance(lightPosition, point)) &&
-              (!al->isSpotlight() || (al->isSpotlight() && dot(al->getDirection(), to_light_source) >= al->getAperture())))
+              (!al->isSpotlight() || (al->isSpotlight() && dot(al->getDirection(), -to_light_source) >= al->getAperture())))
           {
             if (dot_normal_light > 0)
             {

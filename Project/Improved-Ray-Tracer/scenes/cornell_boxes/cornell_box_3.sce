@@ -14,7 +14,7 @@ background   0 0 0
 areaLight   0 399.999 0   1.0 1.0 1.0   30   2   2
 
 # Spotlight : center, color, direction, radius
-light   250 320 -120   1.0 1.0 1.0   -35 -57 -3   120
+light   250 320 -120   1.0 1.0 1.0   0 -1 0   120
 
 # planes: center, normal,  material
 # ground, roof and back wall (white)
