@@ -119,7 +119,9 @@ vec3 Scene::trace(const Ray& _ray, int _depth, bool shadow_rays) {
 
     if(object->isLight()){
       Light* al = dynamic_cast<Light*>(object);
-      color = al->getColor();
+      if (dot(al->getDirection(), -_ray.direction) > 0){
+        color = al->getColor();
+      }
     } else {
       color = lighting(point, normal, -_ray.direction, object->material, _depth, shadow_rays);
     }

@@ -25,8 +25,8 @@ bool Spotlight::intersect(const Ray&  _ray,
 
 vec3 Spotlight::getLightPosition(int light_index) const
 {
-  double r = radius * (rand() % 1000) / 1000.0;
-  double a = 2 * PI * (rand() % 1000) / 1000.0;
+  double r = radius * (rand()*1.0) / RAND_MAX;
+  double a = 2 * PI * (rand()*1.0) / RAND_MAX;
 
   vec3 temp = center + radius * cos(a) * vec3(1,0,0) + radius * sin(a) * vec3(0,0,1);
 
