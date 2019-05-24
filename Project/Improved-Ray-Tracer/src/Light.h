@@ -19,6 +19,7 @@ class Light : public Object {
 
         virtual vec3   getLightPosition(int light_index) const { return center; }
         virtual vec3   getLightIntensity() const { return color / getNumberOfLights(); }
+        virtual vec3   getDirection()      const { return vec3(0); }
         virtual int    getNumberOfLights() const { return 1; }
         virtual double getSurface       () const { return 0.0; };
         virtual double getAperture      () const { return 0.0; };

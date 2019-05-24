@@ -1,8 +1,8 @@
 #The origin is at the center of the box
 
 # maximum recursion depth and number of paths per pixel
-max_depth 10
-paths_per_pixel 5
+max_depth 3
+paths_per_pixel 3
 
 # camera: eye, center, up, fovy, width, height
 camera   0 0 800   0 0 0   0 1 0   75   1000 1000
@@ -14,7 +14,7 @@ background   0 0 0
 areaLight   0 399.999 0   1.0 1.0 1.0   30   2   2
 
 # Spotlight : center, color, direction, radius
-light   250 320 -120   1.0 1.0 1.0   -350 -570 -30   120
+light   250 320 -120   1.0 1.0 1.0   -35 -57 -3   120
 
 # planes: center, normal,  material
 # ground, roof and back wall (white)

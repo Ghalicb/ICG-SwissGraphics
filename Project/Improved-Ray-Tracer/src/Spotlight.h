@@ -46,6 +46,8 @@ public:
   vec3   getLightPosition(int light_index) const override;
   double getSurface()                      const override;
 
+  vec3   getDirection()                    const override { return direction; }
+
 private:
   vec3   direction;
   double radius;
