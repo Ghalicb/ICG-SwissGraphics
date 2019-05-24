@@ -270,15 +270,11 @@ vec3 Scene::lighting(const vec3& _point, const vec3& _normal, const vec3& _view,
 
       color += direct_illumination;
 
-      vec3 indirect_illumination = vec3(0.0);
-
       vec3 random_reflected_ray_dir = reflect_glossy(-_view, _normal, _material.glossy_index);
-      random_reflected_ray_dir      = dot(random_reflected_ray_dir, _normal) < 0 ? -random_reflected_ray_dir : random_reflected_ray_dir;
       vec3 color_traced             = trace(Ray(point, random_reflected_ray_dir), _depth + 1, false);
 
-      indirect_illumination += _material.color *  color_traced * dot(random_reflected_ray_dir, _normal);
-
-      color +=  indirect_illumination;
+      //add indirect illumination component
+      color +=  _material.color * color_traced * dot(random_reflected_ray_dir, _normal);
     }
     return color;
 }
