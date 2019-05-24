@@ -1,8 +1,8 @@
 #The origin is at the center of the box
 
 # maximum recursion depth and number of paths per pixel
-max_depth 5
-paths_per_pixel 20
+max_depth 15
+paths_per_pixel 3000
 
 # camera: eye, center, up, fovy, width, height
 camera   0 0 600   0 0 0   0 1 0   90   1000 1000
@@ -36,4 +36,3 @@ cylinder  125 0 0   12    0 1 0   800    1 1 1   0 1 1.52 0.5
 cylinder  200 0 0   12    0 1 0   800    1 1 1   0 1 1.52 0.5
 cylinder  275 0 0   12    0 1 0   800    1 1 1   0 1 1.52 0.5
 cylinder  350 0 0   12    0 1 0   800    1 1 1   0 1 1.52 0.5
-
