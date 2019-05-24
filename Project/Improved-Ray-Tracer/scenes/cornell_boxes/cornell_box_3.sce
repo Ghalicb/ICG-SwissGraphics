@@ -11,7 +11,7 @@ camera   0 0 800   0 0 0   0 1 0   75   1000 1000
 background   0 0 0
 
 # AreaLights : center, color, block_side, x_parts, y_parts
-areaLight   0 399.999 0   1.0 1.0 1.0   30   2   2
+areaLight   0 399.999 0   1.0 1.0 1.0   60   2   2
 
 # Spotlight : center, color, direction, radius
 light    280  320 -280   1.0 1.0 1.0   -380 -570 130   120
