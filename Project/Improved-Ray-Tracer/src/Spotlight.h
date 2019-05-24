@@ -36,6 +36,7 @@ public:
   virtual void parse(std::istream &is) override
   {
     is >> center >> color >> direction >> radius;
+    direction = normalize(direction);
 
     plane = Plane(center, direction);
   }
