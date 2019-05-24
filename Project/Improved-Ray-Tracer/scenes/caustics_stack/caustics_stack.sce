@@ -2,7 +2,7 @@
 
 # maximum recursion depth and number of paths per pixel
 max_depth 15
-paths_per_pixel 3000
+paths_per_pixel 1500
 
 # camera: eye, center, up, fovy, width, height
 camera   0 0 600   0 0 0   0 1 0   90   1000 1000
