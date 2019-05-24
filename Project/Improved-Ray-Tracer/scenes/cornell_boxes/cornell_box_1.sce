@@ -5,7 +5,7 @@ max_depth 10
 paths_per_pixel 10
 
 # camera: eye, center, up, fovy, width, height
-camera   0 0 600   0 0 0   0 1 0   90   1000 1000
+camera   0 0 800   0 0 0   0 1 0   75   1000 1000
 
 # background color
 background   0 0 0
@@ -23,6 +23,8 @@ plane   -400    0    0    1  0  0   0.93 0.48 1.0   0 0 0.0 1.0
 plane    400    0    0   -1  0  0   0.0 1.0 0.0   0 0 0.0 1.0
 
 
+# cuboids: center, x_size, y_size, z_size, rotation_anglem material
+cuboid   -100 -150 -150   300   500   200   -30   1.0 1.0 1.0   0 1 1.52 1.0
+
 # spheres: center, radius, material
-sphere    200 -300   50   100   1.0 1.0 1.0   0 1 1.52 0.4
-sphere   -100 -150 -150   100   1.0 1.0 1.0   1 0 0.0  0.0
+sphere   200 -300 50   100   0.7 0.7 0.7   0 0 0.0 0.4
