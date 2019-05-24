@@ -75,7 +75,7 @@ public:
 
     x_axis    = vec3(1,0,0);
     y_axis    = vec3(0,0,1);
-    direction = vec3(0,1,0);
+    direction = vec3(0,-1,0);
 
     top_left  = center;
     vec3 temp = x_size/2 * x_axis;
@@ -89,6 +89,8 @@ public:
   int getNumberOfLights() const override { return x_parts * y_parts; }
   vec3 getLightPosition(int light_index) const override;
   double getSurface() const override;
+
+  vec3   getDirection()                    const override { return direction; }
 
 private:
   int block_side;
