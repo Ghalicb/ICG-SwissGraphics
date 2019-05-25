@@ -49,14 +49,15 @@ This describes a rectangular light, which is discretized into blocks of a a give
 
 # Path Tracing
 ## Path tracing with explicit shadow rays (Fig. 1)
-To do this, we trace a ray for each pixel and when it intersects an object, we choose randomly (according to material properties : mirror, transparency) between diffuse, mirror or refractive behavior. If the surface is
+We trace rays for each pixel (~1000 to 10000). Each of these rays is independent from others. Here is the procedure for one ray.
 
-1. diffuse, we compute direct lightning by tracing a ray to each light source, if the light source is visible, we add to the color contribution the material color times the light color times the dot product between object's normal and point-to-light vector (Monte-Carlo integration). Then we randomly choose a vector and trace a ray in this direction and add the obtained color to the color contribution.
-2. mirror, we compute the reflect vector and trace it, the color obtained is the color contribution.
-3. refractive, we compute the refracted vector (that goes inside the object using the refractive index described in material) and trace it. The contribution is the obtained color. The refractive index is the real one.
-The trace method is recursive and we defined a maximum bounces number to not infinitly loop.
+When the ray intersects a surface, first we retrieve the material properties of the intersected object, there are then 3 possibilities which will be detailed:
+1. Mirror surface: for this one, we trace no shadow rays. The only color returned is the color returned by a recursive ray tracing in the reflected direction with respect the object normal.
+2. Transparent objects: first we assume that the ambient material is air whose refraction index is approximated by 1.0. To implement the refraction, we used the Fresnel coefficient which gives the proportion of light that is reflected on a transparent surface given the incident angle and the refraction index of both material. This is mandatory to obtain satisfying results. So we trace a reflected ray and a refracted ray and weight the two obtained color by the Fresnel coefficient for reflected one and (1-Fresnel coefficient) for refracted one.
+3. Glossy (from perfectly reflecting to diffuse): we trace a shadow ray and a recursive new ray. What changes for each level of glossyness is the choose of the ray. We implemented a more or less glossy reflection. When the object is the least glossy, it is perfectly diffuse (the ray direction traced for the recursive call is perfectly random in the hemisphere with respect to the surface normal). When it is the most glossy, the vector chosen is the perfectly reflected one. The object can be in between these two extreme cases and is a bit reflective but not perfectly.
 
-We trace a certain number (~1000 to ~10000) of these paths per pixel and its final color is the average of every results.
+### Implementation
+
 
 
 ## Difficulties
