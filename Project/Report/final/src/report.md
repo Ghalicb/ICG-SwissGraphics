@@ -59,6 +59,11 @@ When the ray intersects a surface, first we retrieve the material properties of 
 ### Implementation
 
 
+## References
+http://www.kevinbeason.com/smallpt/#moreinfo
+
+http://www.scratchapixel.com/lessons/3d-basic-rendering/introduction-to-shading/reflection-refraction-fresnel
+
 
 ## Difficulties
 RAND_MAX not same value on windows and linux (guaranteed only >32767)
