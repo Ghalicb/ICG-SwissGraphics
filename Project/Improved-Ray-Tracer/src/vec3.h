@@ -308,7 +308,7 @@ inline const vec3 refract(const vec3& v, const vec3& n, const float refr_ind)
 }
 
 /// compute the Schlick's approximation of the Fresnel reflectivity coefficient
-inline const float fresnel(const vec3& v, const vec3& n, float refr_ind, const vec3& refracted_dir){
+inline const float fresnel(const vec3& v, const vec3& n, float refr_ind){
   bool ray_going_into = dot(n,v) < 0;
   double etaIn = 1.0;
   double etaOut = refr_ind;
