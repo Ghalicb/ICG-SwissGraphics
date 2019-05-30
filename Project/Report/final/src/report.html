@@ -1,0 +1,89 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title>Enhanced Ray Tracer using Path Tracing (Group 21)</title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <link rel="stylesheet" href="icg_report.css" type="text/css" />
+</head>
+<body>
+<div id="header">
+<h1 class="title">Enhanced Ray Tracer using Path Tracing (Group 21)</h1>
+</div>
+<video width="900px" src="../res/ICG-Final-Presentation-Video-Group21.mp4" loop autoplay muted>
+</video>
+<h1 id="goal">Goal</h1>
+<h2 id="core-4.0">Core (4.0):</h2>
+<ul>
+<li>Basic path tracing with explicit shadow rays at each surface interaction (implemented)</li>
+<li>Diffuse surfaces (implemented)</li>
+<li>Rectangular area lights (implemented)</li>
+<li>Mirrors (implemented)</li>
+</ul>
+<h2 id="extensions-1-each">Extensions (+1 each):</h2>
+<ul>
+<li>Fractals</li>
+<li>Depth of field</li>
+<li>Glossy/blurry reflections, multiple possible outgoing rays based on surface roughness</li>
+<li>Refractions (implemented)</li>
+<li>Special light sources. E.g. spotlights</li>
+</ul>
+<h1 id="build-project">Build Project</h1>
+<ul>
+<li>Go to <code>Improved-Ray-Tracer/</code></li>
+<li><code>mkdir build</code></li>
+<li><code>cd build</code></li>
+<li><code>cmake ..</code></li>
+<li><code>make -j</code></li>
+<li><code>cd ..</code></li>
+<li>Ray trace our Cornell Box : <code>./build/raytrace ./scenes/cornell_boxes/cornell_box_{1, 2, 3}.sce ./results/cornell_box_{1, 2, 3}.png</code></li>
+</ul>
+<h1 id="cuboid">Cuboid</h1>
+<p>We implemented the class Cuboid, which is described by its center, {x, y, z}_size, rotation_angle around the y_axis and material. The faces of this object are planes. We intersect the ray with the Plane associated with the corresponding face to compute intersections and we restrict them to be on the faces computing the the dot product of the face_center_to_intersection_vector with the {x, y, z}_axis. In order to speed up the computations, we came up with the following tricks :</p>
+<ul>
+<li>We keep track of the number of possible intersections so that we do not necessarly need to iterate over all the faces if the already have computed two intersections.</li>
+<li>We evaluate the norm of face_center_to_intersection_vector and compare it with the norm of (x_size/2,y_size/2,z_size/2), which is the biggest value face_center_to_intersection_vector could have when intersection_point is on a face, before starting any heavy computations (circumscribed sphere).</li>
+</ul>
+<h1 id="path-tracing">Path Tracing</h1>
+<h2 id="path-tracing-with-explicit-shadow-rays-fig.-1">Path tracing with explicit shadow rays (Fig. 1)</h2>
+<p>We trace rays for each pixel (~1000 to 10000). Each of these rays is independent from others. Here is the procedure for one ray.</p>
+<p>When the ray intersects a surface, first we retrieve the material properties of the intersected object, there are then 3 possibilities which will be detailed: 1. Mirror surface: for this one, we trace no shadow rays. The only color returned is the color returned by a recursive ray tracing in the reflected direction with respect the object normal. 2. Transparent objects: first we assume that the ambient material is air whose refraction index is approximated by 1.0. To implement the refraction, we used the Fresnel coefficient which gives the proportion of light that is reflected on a transparent surface given the incident angle and the refraction index of both material. This is mandatory to obtain visually satisfying results. So we trace a reflected ray and a refracted ray and weight the two obtained color by the Fresnel coefficient for the reflected one and (1-Fresnel coefficient) for the refracted one. 3. Glossy (from perfectly reflecting to diffuse): we trace a shadow ray and a recursive new ray. What changes for each level of glossyness is the choose of the ray direction. We implemented a more or less glossy reflection. When the object is the least glossy, it is perfectly diffuse (the ray direction traced for the recursive call is perfectly random in the hemisphere with respect to the surface normal). When it is the most glossy, the vector chosen is the perfectly reflected one. The object can be in between these two extreme cases and is a bit reflective but not perfectly.</p>
+<h2 id="implementation">Implementation</h2>
+<h3 id="material">Material</h3>
+<p>We changed the Material class to match our new effects. We first removed every Phong lightning model value to keep only the object <em>color</em> (vec3 for RGB color). Aside that we have a boolean value for mirrorness, another one for transparency and then the refraction index and the glossyness coefficient. There is an order of priority:</p>
+<ol style="list-style-type: decimal">
+<li>Transparency</li>
+<li>Mirrornes</li>
+<li>Glossyness</li>
+</ol>
+<p>That means that if transparency is <em>true</em> then mirroness and glossyness values are simply ignored. If transparency is <em>false</em> and mirrorness is <em>true</em> then object is a mirror. If the object is not transparent, the refraction index is ignored.</p>
+<h3 id="transparency-and-refraction">Transparency and refraction</h3>
+<p>At the intersection with a transparent object, we must compute the refracted vector with respect to the refraction index of the object (we assume that ambient coefficient is 1.0 which is a resonably correct approximation of the air's coefficient) and the reflected one. Then we trace both rays and then weighted the two obtained color by Fresnel coefficient (which gives the weight of the reflected ray) and multiply them by the object color. The refraction indexes used are the real ones.</p>
+<h3 id="mirror">Mirror</h3>
+<p>For the perfect mirror the color returned is simply the trace of the reflected ray (we chose that a mirror has no color).</p>
+<h1 id="references">References</h1>
+<ul>
+<li>../res/references/Monte-Carlo-Ray-Tracing-Cornell-Lecture.pdf</li>
+<li>../res/references/Global-Illumination-Path-Tracing-Taku-Komura-Lecture.pdf</li>
+<li>../res/references/Path-Tracing-Matthias-Teschner-Lecture.pdf</li>
+<li>en.wikipedia.org/wiki/Path_tracing</li>
+<li>scratchapixel.com/lessons/3d-basic-rendering/global-illumination-path-tracing</li>
+<li>scratchapixel.com/lessons/3d-basic-rendering/introduction-to-shading/reflection-refraction-fresnel</li>
+<li>web.cs.wpi.edu/~emmanuel/courses/cs563/write_ups/zackw/realistic_raytracing.html</li>
+<li>www.kevinbeason.com/smallpt/#moreinfo</li>
+</ul>
+<h1 id="difficulties">Difficulties</h1>
+<ul>
+<li>RAND_MAX not same value on windows and linux</li>
+</ul>
+<h1 id="plane">Plane</h1>
+<p>!!! These modifications have been implemented but we discarded them !!!</p>
+<p>We modified the provided Plane class in order to support two new functionalities :</p>
+<ul>
+<li>A plane can be cut, it can have a hole around center of a given hole_radius</li>
+<li>A plane is not necessarly infinite, it can be bounded by a circle of a given outer_radius. This implied the function intersect to be updated (circumscribed circle).</li>
+</ul>
+</body>
+</html>

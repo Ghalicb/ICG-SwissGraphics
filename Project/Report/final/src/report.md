@@ -1,11 +1,7 @@
 ---
-title: Improved Ray Tracer with Path Tracing (Group 21)
+title: Enhanced Ray Tracer using Path Tracing (Group 21)
 ---
-
-![Fig. 1](../res/images/cornell_box.png){width="900px"}
-
-# Request
-We would like to know if you could give us a few points for the implementation of the Cuboid class as well as for the Cornell Box description as these were not mentionned in the proposal.
+<video width="900px" src="../res/ICG-Final-Presentation-Video-Group21.mp4" loop autoplay muted></video>
 
 # Goal
 ## Core (4.0):
@@ -21,11 +17,6 @@ We would like to know if you could give us a few points for the implementation o
 - Refractions (implemented)
 - Special light sources. E.g. spotlights
 
-# Schedule for the next weeks
-- Debug
-- Improve Cuboid, AreaLight and overall path tracing stuff
-- implement one more extension
-
 # Build Project
 - Go to `Improved-Ray-Tracer/`
 - `mkdir build`
@@ -33,19 +24,13 @@ We would like to know if you could give us a few points for the implementation o
 - `cmake ..`
 - `make -j`
 - `cd ..`
-- Ray trace our Cornell Box : `./build/raytrace ./scenes/cornell_box/cornell_box.sce ./results/cornell_box.png`
+- Ray trace our Cornell Box : `./build/raytrace ./scenes/cornell_boxes/cornell_box_{1, 2, 3}.sce ./results/cornell_box_{1, 2, 3}.png`
 
 # Cuboid
 We implemented the class Cuboid, which is described by its center, {x, y, z}_size, rotation_angle around the y_axis and material. The faces of this object are planes. We intersect the ray with the Plane associated with the corresponding face to compute intersections and we restrict them to be on the faces computing the the dot product of the face_center_to_intersection_vector with the {x, y, z}_axis. In order to speed up the computations, we came up with the following tricks :
 
 - We keep track of the number of possible intersections so that we do not necessarly need to iterate over all the faces if the already have computed two intersections.
 - We evaluate the norm of face_center_to_intersection_vector and compare it with the norm of (x_size/2,y_size/2,z_size/2), which is the biggest value face_center_to_intersection_vector could have when intersection_point is on a face, before starting any heavy computations (circumscribed sphere).
-
-# Cornell Box
-We described a Cornell Box scene (/Improved-Ray-Tracer/scenes/cornell_box/). It is composed of five walls, one light, one cuboid and one sphere. It has 800x800x800 dimensions, the origin (0,0,0) is at the center of the box and the camera located at (0, 0, 600) is looking at the origin with a field of view of 90 degrees. The x-axis is pointing the the right-hand side of the image, the y-axis is pointing up and the z-axis is pointing to the camera.
-
-# AreaLight
-This describes a rectangular light, which is discretized into blocks of a a given side length. When checking the lighting during the ray tracing, we iterate over all the contained lights of each AreaLight. This will be improved so that we can give an orientation, a direction and an aperture to it. Moreover, we will take a probabilistic approach to check the lighting at a random point inside a block instead of always checking at the center of the blocks. These improvements will allow us to use AreaLight as a simple light as well as for more specific lights like spotlights.
 
 # Path Tracing
 ## Path tracing with explicit shadow rays (Fig. 1)
@@ -74,6 +59,7 @@ At the intersection with a transparent object, we must compute the refracted vec
 ### Mirror
 For the perfect mirror the color returned is simply the trace of the reflected ray (we chose that a mirror has no color).
 
+
 ### Shadow rays and caustics
 At every intersection with an object that is not transparent or mirror, we compute a shadow ray to get the direct illumination for this point. To do this, we computed the vector from the intersection point to the light and check if an object intersects this ray. If there is an object in between, the point is not directly lit, if nothing intersects, the light contribution is computed by multiplying the object's color by the light's color and by the dot product between the vector to the light and the intersection normal.
 
@@ -87,15 +73,22 @@ This makes possible for the light to lit a point behind a transparent object.
 
 This is not perfect but satisfyingly approximate the caustics effect.
 
-## References
-http://www.kevinbeason.com/smallpt/#moreinfo
-
-http://www.scratchapixel.com/lessons/3d-basic-rendering/introduction-to-shading/reflection-refraction-fresnel
-
+# References
+- ../res/references/Monte-Carlo-Ray-Tracing-Cornell-Lecture.pdf
+- ../res/references/Global-Illumination-Path-Tracing-Taku-Komura-Lecture.pdf
+- ../res/references/Path-Tracing-Matthias-Teschner-Lecture.pdf
+- en.wikipedia.org/wiki/Path_tracing
+- scratchapixel.com/lessons/3d-basic-rendering/global-illumination-path-tracing
+- scratchapixel.com/lessons/3d-basic-rendering/introduction-to-shading/reflection-refraction-fresnel
+- web.cs.wpi.edu/~emmanuel/courses/cs563/write_ups/zackw/realistic_raytracing.html
+- www.kevinbeason.com/smallpt/#moreinfo
 
 # Difficulties
-## RAND_MAX value on different system
-We used Windows to generate the final images. The result was different when running same code on Windows or MacOS/Linux. After a lot of debugging time, we found that RAND_MAX (the maximum value returned by rand() method) was not the same on windows and unix. Indeed it was only guaranteed to be greater or equal to 32767.
+- RAND_MAX not same value on windows and linux
+
+# Difficulties
+## RAND_MAX is not the same value on different systems
+We used Windows to generate the final images. The result was different when running same code on Windows or MacOS/Linux. After a lot of debugging time, we found that RAND_MAX (the maximum value returned by rand() method) is not the same on windows and Unix. Indeed it was only guaranteed to be greater or equal to 32767.
 
 # Plane
 !!! These modifications have been implemented but we discarded them !!!
