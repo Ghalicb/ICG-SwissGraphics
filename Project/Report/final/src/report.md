@@ -4,7 +4,7 @@ title: Enhanced Ray Tracer using Path Tracing (Group 21)
 <video width="900px" src="../res/ICG-Final-Presentation-Video-Group21.mp4" loop autoplay muted></video>
 
 # Abstract
-The purpose of this project was to improve a ray tracer done in class by adding more complex effects. The basic one used the Phong lighting model to render objects with limited properties such as shininess or reflectance. We opted for the path tracing algorithm which allowed us to obtain more interesting effects including global illumination, soft shadows with surface lights, refraction with caustics, glossiness and mirror. We also implemented spotlights to have richer scenes.
+The purpose of this project was to improve a ray tracer done in class by adding more complex effects. The basic one used the Phong lighting model to render objects with limited properties such as shininess or reflectance. We opted for the path tracing algorithm which allowed us to obtain more interesting effects including global illumination, soft shadows with surface lights, refraction with caustics, glossiness and mirror.
 
 # Goal
 ## Core (4.0):
@@ -27,9 +27,9 @@ The purpose of this project was to improve a ray tracer done in class by adding 
 - `cmake ..`
 - `make -j`
 - `cd ..`
-- Ray trace our Cornell Box : `./build/raytrace ./scenes/cornell_boxes/cornell_box_{1, 2, 3}.sce ./results/cornell_box_{1, 2, 3}.png`
+- Ray trace `./build/raytrace ./scenes/{...}.sce ./results/{...}.png`
 
-# Shape
+# Shapes
 
 ## Cuboid  
 We implemented the class Cuboid, which is described by its center, {x, y, z}\_size, rotation\_angle around the y\_axis and material. The faces of this object are planes. We intersect the ray with the Plane associated with the corresponding face to compute intersections and we restrict them to be on the faces computing the the dot product of the face\_center\_to\_intersection\_vector with the {x, y, z}\_axis. In order to speed up the computations, we came up with the following tricks :
