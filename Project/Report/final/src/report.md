@@ -125,12 +125,12 @@ We ended up using Rodrigues' rotation formula and fancy cross products to comput
 We modified the provided Plane class in order to support two new functionalities :
 
 - A plane can be cut, it can have a hole around center of a given hole\_radius
-- A plane is not necessarly infinite, it can be bounded by a circle of a given outer\_radius. This implied the function intersect to be updated (circumscribed circle).
+- A plane is not necessarily infinite, it can be bounded by a circle of a given outer\_radius. This implied the function intersect to be updated (circumscribed circle).
 
 
 # Workload
 ## Daniel Filipe Nunes Silva
-First, I implemented the Cuboid class and designed the basic Cornell box. Then, I implemented the lights: AreaLight and Spotlight classes and how they are integrated in the lighting function. Finally, I worked on glossy surfaces and described two Cornell boxes with 3 sphere and 3 cuboids of diffrent surfaces.
+First, I implemented the Cuboid class and designed the basic Cornell box. Then, I implemented the lights: AreaLight and Spotlight classes and how they are integrated in the lighting function. Finally, I worked on glossy surfaces and described two Cornell boxes with 3 sphere and 3 cuboids of different surfaces.
 
 ## Samuel Chassot
 I implemented the basic path tracing algorithm with diffuse (which was replaced by glossiness) and mirror objects. Then I implemented transparency (with refraction and Fresnel) and then caustics effect.
