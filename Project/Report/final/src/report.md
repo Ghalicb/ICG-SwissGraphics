@@ -4,7 +4,7 @@ title: Enhanced Ray Tracer using Path Tracing (Group 21)
 <video width="900px" src="../res/ICG-Final-Presentation-Video-Group21.mp4" loop autoplay muted></video>
 
 # Abstract
-The purpose of this project is to improve a ray tracer done in class by adding more complex effects. The basic one used the Phong lighting model to render objects with limited properties such as shininess or reflectance. We opted for the path tracing algorithm which allows us to obtain more interesting effets including global illumination, soft shadows with surface lights, refraction with caustics, glossiness and mirror. We also add spotlights.
+The purpose of this project is to improve a ray tracer done in class by adding more complex effects. The basic one used the Phong lighting model to render objects with limited properties such as shininess or reflectance. We opted for the path tracing algorithm which allows us to obtain more interesting effects including global illumination, soft shadows with surface lights, refraction with caustics, glossiness and mirror. We also add spotlights.
 
 # Goal
 ## Core (4.0):
@@ -59,6 +59,8 @@ When the ray intersects a surface, first we retrieve the material properties of 
 ## Implementation
 ### Diffuse
 We initially implemented diffuse with mirror and transparent but then we removed it as it is a limit case of glossy.
+
+Initially an object was able to be mirror and diffuse at the same time, with a weight between 0 and 1. Then we chose randomly at each intersection the behavior for this particular ray using the weight as a probability. We abandonned this approach due to the poor result it produced and because of the presence of the glossiness which let an object be a bit reflective and a bit diffuse.
 
 ### Material
 We changed the Material class to match our new effects. We first removed every Phong lighting model value to keep only the object *color* (vec3 for RGB colour). Aside that we have a boolean value for mirrorness, another one for transparency and then the refraction index and the glossiness coefficient. There is an order of priority:
@@ -120,9 +122,9 @@ We modified the provided Plane class in order to support two new functionalities
 
 # Workload
 ## Daniel Filipe Nunes Silva
-First, I implemented the Cuboid class and designed the basic Cornell box. Then, I implemented the lights : AreaLight and Spotlight classes and how they are integrated in the lighting function. Finally, I worked on glossy surfaces and described two Cornell boxes with 3 sphere and 3 cuboids of diffrent surfaces.
+First, I implemented the Cuboid class and designed the basic Cornell box. Then, I implemented the lights: AreaLight and Spotlight classes and how they are integrated in the lighting function. Finally, I worked on glossy surfaces and described two Cornell boxes with 3 sphere and 3 cuboids of diffrent surfaces.
 
 ## Samuel Chassot
-I implemented the basic path tracing algorithm with diffuse and mirror objects. Then I implemented transparency (with refraction and Fresnel) and then caustics effect.
+I implemented the basic path tracing algorithm with diffuse (which was replaced by glossiness) and mirror objects. Then I implemented transparency (with refraction and Fresnel) and then caustics effect.
 
 ## Ghali Chraïbi
