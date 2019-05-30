@@ -26,9 +26,9 @@
 <ul>
 <li>Fractals</li>
 <li>Depth of field</li>
-<li>Glossy/blurry reflections, multiple possible outgoing rays based on surface roughness</li>
+<li>Glossy/blurry reflections, multiple possible outgoing rays based on surface roughness (implemented)</li>
 <li>Refractions (implemented)</li>
-<li>Special light sources. E.g. spotlights</li>
+<li>Special light sources. E.g. spotlights (implemented)</li>
 </ul>
 <h1 id="build-project">Build Project</h1>
 <ul>
@@ -46,6 +46,12 @@
 <li>We keep track of the number of possible intersections so that we do not necessarly need to iterate over all the faces if the already have computed two intersections.</li>
 <li>We evaluate the norm of face_center_to_intersection_vector and compare it with the norm of (x_size/2,y_size/2,z_size/2), which is the biggest value face_center_to_intersection_vector could have when intersection_point is on a face, before starting any heavy computations (circumscribed sphere).</li>
 </ul>
+<h1 id="lights">Lights</h1>
+<p>The point lights of the basic ray tracer were replaced by area lights and spotlights. This allows us to produce soft shadows effects. These lights are intersected like objects by the ray tracer in order to appear as a surface on the result image. They act also as lights when checking for lighting. Each light adds a contribution of light proportional to its size to the scene.</p>
+<h2 id="arealight">AreaLight</h2>
+<p>This kind of light has a rectangular shape and is composed of smaller light squares. Each square has a single point light inside whose position in randomly chosen during the lighting operation. This non deterministic technique is computationally more efficient and soften even more the shadow without using a lot light square inside each light. It is intersected as a whole. When checking for lightning, we iterate over all the lights composing every Arealight and add a contribution for every light directly connected to the point.</p>
+<h2 id="spotlight">Spotlight</h2>
+<p>The spotlights are a special kind of lights which illuminates in a given direction and at a given aperture. It has a circular shape. When checking for lighting, we compute the dot product of the light direction vector with the vector V and check if it is bigger than an empirical determined value. Vector V is the vector going from the randomly chosen light point (inside the circular light) to the point, whose lighting is being computed.</p>
 <h1 id="path-tracing">Path Tracing</h1>
 <h2 id="path-tracing-with-explicit-shadow-rays-fig.-1">Path tracing with explicit shadow rays (Fig. 1)</h2>
 <p>We trace rays for each pixel (~1000 to 10000). Each of these rays is independent from others. Here is the procedure for one ray.</p>
@@ -75,9 +81,8 @@
 <li>www.kevinbeason.com/smallpt/#moreinfo</li>
 </ul>
 <h1 id="difficulties">Difficulties</h1>
-<ul>
-<li>RAND_MAX not same value on windows and linux</li>
-</ul>
+<h2 id="rand_max-is-not-the-same-value-on-different-systems">RAND_MAX is not the same value on different systems</h2>
+<p>We used Windows to generate the final images. The result was different when running same code on Windows or MacOS/Linux. After a lot of debugging time, we found that RAND_MAX (the maximum value returned by rand() method) is not the same on windows and Unix. Indeed it was only guaranteed to be greater or equal to 32767.</p>
 <h1 id="plane">Plane</h1>
 <p>!!! These modifications have been implemented but we discarded them !!!</p>
 <p>We modified the provided Plane class in order to support two new functionalities :</p>
