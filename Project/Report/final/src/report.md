@@ -29,11 +29,16 @@ The purpose of this project was to improve a ray tracer done in class by adding 
 - `cd ..`
 - Ray trace our Cornell Box : `./build/raytrace ./scenes/cornell_boxes/cornell_box_{1, 2, 3}.sce ./results/cornell_box_{1, 2, 3}.png`
 
-# Cuboid
+# Shape
+
+## Cuboid  
 We implemented the class Cuboid, which is described by its center, {x, y, z}\_size, rotation\_angle around the y\_axis and material. The faces of this object are planes. We intersect the ray with the Plane associated with the corresponding face to compute intersections and we restrict them to be on the faces computing the the dot product of the face\_center\_to\_intersection\_vector with the {x, y, z}\_axis. In order to speed up the computations, we came up with the following tricks :
 
 - We keep track of the number of possible intersections so that we do not necessarly need to iterate over all the faces if the already have computed two intersections.
 - We evaluate the norm of face_center_to_intersection_vector and compare it with the norm of (x\_size/2,y\_size/2,z\_size/2), which is the biggest value face\_center\_to\_intersection\_vector could have when intersection\_point is on a face, before starting any heavy computations (circumscribed sphere).
+
+## Closed cylinder
+We also implemented a closed cylinder composed of a hollow cylinder, an upper plane and a lower plane. The planes were restricted to disks with the same radius as the hollow cylinder. When intersecting with rays, we computed the intersection points among the constrained planes and the hollow cylinder and kept the closest one (if there were several).
 
 # Lights
 The point lights of the basic ray tracer were replaced by area lights and spotlights. This allows us to produce soft shadows effects. These lights are intersected like objects by the ray tracer in order to appear as a surface on the result image. They act also as lights when checking for lighting. Each light adds a contribution of light proportional to its size in the scene.
