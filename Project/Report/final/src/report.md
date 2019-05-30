@@ -36,13 +36,13 @@ We implemented the class Cuboid, which is described by its center, {x, y, z}_siz
 The point lights of the basic ray tracer were replaced by area lights and spotlights. This allows us to produce soft shadows effects. These lights are intersected like objects by the ray tracer in order to appear as a surface on the result image. They act also as lights when checking for lighting. Each light adds a contribution of light proportional to its size to the scene.
 
 ## AreaLight
-This kind of light has a rectangular shape and is composed of smaller light squares. Each square has a single point light inside whose position in randomly chosen during the lighting operation. This non deterministic technique is computationally more efficient and soften even more the shadow without using a lot light square inside each light. It is intersected as a whole. When checking for lightning, we iterate over all the lights composing every Arealight and add a contribution for every light directly connected to the point.
+This kind of light has a rectangular shape and is composed of smaller light squares. Each square has a single point light inside whose position in randomly chosen during the lighting operation. This non deterministic technique is computationally more efficient and soften even more the shadows without using a lot light square inside each light. It is intersected as a whole. When checking for lightning, we iterate over all the lights composing every Arealight and add a contribution for every light directly connected to the point.
 
 ## Spotlight
-The spotlights are a special kind of lights which illuminates in a given direction and at a given aperture. It has a circular shape. When checking for lighting, we compute the dot product of the light direction vector with the vector V and check if it is bigger than an empirical determined value. Vector V is the vector going from the randomly chosen light point (inside the circular light) to the point, whose lighting is being computed.
+The spotlights are a special kind of lights which illuminate in a given direction and at a given aperture. They have a circular shape. When checking for lighting, we compute the dot product of the light direction vector with the vector V and check if it is bigger than an empirical determined value. Vector V is the vector going from the randomly chosen light point (inside the circular light) to the point, whose lighting is being computed.
 
 # Path Tracing
-## Path tracing with explicit shadow rays (Fig. 1)
+## Path tracing with explicit shadow rays
 We trace rays for each pixel (~1000 to 10000). Each of these rays is independent from others. Here is the procedure for one ray.
 
 When the ray intersects a surface, first we retrieve the material properties of the intersected object, there are then 3 possibilities which will be detailed:
@@ -106,7 +106,6 @@ We modified the provided Plane class in order to support two new functionalities
 
 
 # Workload
-
 ## Daniel Filipe Nunes Silva
 
 ## Samuel Chassot

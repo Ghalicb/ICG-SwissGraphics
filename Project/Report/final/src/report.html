@@ -49,16 +49,16 @@
 <h1 id="lights">Lights</h1>
 <p>The point lights of the basic ray tracer were replaced by area lights and spotlights. This allows us to produce soft shadows effects. These lights are intersected like objects by the ray tracer in order to appear as a surface on the result image. They act also as lights when checking for lighting. Each light adds a contribution of light proportional to its size to the scene.</p>
 <h2 id="arealight">AreaLight</h2>
-<p>This kind of light has a rectangular shape and is composed of smaller light squares. Each square has a single point light inside whose position in randomly chosen during the lighting operation. This non deterministic technique is computationally more efficient and soften even more the shadow without using a lot light square inside each light. It is intersected as a whole. When checking for lightning, we iterate over all the lights composing every Arealight and add a contribution for every light directly connected to the point.</p>
+<p>This kind of light has a rectangular shape and is composed of smaller light squares. Each square has a single point light inside whose position in randomly chosen during the lighting operation. This non deterministic technique is computationally more efficient and soften even more the shadows without using a lot light square inside each light. It is intersected as a whole. When checking for lightning, we iterate over all the lights composing every Arealight and add a contribution for every light directly connected to the point.</p>
 <h2 id="spotlight">Spotlight</h2>
-<p>The spotlights are a special kind of lights which illuminates in a given direction and at a given aperture. It has a circular shape. When checking for lighting, we compute the dot product of the light direction vector with the vector V and check if it is bigger than an empirical determined value. Vector V is the vector going from the randomly chosen light point (inside the circular light) to the point, whose lighting is being computed.</p>
+<p>The spotlights are a special kind of lights which illuminate in a given direction and at a given aperture. They have a circular shape. When checking for lighting, we compute the dot product of the light direction vector with the vector V and check if it is bigger than an empirical determined value. Vector V is the vector going from the randomly chosen light point (inside the circular light) to the point, whose lighting is being computed.</p>
 <h1 id="path-tracing">Path Tracing</h1>
-<h2 id="path-tracing-with-explicit-shadow-rays-fig.-1">Path tracing with explicit shadow rays (Fig. 1)</h2>
+<h2 id="path-tracing-with-explicit-shadow-rays">Path tracing with explicit shadow rays</h2>
 <p>We trace rays for each pixel (~1000 to 10000). Each of these rays is independent from others. Here is the procedure for one ray.</p>
 <p>When the ray intersects a surface, first we retrieve the material properties of the intersected object, there are then 3 possibilities which will be detailed: 1. Mirror surface: for this one, we trace no shadow rays. The only color returned is the color returned by a recursive ray tracing in the reflected direction with respect the object normal. 2. Transparent objects: first we assume that the ambient material is air whose refraction index is approximated by 1.0. To implement the refraction, we used the Fresnel coefficient which gives the proportion of light that is reflected on a transparent surface given the incident angle and the refraction index of both material. This is mandatory to obtain visually satisfying results. So we trace a reflected ray and a refracted ray and weight the two obtained color by the Fresnel coefficient for the reflected one and (1-Fresnel coefficient) for the refracted one. 3. Glossy (from perfectly reflecting to diffuse): we trace a shadow ray and a recursive new ray. What changes for each level of glossyness is the choose of the ray direction. We implemented a more or less glossy reflection. When the object is the least glossy, it is perfectly diffuse (the ray direction traced for the recursive call is perfectly random in the hemisphere with respect to the surface normal). When it is the most glossy, the vector chosen is the perfectly reflected one. The object can be in between these two extreme cases and is a bit reflective but not perfectly.</p>
 <h2 id="implementation">Implementation</h2>
-<h3 id="material">Material</h3>
-<p>We changed the Material class to match our new effects. We first removed every Phong lightning model value to keep only the object <em>color</em> (vec3 for RGB color). Aside that we have a boolean value for mirrorness, another one for transparency and then the refraction index and the glossyness coefficient. There is an order of priority:</p>
+<h3 id="diffuse">Diffuse</h3>
+<p>We initially implemented diffuse with mirror and transparent but then we removed it as it is a limit case of glossy. ### Material We changed the Material class to match our new effects. We first removed every Phong lightning model value to keep only the object <em>color</em> (vec3 for RGB color). Aside that we have a boolean value for mirrorness, another one for transparency and then the refraction index and the glossyness coefficient. There is an order of priority:</p>
 <ol style="list-style-type: decimal">
 <li>Transparency</li>
 <li>Mirrornes</li>
@@ -69,6 +69,13 @@
 <p>At the intersection with a transparent object, we must compute the refracted vector with respect to the refraction index of the object (we assume that ambient coefficient is 1.0 which is a resonably correct approximation of the air's coefficient) and the reflected one. Then we trace both rays and then weighted the two obtained color by Fresnel coefficient (which gives the weight of the reflected ray) and multiply them by the object color. The refraction indexes used are the real ones.</p>
 <h3 id="mirror">Mirror</h3>
 <p>For the perfect mirror the color returned is simply the trace of the reflected ray (we chose that a mirror has no color).</p>
+<h3 id="shadow-rays-and-caustics">Shadow rays and caustics</h3>
+<p>At every intersection with an object that is not transparent or mirror, we compute a shadow ray to get the direct illumination for this point. To do this, we computed the vector from the intersection point to the light and check if an object intersects this ray. If there is an object in between, the point is not directly lit, if nothing intersects, the light contribution is computed by multiplying the object's color by the light's color and by the dot product between the vector to the light and the intersection normal.</p>
+<p>To implement the caustics, we changed a bit this algorithm and the lighting method which has now a parameter saying if we compute a &quot;normal ray&quot; or a shadow ray. If it is a shadow ray, if the object intersected is glossy, it returns vec3(0.0), if it is mirror or transparent, it returns a recursive call on the appropriate vector (reflected or refracted). If the shadow ray intersects a light, it returns the light's color.</p>
+<p>As this a shadow ray returns a color contribution only if it eventually reaches the light.</p>
+<p>The algorithm is like before but if an object is in between, we trace a shadow ray using the lighting method with shadow ray = true following the point-to-light vector.</p>
+<p>This makes possible for the light to lit a point behind a transparent object.</p>
+<p>This is not perfect but satisfyingly approximate the caustics effect.</p>
 <h1 id="references">References</h1>
 <ul>
 <li>../res/references/Monte-Carlo-Ray-Tracing-Cornell-Lecture.pdf</li>
@@ -90,5 +97,9 @@
 <li>A plane can be cut, it can have a hole around center of a given hole_radius</li>
 <li>A plane is not necessarly infinite, it can be bounded by a circle of a given outer_radius. This implied the function intersect to be updated (circumscribed circle).</li>
 </ul>
+<h1 id="workload">Workload</h1>
+<h2 id="daniel-filipe-nunes-silva"> Daniel Filipe Nunes Silva</h2>
+<h2 id="samuel-chassot">Samuel Chassot</h2>
+<p>I implemented the basic path tracing algorithm with diffuse and mirror objects. Then I implemented transparency (with refraction and Fresnel) and then caustics effect. ## Ghali Chraïbi</p>
 </body>
 </html>
