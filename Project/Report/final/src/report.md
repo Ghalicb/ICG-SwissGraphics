@@ -32,12 +32,6 @@ We implemented the class Cuboid, which is described by its center, {x, y, z}_siz
 - We keep track of the number of possible intersections so that we do not necessarly need to iterate over all the faces if the already have computed two intersections.
 - We evaluate the norm of face_center_to_intersection_vector and compare it with the norm of (x_size/2,y_size/2,z_size/2), which is the biggest value face_center_to_intersection_vector could have when intersection_point is on a face, before starting any heavy computations (circumscribed sphere).
 
-# Cornell Box
-We described a Cornell Box scene (/Improved-Ray-Tracer/scenes/cornell_box/). It is composed of five walls, one light, one cuboid and one sphere. It has 800x800x800 dimensions, the origin (0,0,0) is at the center of the box and the camera located at (0, 0, 600) is looking at the origin with a field of view of 90 degrees. The x-axis is pointing the the right-hand side of the image, the y-axis is pointing up and the z-axis is pointing to the camera.
-
-# AreaLight
-This describes a rectangular light, which is discretized into blocks of a a given side length. When checking the lighting during the ray tracing, we iterate over all the contained lights of each AreaLight. This will be improved so that we can give an orientation, a direction and an aperture to it. Moreover, we will take a probabilistic approach to check the lighting at a random point inside a block instead of always checking at the center of the blocks. These improvements will allow us to use AreaLight as a simple light as well as for more specific lights like spotlights.
-
 # Path Tracing
 ## Path tracing with explicit shadow rays (Fig. 1)
 We trace rays for each pixel (~1000 to 10000). Each of these rays is independent from others. Here is the procedure for one ray.
