@@ -132,7 +132,8 @@ We modified the provided Plane class in order to support two new functionalities
 
 
 # Workload
-## Daniel Filipe Nunes Silva
+  
+## Daniel Filipe Nunes Silva  
 First, I implemented the Cuboid class and designed the basic Cornell box. Then, I implemented the lights: AreaLight and Spotlight classes and how they are integrated in the lighting function. Finally, I worked on glossy surfaces and described two Cornell boxes with 3 sphere and 3 cuboids of different surfaces.
 
 ## Samuel Chassot
