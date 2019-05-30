@@ -33,10 +33,10 @@ We implemented the class Cuboid, which is described by its center, {x, y, z}_siz
 - We evaluate the norm of face_center_to_intersection_vector and compare it with the norm of (x_size/2,y_size/2,z_size/2), which is the biggest value face_center_to_intersection_vector could have when intersection_point is on a face, before starting any heavy computations (circumscribed sphere).
 
 # Lights
-The point lights of the basic ray tracer were replaced by area lights and spotlights. This allows us to produce soft shadows effects. These lights are intersected like objects by the ray tracer in order to appear as a surface on the result image. They act also as lights when checking for lighting. Each light adds a contribution of light proportional to its size to the scene.
+The point lights of the basic ray tracer were replaced by area lights and spotlights. This allows us to produce soft shadows effects. These lights are intersected like objects by the ray tracer in order to appear as a surface on the result image. They act also as lights when checking for lighting. Each light adds a contribution of light proportional to its size in the scene.
 
 ## AreaLight
-This kind of light has a rectangular shape and is composed of smaller light squares. Each square has a single point light inside whose position in randomly chosen during the lighting operation. This non deterministic technique is computationally more efficient and soften even more the shadows without using a lot light square inside each light. It is intersected as a whole. When checking for lightning, we iterate over all the lights composing every Arealight and add a contribution for every light directly connected to the point.
+This kind of light has a rectangular shape and is composed of smaller light squares. Each square has a single point light inside whose position in randomly chosen during the lighting operation. This non deterministic technique is computationally more efficient and softens even more the shadows without using a lot light square inside each light. It is intersected as a whole. When checking for lighting, we iterate over all the lights composing every Arealight and add a contribution for every light directly connected to the point.
 
 ## Spotlight
 The spotlights are a special kind of lights which illuminate in a given direction and at a given aperture. They have a circular shape. When checking for lighting, we compute the dot product of the light direction vector with the vector V and check if it is bigger than an empirical determined value. Vector V is the vector going from the randomly chosen light point (inside the circular light) to the point, whose lighting is being computed.
@@ -55,7 +55,7 @@ When the ray intersects a surface, first we retrieve the material properties of 
 We initially implemented diffuse with mirror and transparent but then we removed it as it is a limit case of glossy.
 
 ### Material
-We changed the Material class to match our new effects. We first removed every Phong lightning model value to keep only the object *color* (vec3 for RGB colour). Aside that we have a boolean value for mirrorness, another one for transparency and then the refraction index and the glossiness coefficient. There is an order of priority:
+We changed the Material class to match our new effects. We first removed every Phong lighting model value to keep only the object *color* (vec3 for RGB colour). Aside that we have a boolean value for mirrorness, another one for transparency and then the refraction index and the glossiness coefficient. There is an order of priority:
 
 1. Transparency
 2. Mirrorness
