@@ -136,3 +136,4 @@ First, I implemented the Cuboid class and designed the basic Cornell box. Then, 
 I implemented the basic path tracing algorithm with diffuse (which was replaced by glossiness) and mirror objects. Then I implemented transparency (with refraction and Fresnel) and then caustics effect.
 
 ## Ghali Chraïbi
+I implemented first the ClosedCylinder shape and participate in the thinking process of the refraction effect (before we decided to use path tracing). Then I participated in the thinking process of the data structures for the AreaLight and help in the implementation of Light/AreaLight. Finally I designed and implemented various scenes.
