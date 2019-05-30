@@ -1,7 +1,7 @@
 ---
 title: Enhanced Ray Tracer using Path Tracing (Group 21)
 ---
-<video src="../res/ICG-Final-Presentation-Video-Group21.mp4"></video>
+<video width="900px" src="../res/ICG-Final-Presentation-Video-Group21.mp4" loop autoplay muted></video>
 
 # Goal
 ## Core (4.0):
