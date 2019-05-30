@@ -13,9 +13,9 @@ title: Enhanced Ray Tracer using Path Tracing (Group 21)
 ## Extensions (+1 each):
 - Fractals
 - Depth of field
-- Glossy/blurry reflections, multiple possible outgoing rays based on surface roughness
+- Glossy/blurry reflections, multiple possible outgoing rays based on surface roughness (implemented)
 - Refractions (implemented)
-- Special light sources. E.g. spotlights
+- Special light sources. E.g. spotlights (implemented)
 
 # Build Project
 - Go to `Improved-Ray-Tracer/`
