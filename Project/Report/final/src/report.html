@@ -72,6 +72,7 @@
 <h3 id="mirror">Mirror</h3>
 <p>For the perfect mirror the color returned is simply the trace of the reflected ray (we chose that a mirror has no color).</p>
 <h3 id="glossy">Glossy</h3>
+<p>We implemented glossiness as an intermediate surface between mirrors and diffuse surfaces. The outgoing ray for mirrors is simply reflected while for diffuse surface it goes in any direction. We added a glossy index describing how diffuse a mirror surface is. According to this index the outgoing ray will be shoot either in an hemisphere for a diffuse surface or in a cone along the reflected ray whose aperture is larger or smaller for glossy surfaces.</p>
 <h3 id="shadow-rays-and-caustics">Shadow rays and caustics</h3>
 <p>At every intersection with an object that is not transparent or mirror, we compute a shadow ray to get the direct illumination for this point. To do this, we computed the vector from the intersection point to the light and check if an object intersects this ray. If there is an object in between, the point is not directly lit, if nothing intersects, the light contribution is computed by multiplying the object's color by the light's color and by the dot product between the vector to the light and the intersection normal.</p>
 <p>To implement the caustics, we changed a bit this algorithm and the lighting method which has now a parameter saying if we compute a &quot;normal ray&quot; or a shadow ray. If it is a shadow ray, if the object intersected is glossy, it returns vec3(0.0), if it is mirror or transparent, it returns a recursive call on the appropriate vector (reflected or refracted). If the shadow ray intersects a light, it returns the light's color.</p>
@@ -102,6 +103,7 @@
 </ul>
 <h1 id="workload">Workload</h1>
 <h2 id="daniel-filipe-nunes-silva"> Daniel Filipe Nunes Silva</h2>
+<p>First, I implemented the Cuboid class and designed the basic Cornell box. Then, I implemented the lights : AreaLight and Spotlight classes and how they are integrated in the lighting function. Finally, I worked on glossy surfaces and described two Cornell boxes with 3 sphere and 3 cuboids of diffrent surfaces.</p>
 <h2 id="samuel-chassot">Samuel Chassot</h2>
 <p>I implemented the basic path tracing algorithm with diffuse and mirror objects. Then I implemented transparency (with refraction and Fresnel) and then caustics effect.</p>
 <h2 id="ghali-chraïbi">Ghali Chraïbi</h2>

@@ -70,6 +70,7 @@ At the intersection with a transparent object, we must compute the refracted vec
 For the perfect mirror the color returned is simply the trace of the reflected ray (we chose that a mirror has no color).
 
 ### Glossy
+We implemented glossiness as an intermediate surface between mirrors and diffuse surfaces. The outgoing ray for mirrors is simply reflected while for diffuse surface it goes in any direction. We added a glossy index describing how diffuse a mirror surface is. According to this index the outgoing ray will be shoot either in an hemisphere for a diffuse surface or in a cone along the reflected ray whose aperture is larger or smaller for glossy surfaces.
 
 
 ### Shadow rays and caustics
@@ -110,6 +111,7 @@ We modified the provided Plane class in order to support two new functionalities
 
 # Workload
 ## Daniel Filipe Nunes Silva
+First, I implemented the Cuboid class and designed the basic Cornell box. Then, I implemented the lights : AreaLight and Spotlight classes and how they are integrated in the lighting function. Finally, I worked on glossy surfaces and described two Cornell boxes with 3 sphere and 3 cuboids of diffrent surfaces.
 
 ## Samuel Chassot
 I implemented the basic path tracing algorithm with diffuse and mirror objects. Then I implemented transparency (with refraction and Fresnel) and then caustics effect.
