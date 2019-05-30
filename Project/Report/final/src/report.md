@@ -46,27 +46,30 @@ The spotlights are a special kind of lights which illuminate in a given directio
 We trace rays for each pixel (~1000 to 10000). Each of these rays is independent from others. Here is the procedure for one ray.
 
 When the ray intersects a surface, first we retrieve the material properties of the intersected object, there are then 3 possibilities which will be detailed:
-1. Mirror surface: for this one, we trace no shadow rays. The only color returned is the color returned by a recursive ray tracing in the reflected direction with respect the object normal.
-2. Transparent objects: first we assume that the ambient material is air whose refraction index is approximated by 1.0. To implement the refraction, we used the Fresnel coefficient which gives the proportion of light that is reflected on a transparent surface given the incident angle and the refraction index of both material. This is mandatory to obtain visually satisfying results. So we trace a reflected ray and a refracted ray and weight the two obtained color by the Fresnel coefficient for the reflected one and (1-Fresnel coefficient) for the refracted one.
-3. Glossy (from perfectly reflecting to diffuse): we trace a shadow ray and a recursive new ray. What changes for each level of glossyness is the choose of the ray direction. We implemented a more or less glossy reflection. When the object is the least glossy, it is perfectly diffuse (the ray direction traced for the recursive call is perfectly random in the hemisphere with respect to the surface normal). When it is the most glossy, the vector chosen is the perfectly reflected one. The object can be in between these two extreme cases and is a bit reflective but not perfectly.
+1. Mirror surface: for this one, we trace no shadow rays. The only color returned is the colour returned by a recursive ray tracing in the reflected direction with respect the object normal.
+2. Transparent objects: first we assume that the ambient material is air whose refraction index is approximated by 1.0. To implement the refraction, we used the Fresnel coefficient which gives the proportion of light that is reflected on a transparent surface given the incident angle and the refraction index of both material. This is mandatory to obtain visually satisfying results. So we trace a reflected ray and a refracted ray and weight the two obtained colour by the Fresnel coefficient for the reflected one and (1-Fresnel coefficient) for the refracted one.
+3. Glossy (from perfectly reflecting to diffuse): we trace a shadow ray and a recursive new ray. What changes for each level of glossiness is the choose of the ray direction. We implemented a more or less glossy reflection. When the object is the least glossy, it is perfectly diffuse (the ray direction traced for the recursive call is perfectly random in the hemisphere with respect to the surface normal). When it is the most glossy, the vector chosen is the perfectly reflected one. The object can be in between these two extreme cases and is a bit reflective but not perfectly.
 
 ## Implementation
 ### Diffuse
 We initially implemented diffuse with mirror and transparent but then we removed it as it is a limit case of glossy.
+
 ### Material
-We changed the Material class to match our new effects. We first removed every Phong lightning model value to keep only the object *color* (vec3 for RGB color). Aside that we have a boolean value for mirrorness, another one for transparency and then the refraction index and the glossyness coefficient. There is an order of priority:
+We changed the Material class to match our new effects. We first removed every Phong lightning model value to keep only the object *color* (vec3 for RGB colour). Aside that we have a boolean value for mirrorness, another one for transparency and then the refraction index and the glossiness coefficient. There is an order of priority:
 
 1. Transparency
-2. Mirrornes
-3. Glossyness
+2. Mirrorness
+3. Glossiness
 
 That means that if transparency is *true* then mirroness and glossyness values are simply ignored. If transparency is *false* and mirrorness is *true* then object is a mirror. If the object is not transparent, the refraction index is ignored.
 
 ### Transparency and refraction
-At the intersection with a transparent object, we must compute the refracted vector with respect to the refraction index of the object (we assume that ambient coefficient is 1.0 which is a resonably correct approximation of the air's coefficient) and the reflected one. Then we trace both rays and then weighted the two obtained color by Fresnel coefficient (which gives the weight of the reflected ray) and multiply them by the object color. The refraction indexes used are the real ones.
+At the intersection with a transparent object, we must compute the refracted vector with respect to the refraction index of the object (we assume that ambient coefficient is 1.0 which is a reasonably correct approximation of the air's coefficient) and the reflected one. Then we trace both rays and then weighted the two obtained color by Fresnel coefficient (which gives the weight of the reflected ray) and multiply them by the object color. The refraction indexes used are the real ones.
 
 ### Mirror
 For the perfect mirror the color returned is simply the trace of the reflected ray (we chose that a mirror has no color).
+
+### Glossy
 
 
 ### Shadow rays and caustics
@@ -96,7 +99,7 @@ This is not perfect but satisfyingly approximate the caustics effect.
 ## RAND_MAX is not the same value on different systems
 We used Windows to generate the final images. The result was different when running same code on Windows or MacOS/Linux. After a lot of debugging time, we found that RAND_MAX (the maximum value returned by rand() method) is not the same on windows and Unix. Indeed it was only guaranteed to be greater or equal to 32767.
 
-# Plane
+## Plane
 !!! These modifications have been implemented but we discarded them !!!
 
 We modified the provided Plane class in order to support two new functionalities :
@@ -110,4 +113,5 @@ We modified the provided Plane class in order to support two new functionalities
 
 ## Samuel Chassot
 I implemented the basic path tracing algorithm with diffuse and mirror objects. Then I implemented transparency (with refraction and Fresnel) and then caustics effect.
+
 ## Ghali Chraïbi
