@@ -32,6 +32,15 @@ We implemented the class Cuboid, which is described by its center, {x, y, z}_siz
 - We keep track of the number of possible intersections so that we do not necessarly need to iterate over all the faces if the already have computed two intersections.
 - We evaluate the norm of face_center_to_intersection_vector and compare it with the norm of (x_size/2,y_size/2,z_size/2), which is the biggest value face_center_to_intersection_vector could have when intersection_point is on a face, before starting any heavy computations (circumscribed sphere).
 
+# Lights
+The point lights of the basic ray tracer were replaced by area lights and spotlights. This allows us to produce soft shadows effects. These lights are intersected like objects by the ray tracer in order to appear as a surface on the result image. They act also as lights when checking for lighting. Each light adds a contribution of light proportional to its size to the scene.
+
+## AreaLight
+This kind of light has a rectangular shape and is composed of smaller light squares. Each square has a single point light inside whose position in randomly chosen during the lighting operation. This non deterministic technique is computationally more efficient and soften even more the shadow without using a lot light square inside each light. It is intersected as a whole. When checking for lightning, we iterate over all the lights composing every Arealight and add a contribution for every light directly connected to the point.
+
+## Spotlight
+The spotlights are a special kind of lights which illuminates in a given direction and at a given aperture. It has a circular shape. When checking for lighting, we compute the dot product of the light direction vector with the vector V and check if it is bigger than an empirical determined value. Vector V is the vector going from the randomly chosen light point (inside the circular light) to the point, whose lighting is being computed.
+
 # Path Tracing
 ## Path tracing with explicit shadow rays (Fig. 1)
 We trace rays for each pixel (~1000 to 10000). Each of these rays is independent from others. Here is the procedure for one ray.
