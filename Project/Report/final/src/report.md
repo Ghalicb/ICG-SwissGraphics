@@ -104,5 +104,5 @@ We modified the provided Plane class in order to support two new functionalities
 ## Daniel Filipe Nunes Silva
 
 ## Samuel Chassot
-
+I implemented the basic path tracing algorithm with diffuse and mirror objects. Then I implemented transparency (with refraction and Fresnel) and then caustics effect.
 ## Ghali Chraïbi
