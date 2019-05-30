@@ -70,6 +70,13 @@ For the perfect mirror the color returned is simply the trace of the reflected r
 # Difficulties
 - RAND_MAX not same value on windows and linux
 
+<<<<<<< HEAD
+=======
+# Difficulties
+## RAND_MAX is not the same value on different systems
+We used Windows to generate the final images. The result was different when running same code on Windows or MacOS/Linux. After a lot of debugging time, we found that RAND_MAX (the maximum value returned by rand() method) is not the same on windows and Unix. Indeed it was only guaranteed to be greater or equal to 32767.
+
+>>>>>>> Project
 # Plane
 !!! These modifications have been implemented but we discarded them !!!
 
