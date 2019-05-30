@@ -113,6 +113,9 @@ This is not perfect but satisfyingly approximate the caustics effect.
 - en.wikipedia.org/wiki/Schlick%27s_approximation
 
 # Difficulties
+## Changing the whole model for the lighting procedure
+When starting the project with the Phong Lighting model, some members of the group tried to implement some of the effects given as targets, based on the initial ray tracer. However, if the Phong lighting model is a simple model to implement and can approximate some basic effects quite well, it prevents the implementation of more complex effects. Indeed, even if it is possible to add refraction with this model, we could not have rendered realistic soft shadows and glossiness without changing the model, here to Path tracing.  
+
 ## RAND_MAX is not the same value on different systems
 We used Windows to generate the final images. The result was different when running same code on Windows or MacOS/Linux. After a lot of debugging time, we found that RAND\_MAX (the maximum value returned by rand() method) is not the same on windows and Unix. Indeed it was only guaranteed to be greater or equal to 32767.
 
