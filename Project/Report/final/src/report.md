@@ -46,8 +46,11 @@ The spotlights are a special kind of lights which illuminate in a given directio
 We trace rays for each pixel (~1000 to 10000). Each of these rays is independent from others. Here is the procedure for one ray.
 
 When the ray intersects a surface, first we retrieve the material properties of the intersected object, there are then 3 possibilities which will be detailed:
+
 1. Mirror surface: for this one, we trace no shadow rays. The only color returned is the colour returned by a recursive ray tracing in the reflected direction with respect the object normal.
+
 2. Transparent objects: first we assume that the ambient material is air whose refraction index is approximated by 1.0. To implement the refraction, we used the Fresnel coefficient which gives the proportion of light that is reflected on a transparent surface given the incident angle and the refraction index of both material. This is mandatory to obtain visually satisfying results. So we trace a reflected ray and a refracted ray and weight the two obtained colour by the Fresnel coefficient for the reflected one and (1-Fresnel coefficient) for the refracted one.
+
 3. Glossy (from perfectly reflecting to diffuse): we trace a shadow ray and a recursive new ray. What changes for each level of glossiness is the choose of the ray direction. We implemented a more or less glossy reflection. When the object is the least glossy, it is perfectly diffuse (the ray direction traced for the recursive call is perfectly random in the hemisphere with respect to the surface normal). When it is the most glossy, the vector chosen is the perfectly reflected one. The object can be in between these two extreme cases and is a bit reflective but not perfectly.
 
 ## Implementation
@@ -61,7 +64,7 @@ We changed the Material class to match our new effects. We first removed every P
 2. Mirrorness
 3. Glossiness
 
-That means that if transparency is *true* then mirroness and glossyness values are simply ignored. If transparency is *false* and mirrorness is *true* then object is a mirror. If the object is not transparent, the refraction index is ignored.
+That means that if transparency is *true* then mirroness and glossiness values are simply ignored. If transparency is *false* and mirrorness is *true* then object is a mirror. If the object is not transparent, the refraction index is ignored.
 
 ### Transparency and refraction
 At the intersection with a transparent object, we must compute the refracted vector with respect to the refraction index of the object (we assume that ambient coefficient is 1.0 which is a reasonably correct approximation of the air's coefficient) and the reflected one. Then we trace both rays and then weighted the two obtained color by Fresnel coefficient (which gives the weight of the reflected ray) and multiply them by the object color. The refraction indexes used are the real ones.
