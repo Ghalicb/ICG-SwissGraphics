@@ -30,10 +30,10 @@ The purpose of this project was to improve a ray tracer done in class by adding 
 - Ray trace our Cornell Box : `./build/raytrace ./scenes/cornell_boxes/cornell_box_{1, 2, 3}.sce ./results/cornell_box_{1, 2, 3}.png`
 
 # Cuboid
-We implemented the class Cuboid, which is described by its center, {x, y, z}_size, rotation_angle around the y_axis and material. The faces of this object are planes. We intersect the ray with the Plane associated with the corresponding face to compute intersections and we restrict them to be on the faces computing the the dot product of the face_center_to_intersection_vector with the {x, y, z}_axis. In order to speed up the computations, we came up with the following tricks :
+We implemented the class Cuboid, which is described by its center, {x, y, z}\_size, rotation\_angle around the y\_axis and material. The faces of this object are planes. We intersect the ray with the Plane associated with the corresponding face to compute intersections and we restrict them to be on the faces computing the the dot product of the face\_center\_to\_intersection\_vector with the {x, y, z}\_axis. In order to speed up the computations, we came up with the following tricks :
 
 - We keep track of the number of possible intersections so that we do not necessarly need to iterate over all the faces if the already have computed two intersections.
-- We evaluate the norm of face_center_to_intersection_vector and compare it with the norm of (x_size/2,y_size/2,z_size/2), which is the biggest value face_center_to_intersection_vector could have when intersection_point is on a face, before starting any heavy computations (circumscribed sphere).
+- We evaluate the norm of face_center_to_intersection_vector and compare it with the norm of (x\_size/2,y\_size/2,z\_size/2), which is the biggest value face\_center\_to\_intersection\_vector could have when intersection\_point is on a face, before starting any heavy computations (circumscribed sphere).
 
 # Lights
 The point lights of the basic ray tracer were replaced by area lights and spotlights. This allows us to produce soft shadows effects. These lights are intersected like objects by the ray tracer in order to appear as a surface on the result image. They act also as lights when checking for lighting. Each light adds a contribution of light proportional to its size in the scene.
@@ -109,18 +109,18 @@ This is not perfect but satisfyingly approximate the caustics effect.
 
 # Difficulties
 ## RAND_MAX is not the same value on different systems
-We used Windows to generate the final images. The result was different when running same code on Windows or MacOS/Linux. After a lot of debugging time, we found that RAND_MAX (the maximum value returned by rand() method) is not the same on windows and Unix. Indeed it was only guaranteed to be greater or equal to 32767.
+We used Windows to generate the final images. The result was different when running same code on Windows or MacOS/Linux. After a lot of debugging time, we found that RAND\_MAX (the maximum value returned by rand() method) is not the same on windows and Unix. Indeed it was only guaranteed to be greater or equal to 32767.
 
 ## Computation of the outgoing ray of glossy surfaces is not trivial
-We ended up using Rodrigues' rotation formula and fancy cross products to compute the random outgoing rays in for glossy surfaces because the only informations we have are the incoming ray and the surface normal. The details can be found in reflect_glossy function of *vec3.h* and *scene.cpp*.
+We ended up using Rodrigues' rotation formula and fancy cross products to compute the random outgoing rays in for glossy surfaces because the only informations we have are the incoming ray and the surface normal. The details can be found in reflect\_glossy function of *vec3.h* and *scene.cpp*.
 
 ## Plane
 !!! These modifications have been implemented but we discarded them !!!
 
 We modified the provided Plane class in order to support two new functionalities :
 
-- A plane can be cut, it can have a hole around center of a given hole_radius
-- A plane is not necessarly infinite, it can be bounded by a circle of a given outer_radius. This implied the function intersect to be updated (circumscribed circle).
+- A plane can be cut, it can have a hole around center of a given hole\_radius
+- A plane is not necessarly infinite, it can be bounded by a circle of a given outer\_radius. This implied the function intersect to be updated (circumscribed circle).
 
 
 # Workload
