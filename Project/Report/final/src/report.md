@@ -3,6 +3,9 @@ title: Enhanced Ray Tracer using Path Tracing (Group 21)
 ---
 <video width="900px" src="../res/ICG-Final-Presentation-Video-Group21.mp4" loop autoplay muted></video>
 
+# Abstract
+The purpose of this project is to improve a ray tracer done in class by adding more complex effects. The basic one used the Phong lighting model to render objects with limited properties such as shininess or reflectance. We opted for the path tracing algorithm which allows us to obtain more interesting effets including global illumination, soft shadows with surface lights, refraction with caustics, glossiness and mirror. We also add spotlights.
+
 # Goal
 ## Core (4.0):
 - Basic path tracing with explicit shadow rays at each surface interaction (implemented)
