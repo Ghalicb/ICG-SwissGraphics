@@ -51,6 +51,8 @@ When the ray intersects a surface, first we retrieve the material properties of 
 3. Glossy (from perfectly reflecting to diffuse): we trace a shadow ray and a recursive new ray. What changes for each level of glossyness is the choose of the ray direction. We implemented a more or less glossy reflection. When the object is the least glossy, it is perfectly diffuse (the ray direction traced for the recursive call is perfectly random in the hemisphere with respect to the surface normal). When it is the most glossy, the vector chosen is the perfectly reflected one. The object can be in between these two extreme cases and is a bit reflective but not perfectly.
 
 ## Implementation
+### Diffuse
+We initially implemented diffuse with mirror and transparent but then we removed it as it is a limit case of glossy.
 ### Material
 We changed the Material class to match our new effects. We first removed every Phong lightning model value to keep only the object *color* (vec3 for RGB color). Aside that we have a boolean value for mirrorness, another one for transparency and then the refraction index and the glossyness coefficient. There is an order of priority:
 
@@ -65,6 +67,20 @@ At the intersection with a transparent object, we must compute the refracted vec
 
 ### Mirror
 For the perfect mirror the color returned is simply the trace of the reflected ray (we chose that a mirror has no color).
+
+
+### Shadow rays and caustics
+At every intersection with an object that is not transparent or mirror, we compute a shadow ray to get the direct illumination for this point. To do this, we computed the vector from the intersection point to the light and check if an object intersects this ray. If there is an object in between, the point is not directly lit, if nothing intersects, the light contribution is computed by multiplying the object's color by the light's color and by the dot product between the vector to the light and the intersection normal.
+
+To implement the caustics, we changed a bit this algorithm and the lighting method which has now a parameter saying if we compute a "normal ray" or a shadow ray. If it is a shadow ray, if the object intersected is glossy, it returns vec3(0.0), if it is mirror or transparent, it returns a recursive call on the appropriate vector (reflected or refracted). If the shadow ray intersects a light, it returns the light's color.
+
+As this a shadow ray returns a color contribution only if it eventually reaches the light.
+
+The algorithm is like before but if an object is in between, we trace a shadow ray using the lighting method with shadow ray = true following the point-to-light vector.
+
+This makes possible for the light to lit a point behind a transparent object.
+
+This is not perfect but satisfyingly approximate the caustics effect.
 
 # References
 - ../res/references/Monte-Carlo-Ray-Tracing-Cornell-Lecture.pdf
@@ -87,3 +103,12 @@ We modified the provided Plane class in order to support two new functionalities
 
 - A plane can be cut, it can have a hole around center of a given hole_radius
 - A plane is not necessarly infinite, it can be bounded by a circle of a given outer_radius. This implied the function intersect to be updated (circumscribed circle).
+
+
+# Workload
+
+## Daniel Filipe Nunes Silva
+
+## Samuel Chassot
+I implemented the basic path tracing algorithm with diffuse and mirror objects. Then I implemented transparency (with refraction and Fresnel) and then caustics effect.
+## Ghali Chraïbi
