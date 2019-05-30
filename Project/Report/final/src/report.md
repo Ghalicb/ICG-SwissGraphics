@@ -100,6 +100,9 @@ This is not perfect but satisfyingly approximate the caustics effect.
 ## RAND_MAX is not the same value on different systems
 We used Windows to generate the final images. The result was different when running same code on Windows or MacOS/Linux. After a lot of debugging time, we found that RAND_MAX (the maximum value returned by rand() method) is not the same on windows and Unix. Indeed it was only guaranteed to be greater or equal to 32767.
 
+## Computation of the outgoing ray of glossy surfaces is not trivial
+We ended up using Rodrigues' rotation formula and fancy cross products to compute the random outgoing rays in for glossy surfaces because the only informations we have are the incoming ray and the surface normal. The details can be found in reflect_glossy function of *vec3.h* and *scene.cpp*.
+
 ## Plane
 !!! These modifications have been implemented but we discarded them !!!
 

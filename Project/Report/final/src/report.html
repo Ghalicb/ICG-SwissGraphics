@@ -94,6 +94,8 @@
 <h1 id="difficulties">Difficulties</h1>
 <h2 id="rand_max-is-not-the-same-value-on-different-systems">RAND_MAX is not the same value on different systems</h2>
 <p>We used Windows to generate the final images. The result was different when running same code on Windows or MacOS/Linux. After a lot of debugging time, we found that RAND_MAX (the maximum value returned by rand() method) is not the same on windows and Unix. Indeed it was only guaranteed to be greater or equal to 32767.</p>
+<h2 id="computation-of-the-outgoing-ray-of-glossy-surfaces-is-not-trivial">Computation of the outgoing ray of glossy surfaces is not trivial</h2>
+<p>We ended up using Rodrigues' rotation formula and fancy cross products to compute the random outgoing rays in for glossy surfaces because the only informations we have are the incoming ray and the surface normal. The details can be found in reflect_glossy function of <em>vec3.h</em> and <em>scene.cpp</em>.</p>
 <h2 id="plane">Plane</h2>
 <p>!!! These modifications have been implemented but we discarded them !!!</p>
 <p>We modified the provided Plane class in order to support two new functionalities :</p>
