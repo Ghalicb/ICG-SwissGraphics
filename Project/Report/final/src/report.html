@@ -12,7 +12,7 @@
 <div id="header">
 <h1 class="title">Enhanced Ray Tracer using Path Tracing (Group 21)</h1>
 </div>
-<video src="../res/ICG-Final-Presentation-Video-Group21.mp4">
+<video width="900px" src="../res/ICG-Final-Presentation-Video-Group21.mp4" loop autoplay muted>
 </video>
 <h1 id="goal">Goal</h1>
 <h2 id="core-4.0">Core (4.0):</h2>
@@ -46,10 +46,6 @@
 <li>We keep track of the number of possible intersections so that we do not necessarly need to iterate over all the faces if the already have computed two intersections.</li>
 <li>We evaluate the norm of face_center_to_intersection_vector and compare it with the norm of (x_size/2,y_size/2,z_size/2), which is the biggest value face_center_to_intersection_vector could have when intersection_point is on a face, before starting any heavy computations (circumscribed sphere).</li>
 </ul>
-<h1 id="cornell-box">Cornell Box</h1>
-<p>We described a Cornell Box scene (/Improved-Ray-Tracer/scenes/cornell_box/). It is composed of five walls, one light, one cuboid and one sphere. It has 800x800x800 dimensions, the origin (0,0,0) is at the center of the box and the camera located at (0, 0, 600) is looking at the origin with a field of view of 90 degrees. The x-axis is pointing the the right-hand side of the image, the y-axis is pointing up and the z-axis is pointing to the camera.</p>
-<h1 id="arealight">AreaLight</h1>
-<p>This describes a rectangular light, which is discretized into blocks of a a given side length. When checking the lighting during the ray tracing, we iterate over all the contained lights of each AreaLight. This will be improved so that we can give an orientation, a direction and an aperture to it. Moreover, we will take a probabilistic approach to check the lighting at a random point inside a block instead of always checking at the center of the blocks. These improvements will allow us to use AreaLight as a simple light as well as for more specific lights like spotlights.</p>
 <h1 id="path-tracing">Path Tracing</h1>
 <h2 id="path-tracing-with-explicit-shadow-rays-fig.-1">Path tracing with explicit shadow rays (Fig. 1)</h2>
 <p>We trace rays for each pixel (~1000 to 10000). Each of these rays is independent from others. Here is the procedure for one ray.</p>
@@ -67,11 +63,23 @@
 <p>At the intersection with a transparent object, we must compute the refracted vector with respect to the refraction index of the object (we assume that ambient coefficient is 1.0 which is a resonably correct approximation of the air's coefficient) and the reflected one. Then we trace both rays and then weighted the two obtained color by Fresnel coefficient (which gives the weight of the reflected ray) and multiply them by the object color. The refraction indexes used are the real ones.</p>
 <h3 id="mirror">Mirror</h3>
 <p>For the perfect mirror the color returned is simply the trace of the reflected ray (we chose that a mirror has no color).</p>
-<h2 id="references">References</h2>
-<p>http://www.kevinbeason.com/smallpt/#moreinfo</p>
-<p>http://www.scratchapixel.com/lessons/3d-basic-rendering/introduction-to-shading/reflection-refraction-fresnel</p>
-<h2 id="difficulties">Difficulties</h2>
-<p>RAND_MAX not same value on windows and linux (guaranteed only &gt;32767) # Plane !!! These modifications have been implemented but we discarded them !!!</p>
+<h1 id="references">References</h1>
+<ul>
+<li>../res/references/Monte-Carlo-Ray-Tracing-Cornell-Lecture.pdf</li>
+<li>../res/references/Global-Illumination-Path-Tracing-Taku-Komura-Lecture.pdf</li>
+<li>../res/references/Path-Tracing-Matthias-Teschner-Lecture.pdf</li>
+<li>en.wikipedia.org/wiki/Path_tracing</li>
+<li>scratchapixel.com/lessons/3d-basic-rendering/global-illumination-path-tracing</li>
+<li>scratchapixel.com/lessons/3d-basic-rendering/introduction-to-shading/reflection-refraction-fresnel</li>
+<li>web.cs.wpi.edu/~emmanuel/courses/cs563/write_ups/zackw/realistic_raytracing.html</li>
+<li>www.kevinbeason.com/smallpt/#moreinfo</li>
+</ul>
+<h1 id="difficulties">Difficulties</h1>
+<ul>
+<li>RAND_MAX not same value on windows and linux</li>
+</ul>
+<h1 id="plane">Plane</h1>
+<p>!!! These modifications have been implemented but we discarded them !!!</p>
 <p>We modified the provided Plane class in order to support two new functionalities :</p>
 <ul>
 <li>A plane can be cut, it can have a hole around center of a given hole_radius</li>

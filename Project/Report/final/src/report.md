@@ -57,14 +57,19 @@ At the intersection with a transparent object, we must compute the refracted vec
 ### Mirror
 For the perfect mirror the color returned is simply the trace of the reflected ray (we chose that a mirror has no color).
 
-## References
-http://www.kevinbeason.com/smallpt/#moreinfo
+# References
+- ../res/references/Monte-Carlo-Ray-Tracing-Cornell-Lecture.pdf
+- ../res/references/Global-Illumination-Path-Tracing-Taku-Komura-Lecture.pdf
+- ../res/references/Path-Tracing-Matthias-Teschner-Lecture.pdf
+- en.wikipedia.org/wiki/Path_tracing
+- scratchapixel.com/lessons/3d-basic-rendering/global-illumination-path-tracing
+- scratchapixel.com/lessons/3d-basic-rendering/introduction-to-shading/reflection-refraction-fresnel
+- web.cs.wpi.edu/~emmanuel/courses/cs563/write_ups/zackw/realistic_raytracing.html
+- www.kevinbeason.com/smallpt/#moreinfo
 
-http://www.scratchapixel.com/lessons/3d-basic-rendering/introduction-to-shading/reflection-refraction-fresnel
+# Difficulties
+- RAND_MAX not same value on windows and linux
 
-
-## Difficulties
-RAND_MAX not same value on windows and linux (guaranteed only >32767)
 # Plane
 !!! These modifications have been implemented but we discarded them !!!
 
