@@ -1,11 +1,7 @@
 ---
-title: Improved Ray Tracer with Path Tracing (Group 21)
+title: Enhanced Ray Tracer using Path Tracing (Group 21)
 ---
-
-![Fig. 1](../res/images/cornell_box.png){width="900px"}
-
-# Request
-We would like to know if you could give us a few points for the implementation of the Cuboid class as well as for the Cornell Box description as these were not mentionned in the proposal.
+<video src="../res/ICG-Final-Presentation-Video-Group21.mp4"></video>
 
 # Goal
 ## Core (4.0):
@@ -21,11 +17,6 @@ We would like to know if you could give us a few points for the implementation o
 - Refractions (implemented)
 - Special light sources. E.g. spotlights
 
-# Schedule for the next weeks
-- Debug
-- Improve Cuboid, AreaLight and overall path tracing stuff
-- implement one more extension
-
 # Build Project
 - Go to `Improved-Ray-Tracer/`
 - `mkdir build`
@@ -33,7 +24,7 @@ We would like to know if you could give us a few points for the implementation o
 - `cmake ..`
 - `make -j`
 - `cd ..`
-- Ray trace our Cornell Box : `./build/raytrace ./scenes/cornell_box/cornell_box.sce ./results/cornell_box.png`
+- Ray trace our Cornell Box : `./build/raytrace ./scenes/cornell_boxes/cornell_box_{1, 2, 3}.sce ./results/cornell_box_{1, 2, 3}.png`
 
 # Cuboid
 We implemented the class Cuboid, which is described by its center, {x, y, z}_size, rotation_angle around the y_axis and material. The faces of this object are planes. We intersect the ray with the Plane associated with the corresponding face to compute intersections and we restrict them to be on the faces computing the the dot product of the face_center_to_intersection_vector with the {x, y, z}_axis. In order to speed up the computations, we came up with the following tricks :
