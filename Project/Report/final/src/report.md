@@ -78,8 +78,10 @@ http://www.kevinbeason.com/smallpt/#moreinfo
 http://www.scratchapixel.com/lessons/3d-basic-rendering/introduction-to-shading/reflection-refraction-fresnel
 
 
-## Difficulties
-RAND_MAX not same value on windows and linux (guaranteed only >32767)
+# Difficulties
+## RAND_MAX value on different system
+We used Windows to generate the final images. The result was different when running same code on Windows or MacOS/Linux. After a lot of debugging time, we found that RAND_MAX (the maximum value returned by rand() method) was not the same on windows and unix. Indeed it was only guaranteed to be greater or equal to 32767.
+
 # Plane
 !!! These modifications have been implemented but we discarded them !!!
 
