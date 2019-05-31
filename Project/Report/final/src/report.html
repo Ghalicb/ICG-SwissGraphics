@@ -59,6 +59,7 @@
 <p>The spotlights are a special kind of lights which illuminate in a given direction and at a given aperture. They have a circular shape. When checking for lighting, we compute the dot product of the light direction vector with the vector V and check if it is bigger than an empirical determined value. Vector V is the vector going from the randomly chosen light point (inside the circular light) to the point, whose lighting is being computed.</p>
 <h1 id="path-tracing">Path Tracing</h1>
 <h2 id="path-tracing-with-explicit-shadow-rays">Path tracing with explicit shadow rays</h2>
+<p>As discussed with Tizian before really starting the project, we abandonned the Phong lighting model because it is incompatible with this algorithm replacing it by the Monte Carlo integration and BRDF.</p>
 <p>We trace rays for each pixel (~1000 to 10000). Each of these rays is independent from others. Here is the procedure for one ray.</p>
 <p>When the ray intersects a surface, first we retrieve the material properties of the intersected object, there are then 3 possibilities which will be detailed:</p>
 <ol style="list-style-type: decimal">

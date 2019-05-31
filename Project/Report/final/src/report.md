@@ -51,6 +51,8 @@ The spotlights are a special kind of lights which illuminate in a given directio
 
 # Path Tracing
 ## Path tracing with explicit shadow rays
+As discussed with Tizian before really starting the project, we abandonned the Phong lighting model because it is incompatible with this algorithm replacing it by the Monte Carlo integration and BRDF.
+
 We trace rays for each pixel (~1000 to 10000). Each of these rays is independent from others. Here is the procedure for one ray.
 
 When the ray intersects a surface, first we retrieve the material properties of the intersected object, there are then 3 possibilities which will be detailed:
