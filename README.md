@@ -136,3 +136,9 @@ Finally, we produced a 3D terrain, which was the most demanding part.
 Daniel Filipe NUNES SILVA : 1/3  
 Ghali CHRAIBI : 1/3  
 Samuel CHASSOT : 1/3  
+
+## Project
+
+### Description
+
+We implementes path tracing algorithm based on the ray tracer done in Assignment 1, 2 and 3. We implemented mirror, transparent and glossy objects.
