@@ -1,25 +1,17 @@
-<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-  <meta charset="utf-8" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
   <meta name="generator" content="pandoc" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
   <title>Enhanced Ray Tracer using Path Tracing (Group 21)</title>
-  <style>
-      code{white-space: pre-wrap;}
-      span.smallcaps{font-variant: small-caps;}
-      span.underline{text-decoration: underline;}
-      div.column{display: inline-block; vertical-align: top; width: 50%;}
-  </style>
-  <link rel="stylesheet" href="icg_report.css" />
-  <!--[if lt IE 9]>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
-  <![endif]-->
+  <style type="text/css">code{white-space: pre;}</style>
+  <link rel="stylesheet" href="icg_report.css" type="text/css" />
 </head>
 <body>
-<header id="title-block-header">
+<div id="header">
 <h1 class="title">Enhanced Ray Tracer using Path Tracing (Group 21)</h1>
-</header>
+</div>
 <video width="900px" src="../res/ICG-Final-Presentation-Video-Group21.mp4" loop autoplay muted>
 </video>
 <h1 id="abstract">Abstract</h1>
@@ -69,7 +61,7 @@
 <h2 id="path-tracing-with-explicit-shadow-rays">Path tracing with explicit shadow rays</h2>
 <p>We trace rays for each pixel (~1000 to 10000). Each of these rays is independent from others. Here is the procedure for one ray.</p>
 <p>When the ray intersects a surface, first we retrieve the material properties of the intersected object, there are then 3 possibilities which will be detailed:</p>
-<ol type="1">
+<ol style="list-style-type: decimal">
 <li><p>Mirror surfaces: for this one, we trace no shadow rays. The only color returned is the color returned by a recursive ray tracing in the reflected direction with respect to the object normal.</p></li>
 <li><p>Transparent objects: first we assume that the ambient material is air whose refraction index is approximated by 1.0. To implement the refraction, we used the Fresnel coefficient which gives the proportion of light that is reflected on a transparent surface given the incident angle and the refraction index of both material. This is mandatory to obtain visually satisfying results.</p></li>
 <li><p>Glossy (from perfectly reflecting to diffuse): we trace a shadow ray and a recursive new ray. What changes for each level of glossiness is the choice of the ray direction. We implemented a more or less glossy reflection. When the object is the least glossy, it is perfectly diffuse (the ray direction traced for the recursive call is perfectly random in the hemisphere with respect to the surface normal). When it is the most glossy, the vector chosen is the perfectly reflected one. The object can be in between these two extreme cases and is a bit reflective but not perfectly.</p></li>
@@ -79,8 +71,8 @@
 <p>We initially implemented diffuse with mirror and transparent but then we removed it as it is a limit case of glossy.</p>
 <p>Initially an object was able to be mirror and diffuse at the same time, with a weight between 0 and 1. Then we chose randomly at each intersection the behavior for this particular ray using the weight as a probability. We abandonned this approach due to the poor result it produced and because of the presence of the glossiness which let an object be a bit reflective and a bit diffuse.</p>
 <h3 id="material">Material</h3>
-<p>We changed the Material class to match our new effects. We first removed every Phong lighting model value to keep only the object <em>color</em> (vec3 for RGB colour). Aside that we have a boolean value for mirrorness, another one for transparency and then the refraction index and the glossiness coefficient. There is an order of priority:</p>
-<ol type="1">
+<p>We changed the Material class to match our new effects. We first removed every Phong lighting model value to keep only the object <em>color</em> (vec3 for RGB color). Aside that we have a boolean value for mirrorness, another one for transparency and then the refraction index and the glossiness coefficient. There is an order of priority:</p>
+<ol style="list-style-type: decimal">
 <li>Transparency</li>
 <li>Mirrorness</li>
 <li>Glossiness</li>
@@ -88,18 +80,18 @@
 <p>That means that if transparency is <em>true</em> then mirroness and glossiness values are simply ignored. If transparency is <em>false</em> and mirrorness is <em>true</em> then object is a mirror. If the object is not transparent, the refraction index is ignored.</p>
 <h3 id="transparency-and-refraction">Transparency and refraction</h3>
 <p>At the intersection with a transparent object, we must compute the refracted vector with respect to the refraction index of the object and the reflected one. Then we trace both rays and then weighted the two obtained color by Fresnel coefficient (which gives the weight of the reflected ray) and multiply them by the object color. The refraction indexes used are the real ones.</p>
-<p>Fresnel coefficient is computed using the Schlick’s approximation which is computationally more efficient than the real formula and gives really good results in computer graphics field.</p>
+<p>Fresnel coefficient is computed using the Schlick's approximation which is computationally more efficient than the real formula and gives really good results in the computer graphics field.</p>
 <h3 id="mirror">Mirror</h3>
 <p>For the perfect mirror the color returned is simply the trace of the reflected ray (we chose that a mirror has no color).</p>
 <h3 id="glossy">Glossy</h3>
 <p>We implemented glossiness as an intermediate surface between mirrors and diffuse surfaces. The outgoing ray for mirrors is simply reflected while for diffuse surface it goes in any direction. We added a glossy index describing how diffuse a mirror surface is. According to this index the outgoing ray will be shoot either in an hemisphere for a diffuse surface or in a cone along the reflected ray whose aperture is larger or smaller for glossy surfaces.</p>
 <h3 id="shadow-rays-and-caustics">Shadow rays and caustics</h3>
-<p>At every intersection with an object that is not transparent or mirror, we compute a shadow ray to get the direct illumination for this point. To do this, we computed the vector from the intersection point to the light and check if an object intersects this ray. If there is an object in between, the point is not directly lit, if nothing intersects, the light contribution is computed by multiplying the object’s color by the light’s color and by the dot product between the vector to the light and the intersection normal.</p>
-<p>To implement the caustics, we changed a bit this algorithm and the lighting method which has now a parameter saying if we compute a “normal ray” or a shadow ray. If it is a shadow ray, if the object intersected is glossy, it returns vec3(0.0), if it is mirror or transparent, it returns a recursive call on the appropriate vector (reflected or refracted). If the shadow ray intersects a light, it returns the light’s color.</p>
+<p>At every intersection with an object that is not transparent or mirror, we compute a shadow ray to get the direct illumination for this point. To do so, we computed the vector from the intersection point to the light and check if an object intersects this ray. If there is an object in between, the point is not directly lit, if nothing intersects, the light contribution is computed by multiplying the object's color by the light's color and by the dot product between the vector to the light and the intersection normal.</p>
+<p>To implement the caustics, we changed a bit this algorithm and the lighting method which has now a parameter saying if we are computing a &quot;normal ray&quot; or a shadow ray. If it is a shadow ray, if the object intersected is glossy, it returns vec3(0.0), if it is mirror or transparent, it returns a recursive call on the appropriate vector (reflected or refracted). If the shadow ray intersects a light, it returns the light's color.</p>
 <p>As this a shadow ray returns a color contribution only if it eventually reaches the light.</p>
-<p>The algorithm is like before but if an object is in between, we trace a shadow ray using the lighting method with shadow ray = true following the point-to-light vector.</p>
+<p>The algorithm to compute shadow ray (direct illumination) is like before but if an object is in between, we trace a shadow ray using the lighting method with shadow ray = true following the point-to-light vector.</p>
 <p>This makes possible for the light to lit a point behind a transparent object.</p>
-<p>This is not perfect but satisfyingly approximate the caustics effect.</p>
+<p>This is not the perfectly reallistic behavior but satisfyingly approximate the caustics effect.</p>
 <h1 id="references">References</h1>
 <ul>
 <li>../res/references/Monte-Carlo-Ray-Tracing-Cornell-Lecture.pdf</li>
@@ -118,7 +110,9 @@
 <h2 id="rand_max-is-not-the-same-value-on-different-systems">RAND_MAX is not the same value on different systems</h2>
 <p>We used Windows to generate the final images. The result was different when running same code on Windows or MacOS/Linux. After a lot of debugging time, we found that RAND_MAX (the maximum value returned by rand() method) is not the same on windows and Unix. Indeed it was only guaranteed to be greater or equal to 32767.</p>
 <h2 id="computation-of-the-outgoing-ray-of-glossy-surfaces-is-not-trivial">Computation of the outgoing ray of glossy surfaces is not trivial</h2>
-<p>We ended up using Rodrigues’ rotation formula and fancy cross products to compute the random outgoing rays in for glossy surfaces because the only informations we have are the incoming ray and the surface normal. The details can be found in reflect_glossy function of <em>vec3.h</em> and <em>scene.cpp</em>.</p>
+<p>We ended up using Rodrigues' rotation formula and fancy cross products to compute the random outgoing rays in for glossy surfaces because the only informations we have are the incoming ray and the surface normal. The details can be found in reflect_glossy function of <em>vec3.h</em> and <em>scene.cpp</em>.</p>
+<h2 id="brdf-and-light-contribution">BRDF and light contribution</h2>
+<p>It was not trivial to understand well how light contributes to a point taking into account the Monte Carlo integration principle. It took some time to implement correctly the lighting method.</p>
 <h2 id="plane">Plane</h2>
 <p>!!! These modifications have been implemented but we discarded them !!!</p>
 <p>We modified the provided Plane class in order to support two new functionalities :</p>
@@ -128,10 +122,10 @@
 </ul>
 <h1 id="workload">Workload</h1>
 <h2 id="daniel-filipe-nunes-silva">Daniel Filipe Nunes Silva</h2>
-<p>First, I implemented the Cuboid class and designed the basic Cornell box. Then, I implemented the lights: AreaLight and Spotlight classes and how they are integrated in the lighting function. Finally, I worked on glossy surfaces and described two Cornell boxes with 3 sphere and 3 cuboids of different surfaces.</p>
+<p>First, I implemented the Cuboid class and designed the basic Cornell box. Then, I made research for and implemented the lights: AreaLight and Spotlight classes and how they are integrated in the lighting function. Finally, I worked on glossy surfaces (including the method that computes the outgoing vector) and described two Cornell boxes with 3 sphere and 3 cuboids of different surfaces.</p>
 <h2 id="samuel-chassot">Samuel Chassot</h2>
-<p>I implemented the basic path tracing algorithm with diffuse (which was replaced by glossiness) and mirror objects. Then I implemented transparency (with refraction and Fresnel) and then caustics effect.</p>
+<p>I made research about how to do path tracing and then implemented the basic path tracing algorithm with diffuse (which was replaced by glossiness) and mirror objects. Then I made research and implemented transparency (with refraction and Fresnel including the two corresponding functions in <em>vec3.h</em> that computes them) and then caustics effect. Finally I designed and described the glass with straw scene and Cornell Box with a cuboid and a ball.</p>
 <h2 id="ghali-chraïbi">Ghali Chraïbi</h2>
-<p>I implemented first the ClosedCylinder shape. Then I documented myself and tried an implementation of the refraction effect (before we decided to use path tracing). Afterwards I participated in the thinking process of the data structures for the AreaLight and helped in the implementation of Light/AreaLight. Finally I designed and implemented various scenes.</p>
+<p>I implemented first the ClosedCylinder shape. Then I documented myself and tried an implementation of the refraction effect (before we decided to use path tracing). Afterwards I thought about how to implement the AreaLight and helped in the implementation of Light/AreaLight. Finally I designed and implemented various scenes.</p>
 </body>
 </html>

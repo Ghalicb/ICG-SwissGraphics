@@ -68,7 +68,7 @@ We initially implemented diffuse with mirror and transparent but then we removed
 Initially an object was able to be mirror and diffuse at the same time, with a weight between 0 and 1. Then we chose randomly at each intersection the behavior for this particular ray using the weight as a probability. We abandonned this approach due to the poor result it produced and because of the presence of the glossiness which let an object be a bit reflective and a bit diffuse.
 
 ### Material
-We changed the Material class to match our new effects. We first removed every Phong lighting model value to keep only the object *color* (vec3 for RGB colour). Aside that we have a boolean value for mirrorness, another one for transparency and then the refraction index and the glossiness coefficient. There is an order of priority:
+We changed the Material class to match our new effects. We first removed every Phong lighting model value to keep only the object *color* (vec3 for RGB color). Aside that we have a boolean value for mirrorness, another one for transparency and then the refraction index and the glossiness coefficient. There is an order of priority:
 
 1. Transparency
 2. Mirrorness
@@ -79,7 +79,7 @@ That means that if transparency is *true* then mirroness and glossiness values a
 ### Transparency and refraction
 At the intersection with a transparent object, we must compute the refracted vector with respect to the refraction index of the object and the reflected one. Then we trace both rays and then weighted the two obtained color by Fresnel coefficient (which gives the weight of the reflected ray) and multiply them by the object color. The refraction indexes used are the real ones.
 
-Fresnel coefficient is computed using the Schlick's approximation which is computationally more efficient than the real formula and gives really good results in computer graphics field.
+Fresnel coefficient is computed using the Schlick's approximation which is computationally more efficient than the real formula and gives really good results in the computer graphics field.
 
 ### Mirror
 For the perfect mirror the color returned is simply the trace of the reflected ray (we chose that a mirror has no color).
@@ -89,17 +89,17 @@ We implemented glossiness as an intermediate surface between mirrors and diffuse
 
 
 ### Shadow rays and caustics
-At every intersection with an object that is not transparent or mirror, we compute a shadow ray to get the direct illumination for this point. To do this, we computed the vector from the intersection point to the light and check if an object intersects this ray. If there is an object in between, the point is not directly lit, if nothing intersects, the light contribution is computed by multiplying the object's color by the light's color and by the dot product between the vector to the light and the intersection normal.
+At every intersection with an object that is not transparent or mirror, we compute a shadow ray to get the direct illumination for this point. To do so, we computed the vector from the intersection point to the light and check if an object intersects this ray. If there is an object in between, the point is not directly lit, if nothing intersects, the light contribution is computed by multiplying the object's color by the light's color and by the dot product between the vector to the light and the intersection normal.
 
-To implement the caustics, we changed a bit this algorithm and the lighting method which has now a parameter saying if we compute a "normal ray" or a shadow ray. If it is a shadow ray, if the object intersected is glossy, it returns vec3(0.0), if it is mirror or transparent, it returns a recursive call on the appropriate vector (reflected or refracted). If the shadow ray intersects a light, it returns the light's color.
+To implement the caustics, we changed a bit this algorithm and the lighting method which has now a parameter saying if we are computing a "normal ray" or a shadow ray. If it is a shadow ray, if the object intersected is glossy, it returns vec3(0.0), if it is mirror or transparent, it returns a recursive call on the appropriate vector (reflected or refracted). If the shadow ray intersects a light, it returns the light's color.
 
 As this a shadow ray returns a color contribution only if it eventually reaches the light.
 
-The algorithm is like before but if an object is in between, we trace a shadow ray using the lighting method with shadow ray = true following the point-to-light vector.
+The algorithm to compute shadow ray (direct illumination) is like before but if an object is in between, we trace a shadow ray using the lighting method with shadow ray = true following the point-to-light vector.
 
 This makes possible for the light to lit a point behind a transparent object.
 
-This is not perfect but satisfyingly approximate the caustics effect.
+This is not the perfectly reallistic behavior but satisfyingly approximate the caustics effect.
 
 # References
 - ../res/references/Monte-Carlo-Ray-Tracing-Cornell-Lecture.pdf
@@ -124,6 +124,7 @@ We ended up using Rodrigues' rotation formula and fancy cross products to comput
 
 ## BRDF and light contribution
 It was not trivial to understand well how light contributes to a point taking into account the Monte Carlo integration principle. It took some time to implement correctly the lighting method.
+
 ## Plane
 !!! These modifications have been implemented but we discarded them !!!
 
