@@ -122,6 +122,8 @@ We used Windows to generate the final images. The result was different when runn
 ## Computation of the outgoing ray of glossy surfaces is not trivial
 We ended up using Rodrigues' rotation formula and fancy cross products to compute the random outgoing rays in for glossy surfaces because the only informations we have are the incoming ray and the surface normal. The details can be found in reflect\_glossy function of *vec3.h* and *scene.cpp*.
 
+## BRDF and light contribution
+It was not trivial to understand well how light contributes to a point taking into account the Monte Carlo integration principle. It took some time to implement correctly the lighting method.
 ## Plane
 !!! These modifications have been implemented but we discarded them !!!
 
@@ -132,12 +134,12 @@ We modified the provided Plane class in order to support two new functionalities
 
 
 # Workload
-  
+
 ## Daniel Filipe Nunes Silva  
-First, I implemented the Cuboid class and designed the basic Cornell box. Then, I implemented the lights: AreaLight and Spotlight classes and how they are integrated in the lighting function. Finally, I worked on glossy surfaces and described two Cornell boxes with 3 sphere and 3 cuboids of different surfaces.
+First, I implemented the Cuboid class and designed the basic Cornell box. Then, I made research for and implemented the lights: AreaLight and Spotlight classes and how they are integrated in the lighting function. Finally, I worked on glossy surfaces (including the method that computes the outgoing vector) and described two Cornell boxes with 3 sphere and 3 cuboids of different surfaces.
 
 ## Samuel Chassot
-I implemented the basic path tracing algorithm with diffuse (which was replaced by glossiness) and mirror objects. Then I implemented transparency (with refraction and Fresnel) and then caustics effect.
+I made research about how to do path tracing and then implemented the basic path tracing algorithm with diffuse (which was replaced by glossiness) and mirror objects. Then I made research and implemented transparency (with refraction and Fresnel including the two corresponding functions in *vec3.h* that computes them) and then caustics effect. Finally I designed and described the glass with straw scene and Cornell Box with a cuboid and a ball.
 
 ## Ghali Chraïbi
 I implemented first the ClosedCylinder shape. Then I documented myself and tried an implementation of the refraction effect (before we decided to use path tracing). Afterwards I thought about how to implement the AreaLight and helped in the implementation of Light/AreaLight. Finally I designed and implemented various scenes.
