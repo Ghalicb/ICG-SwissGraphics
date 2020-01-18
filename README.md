@@ -4,13 +4,13 @@ All the following assingnments were realised by Samuel CHASSOT, Ghali CHRAIBI an
 
 ## Assignment 0 : "Hello World"
 
-We solved this exercice by changing the color of the background in the solid_color scene from black to red.
+We solved this assignment by changing the color of the background 'solid_color' scene from black to red.
 
 ## Assignment 1 : Planes and Cylinders
 
-- In the first part of the assignment, we implemented ray intersections with planes using mainly the implicit equation of a plane, derived in class.
-- Then, we derived the implicit equation of a cylinder (cf. TheoryExercise.pdf), which was for us the most difficult part of the week.
-- Finally, having the implicit equation of the cylinder, we implemented ray intersections with cylinders without many difficulties.
+- In the first part of the assignment, we implemented ray intersections with planes using the implicit equations.
+- Then, we derived the implicit equation of a cylinder, which was for us the most challenging part of the assignment.
+- Finally, having these implicit equations, we implemented ray intersections with cylinders.
 
 ## Assignment 2 : Lighting
 
@@ -18,7 +18,7 @@ In this assignment, we implemented the Phong lighting model and add shadows as w
 
 - First, we computed the ambient, diffuse and specular contributions of the Phong lighting model.
 - Then, we added shadows : the diffuse and specular contributions of a given point change if there is an object between it and the source light. We build a _ray_ from this point (+offset, to avoid self-shadowing) directed to the source light and checked if it intersected any object at a distance smaller than the distance between the point and the source light.
-- Finally, we implemented recursive ray tracing to produce reflections. We paid attention to ensure that the reflected rays are out of the intersected object, to avoid again self-shadowing.
+- Finally, we implemented recursive ray tracing to produce reflections. We paid particular attention to ensure that the reflected rays are out of the intersected object, to avoid self-shadowing.
 - The trickiest diffulty we overcame was forgetting to check that the dot product of the light or the reflection vector with the normal was positive before adding respectively the diffuse and specular contributions.
 
 ## Assignment 3 : Raytracing meshes
@@ -27,7 +27,7 @@ In this assignment, we implemented ray tracing for triangle meshes.
 
 - First, we implemented a method to compute vertex normals as an average of incident triangles' normal weighted by the opening angle of the triangle. To make it efficient, we traversed each triangle once and add the contribution of their normal to the three vertices composing them. At the end, we normalized the all the vertex normals.
 - Then, we implemented the method for triangle intersection using the explicit equation of the triangle (with the help of barycentric coordinates representation) and Cramer's rule to solve the equation. Depending on whether we  want a flat shaded or Phong shaded object, we computed the normal accordingly. For Phong lightning, the normal is an interpolation of the normals of each vertex weighted by the barycentric coordinates coefficients. For flat lightning, the normal is simply the triangle's normal.
-For this part, we added a method compute_determinant in the Mesh.h/Mesh.cpp files to help us when using the Cramer's rule.
+For this part, we added a method 'compute_determinant' in the Mesh.h/Mesh.cpp files to help us when using the Cramer's rule.
 - Finally, to make our raytracer more efficient, we computed the bounding box test for triangle meshes, which avoid to test for many useless ray intersections. To help us with this function, we add an operator overload for the component-wise division of vectors in vec3.h.
 Note that if one of the component of the vector at the denominator is exactly 0.0, it will return infinity in C++, which is in concordance with our implementation.
 
@@ -45,10 +45,10 @@ In this assignment, we built a scene containing several objects (planets from th
 
 ## Assignment 6 : Texturing and Lighting
 
-In this assignment, we used the billboarding technique to mimic the sun's glow. We had first difficulties to figure out how to make the billboard always facing the eye (we tried to find the angles of the billboard using trigonometric functions), but after some time we saw that these angles were already computed and corresponded to the given x\_angle_ and y\_angle_.
+In this assignment, we used the billboarding technique to mimic the sun's glow. We had first difficulties to figure out how to make the billboard always facing the eye (we tried to find the angles of the billboard using trigonometric functions), but after some time we saw that these angles were already computed and corresponded to the given 'x\_angle_' and 'y\_angle_'.
 For the rendering of this sun's glow, we tried many functions to make it realistic and we finally decided to use an exponential as its curvature correspond well to the wanted phenomena.
 
-Then we implemented the Phong lighting model to illuminate the planets. For that we needed to pass the modelview, modelview_projection and normal matrixes throw the phong vertex shader to compute the n,l,v vectors that we used in the fragment shader to apply the formula of the phong model derived in class.
+Then we implemented the Phong lighting model to illuminate the planets. For that we needed to pass 'the modelview', 'modelview_projection' and normal matrixes throw the phong vertex shader to compute the 'n','l','v' vectors that we used in the fragment shader to apply the formula of the phong model derived in class.
 
 Finaly, we focused our work on the earth and we combined multiple textures to visualize day/night, clouds and specularity of the water according to the state of the earth.
 
@@ -81,4 +81,4 @@ Finally, we produced a 3D terrain, which was the most demanding part.
 
 ## Project
 
-We implementes path tracing algorithm based on the ray tracer done in Assignment 1, 2 and 3. We implemented mirror, transparent and glossy objects.
+We implementes path tracing algorithm based on the ray tracer done in assignments 1, 2 and 3. We implemented mirror, transparent and glossy objects.
