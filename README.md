@@ -5,7 +5,7 @@ All the following assingnments were realised by Samuel CHASSOT, Ghali CHRAIBI an
 ## Assignment 0 : "Hello World"
 
 ### Description
-We solve this exercice by changing the color of the background in the solid_color scene from black to red.
+We solved this exercice by changing the color of the background in the solid_color scene from black to red.
 
 ## Assignment 1 : Planes and Cylinders
 
