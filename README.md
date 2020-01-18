@@ -1,6 +1,6 @@
 # ICG-SwissGraphics
 
-All the following assingnments were realised by Samuel CHASSOT, Ghali CHRAIBI & Daniel Filipe NUNES SILVA.
+All the following assingnments were realised by Samuel CHASSOT, Ghali CHRAIBI and Daniel Filipe NUNES SILVA.
 
 ## Assignment 0 : "Hello World"
 
